@@ -22,6 +22,7 @@ import android.widget.RadioButton;
 public class SmartRide extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    //youpi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
