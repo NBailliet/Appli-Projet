@@ -1,7 +1,7 @@
-#Wed Feb 01 12:41:38 EST 2017
-base.0=/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_93d62c01ac5d51a5be0a669cabc3e8fbe24a0e87
+#Wed Feb 01 22:42:50 EST 2017
+base.0=C\:\\Users\\Valentin\\AndroidStudioProjects\\Appli-Projet\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_8a9c3ab4c7d95e5f07e50b97b75305f725ad3cc3
 renamed.1=classes.dex
 renamed.0=classes2.dex
-file.1=/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_5aba9300f704c8335789b3ef87dcc2628f46db0b/classes.dex
-base.1=/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_5aba9300f704c8335789b3ef87dcc2628f46db0b
-file.0=/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_93d62c01ac5d51a5be0a669cabc3e8fbe24a0e87/classes.dex
+file.1=C\:\\Users\\Valentin\\AndroidStudioProjects\\Appli-Projet\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_e73e5a6e3d6357c9802ac166ca1cfc50f8369cfe\\classes.dex
+base.1=C\:\\Users\\Valentin\\AndroidStudioProjects\\Appli-Projet\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_e73e5a6e3d6357c9802ac166ca1cfc50f8369cfe
+file.0=C\:\\Users\\Valentin\\AndroidStudioProjects\\Appli-Projet\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_8a9c3ab4c7d95e5f07e50b97b75305f725ad3cc3\\classes.dex
