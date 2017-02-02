@@ -6,5 +6,13 @@
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/menu/activity_smart_ride_drawer.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/menu/activity_smart_ride_drawer.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/menu/smart_ride.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/menu/smart_ride.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/menu/activity_smart_ride_drawer.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/menu/activity_smart_ride_drawer.xml"
     }
 ]

@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_launcher.png",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_launcher.png",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/mipmap-mdpi/ic_launcher.png"
     }
