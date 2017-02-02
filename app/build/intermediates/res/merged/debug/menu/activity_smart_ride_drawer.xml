@@ -2,34 +2,38 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/acquisition"
-            android:icon="@drawable/snow"
-            android:title="Record"/>
-        <item
-            android:id="@+id/overview"
-            android:icon="@drawable/courbelinear"
-            android:title="Overview" />
-        <item
-            android:id="@+id/gps"
-            android:icon="@drawable/location"
-            android:title="GPS" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+        <item android:title="@string/action_features">
+            <menu>
+                <item
+                    android:id="@+id/home"
+                    android:icon="@drawable/home"
+                    android:title="@string/action_home" />
+                <item
+                    android:id="@+id/record"
+                    android:icon="@drawable/snow"
+                    android:title="@string/action_record"/>
+                <item
+                    android:id="@+id/overview"
+                    android:icon="@drawable/courbelinear"
+                    android:title="@string/action_overview" />
+                <item
+                    android:id="@+id/map"
+                    android:icon="@drawable/location"
+                    android:title="@string/action_map" />
+            </menu>
+        </item>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/action_communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="@string/action_share" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="@string/action_send" />
         </menu>
     </item>
 

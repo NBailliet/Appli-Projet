@@ -4,12 +4,12 @@
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/notification_template_part_time.xml"
     },
     {
-        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/abc_alert_dialog_button_bar_material.xml",
-        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_alert_dialog_button_bar_material.xml"
-    },
-    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/design_text_input_password_icon.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/res/layout/design_text_input_password_icon.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/abc_alert_dialog_button_bar_material.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_alert_dialog_button_bar_material.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/notification_template_part_chronometer.xml",
@@ -24,16 +24,20 @@
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_action_bar_up_container.xml"
     },
     {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/record.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/record.xml"
+    },
+    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/app_bar_smart_ride.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/layout/app_bar_smart_ride.xml"
     },
     {
-        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/design_bottom_sheet_dialog.xml",
-        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/res/layout/design_bottom_sheet_dialog.xml"
-    },
-    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/select_dialog_item_material.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/select_dialog_item_material.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/design_bottom_sheet_dialog.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/res/layout/design_bottom_sheet_dialog.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/design_text_input_password_icon.xml",
@@ -96,28 +100,32 @@
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/notification_template_big_media_narrow_custom.xml"
     },
     {
-        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/acquisition.xml",
-        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/layout/acquisition.xml"
-    },
-    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/notification_template_big_media_custom.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/notification_template_big_media_custom.xml"
     },
     {
-        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/abc_screen_toolbar.xml",
-        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_screen_toolbar.xml"
+        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/acquisition.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/layout/acquisition.xml"
     },
     {
-        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/abc_search_view.xml",
-        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_search_view.xml"
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/map.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/map.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/abc_list_menu_item_radio.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_list_menu_item_radio.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/content_smart_ride.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/layout/content_smart_ride.xml"
     },
     {
-        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/abc_list_menu_item_radio.xml",
-        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_list_menu_item_radio.xml"
+        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/abc_search_view.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_search_view.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/abc_screen_toolbar.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_screen_toolbar.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/abc_screen_content_include.xml",
@@ -146,6 +154,10 @@
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/design_bottom_sheet_dialog.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/res/layout/design_bottom_sheet_dialog.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/home.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/home.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/design_navigation_item_subheader.xml",
@@ -182,6 +194,10 @@
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/abc_dialog_title_material.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/settings.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/settings.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/select_dialog_singlechoice_material.xml",
@@ -252,6 +268,10 @@
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_popup_menu_header_item_layout.xml"
     },
     {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/profile.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/profile.xml"
+    },
+    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/design_navigation_menu.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/res/layout/design_navigation_menu.xml"
     },
@@ -282,10 +302,6 @@
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/select_dialog_multichoice_material.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/select_dialog_multichoice_material.xml"
-    },
-    {
-        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/acquisition.xml",
-        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/acquisition.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/notification_media_action.xml",
@@ -320,6 +336,10 @@
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_select_dialog_material.xml"
     },
     {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/share.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/share.xml"
+    },
+    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/design_layout_snackbar.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/res/layout/design_layout_snackbar.xml"
     },
@@ -346,6 +366,10 @@
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/abc_action_bar_up_container.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/overview.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/overview.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/design_navigation_item_header.xml",
@@ -436,12 +460,20 @@
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/content_smart_ride.xml"
     },
     {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/send.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/send.xml"
+    },
+    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/notification_template_part_time.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/notification_template_part_time.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/layout/activity_smart_ride.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/layout/activity_smart_ride.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/bluetooth.xml",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/layout/bluetooth.xml"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/layout/support_simple_spinner_dropdown_item.xml",

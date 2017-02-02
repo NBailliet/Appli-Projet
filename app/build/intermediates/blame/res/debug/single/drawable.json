@@ -20,6 +20,10 @@
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/drawable/side_nav_bar.xml"
     },
     {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/drawable/imagepiste2.jpg",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/drawable/imagepiste2.jpg"
+    },
+    {
         "merged": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/build/intermediates/res/merged/debug/drawable/settings2.png",
         "source": "/Users/Nicolas/AndroidStudioProjects/SmartRide2/app/src/main/res/drawable/settings2.png"
     },
@@ -414,6 +418,10 @@
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/drawable/notification_bg.xml",
         "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/drawable/notification_bg.xml"
+    },
+    {
+        "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/drawable/imagepiste.jpg",
+        "source": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/res/drawable/imagepiste.jpg"
     },
     {
         "merged": "/Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/res/merged/debug/drawable/notification_bg_low.xml",

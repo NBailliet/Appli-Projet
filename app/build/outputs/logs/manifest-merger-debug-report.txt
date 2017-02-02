@@ -54,14 +54,14 @@ category#android.intent.category.LAUNCHER
 ADDED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml:18:17-77
 	android:name
 		ADDED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml:18:27-74
-activity#com.example.nicolas.smartride2.Acquisition
+activity#com.example.nicolas.smartride2.RecordFragment
 ADDED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml:21:9-24:20
 	android:label
 		ADDED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml:22:13-45
 	android:theme
 		ADDED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml:23:13-56
 	android:name
-		ADDED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml:21:19-46
+		ADDED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml:21:19-49
 uses-sdk
 INJECTED from /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:design:25.0.1] /Users/Nicolas/AndroidStudioProjects/Appli-Projet-nicolas/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/AndroidManifest.xml:21:5-23:62

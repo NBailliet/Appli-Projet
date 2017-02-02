@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.nicolas.smartride2.Acquisition"
+            android:name="com.example.nicolas.smartride2.RecordFragment"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
