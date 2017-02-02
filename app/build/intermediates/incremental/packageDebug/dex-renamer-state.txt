@@ -1,4 +1,4 @@
-#Wed Feb 01 22:42:50 EST 2017
+#Thu Feb 02 00:35:59 EST 2017
 base.0=C\:\\Users\\Valentin\\AndroidStudioProjects\\Appli-Projet\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_8a9c3ab4c7d95e5f07e50b97b75305f725ad3cc3
 renamed.1=classes.dex
 renamed.0=classes2.dex

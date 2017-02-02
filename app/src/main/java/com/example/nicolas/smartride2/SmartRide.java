@@ -1,5 +1,7 @@
 package com.example.nicolas.smartride2;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -7,10 +9,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,7 +34,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class SmartRide extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +42,10 @@ public class SmartRide extends AppCompatActivity
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
+    public ProgressDialog progress;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private String action;
+    private int findDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,30 @@ public class SmartRide extends AppCompatActivity
         setContentView(R.layout.activity_smart_ride);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        findDevice = 0;
+///////demande permission
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //Cela signifie que la permission à déjà était
+                //demandé et l'utilisateur l'a refusé
+                //Vous pouvez aussi expliquer à l'utilisateur pourquoi
+                //cette permission est nécessaire et la redemander
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+            } else {
+                //Sinon demander la permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
+/////////////////////////////
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,9 +96,17 @@ public class SmartRide extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Register for broadcasts when a device is discovered.
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
         registerReceiver(mReceiver, filter);
+
+
+
     }
 
     @Override
@@ -110,6 +149,11 @@ public class SmartRide extends AppCompatActivity
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
 
+            if (mBluetoothAdapter.isEnabled()) {
+                //make something
+                findDevice();
+            }
+
 
 
             return true;
@@ -127,64 +171,23 @@ public class SmartRide extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
-
-                mBluetoothAdapter.startDiscovery();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(SmartRide.this);
-                // Add the buttons
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked OK button
-                        mBluetoothAdapter.cancelDiscovery();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                        mBluetoothAdapter.cancelDiscovery();
-                    }
-                });
-
-                builder.setIcon(R.drawable.bluetooth);
-
-                builder.setTitle("Bluetooth Devices");
-
-                LayoutInflater inflater = getLayoutInflater();
-                View convertView = (View) inflater.inflate(R.layout.bluetooth_device_list, null);
-                builder.setView(convertView);
-
-
-                // Create the AlertDialog
-                AlertDialog dialog = builder.create();
-
-                Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-                ArrayList<BluetoothDevice> list = new ArrayList<BluetoothDevice>();
-
-                list.addAll(pairedDevices);
-
-                listView = (ListView) convertView.findViewById(R.id.listView1);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mDeviceList);
-                listView.setAdapter(adapter);
-
-                //mBluetoothAdapter.startDiscovery();
-                Log.i("khvjfj","tag jhyjg");
-                dialog.show();
-
-                Toast.makeText(SmartRide.this, "Work !!", Toast.LENGTH_SHORT).show();
+                findDevice();
             }
 
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(SmartRide.this, "Recording Data impossible without Bluetooth connection...", Toast.LENGTH_SHORT).show();
             }
+
+
         }
     }
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            Log.i("BT","tag 1");
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+            action = intent.getAction();
+            Log.i("BT",intent.getAction());
+            if (BluetoothDevice.ACTION_FOUND.equals(action) ) {
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -192,10 +195,12 @@ public class SmartRide extends AppCompatActivity
                 String deviceHardwareAddress = device.getAddress(); // MAC address*/
                 mDeviceList.add(device.getName() + "\n" + device.getAddress());
                 Log.i("BT", device.getName() + "\n" + device.getAddress());
-                Toast.makeText(SmartRide.this,"yo", Toast.LENGTH_SHORT).show();
-                listView.setAdapter(new ArrayAdapter<String>(context,
-                       android.R.layout.simple_list_item_1, mDeviceList));
+                //Toast.makeText(SmartRide.this,"yo", Toast.LENGTH_SHORT).show();
+                if(findDevice==1) {
+                    listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
+                }
             }
+
         }
     };
 
@@ -223,6 +228,107 @@ public class SmartRide extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[],
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // La permission est garantie
+                } else {
+                    // La permission est refusée
+                }
+                return;
+            }
+        }
+    }
+
+    public void findDevice(){
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            progress = ProgressDialog.show(SmartRide.this, "Find Bluetooth Device",
+                    "Please wait...", true);
+
+           new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    mBluetoothAdapter.startDiscovery();
+
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            if(BluetoothDevice.ACTION_FOUND.equals(action) ) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SmartRide.this);
+                                // Add the buttons
+                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // User clicked OK button
+                                        findDevice=0;
+                                        mBluetoothAdapter.cancelDiscovery();
+                                        mDeviceList.clear();
+                                    }
+                                });
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // User cancelled the dialog
+                                        findDevice=0;
+                                        mBluetoothAdapter.cancelDiscovery();
+                                        mDeviceList.clear();
+                                    }
+                                });
+
+                                builder.setIcon(R.drawable.bluetooth);
+
+                                builder.setTitle("Bluetooth Devices");
+
+                                LayoutInflater inflater = getLayoutInflater();
+                                View convertView = (View) inflater.inflate(R.layout.bluetooth_device_list, null);
+                                builder.setView(convertView);
+
+
+                                // Create the AlertDialog
+                                AlertDialog dialog = builder.create();
+
+                                listView = (ListView) convertView.findViewById(R.id.listView1);
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this,android.R.layout.simple_list_item_1,mDeviceList);
+                                listView.setAdapter(adapter);
+
+                                dialog.show();
+                                findDevice = 1;
+                                progress.dismiss();
+
+                            }else  {Toast.makeText(SmartRide.this, "No Bluetooth device found...", Toast.LENGTH_SHORT).show();
+                                findDevice=0;
+                                mBluetoothAdapter.cancelDiscovery();
+                                progress.dismiss();
+                            }
+
+
+
+                        }
+
+                    });
+                }
+            }).start();
+
+
+        }
+        else Toast.makeText(SmartRide.this, "Application can't work fine without access to the location...", Toast.LENGTH_SHORT).show(); findDevice=0;
+
     }
 
    @Override
