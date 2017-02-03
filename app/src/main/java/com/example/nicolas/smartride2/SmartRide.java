@@ -198,6 +198,10 @@ public class SmartRide extends AppCompatActivity
                 //Toast.makeText(SmartRide.this,"yo", Toast.LENGTH_SHORT).show();
                 if(findDevice==1) {
                     listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
+                    //TODO comparer les éléments de la list pour ne pas ajouter plusieurs fois le même device
+                    //TODO un meilleur design pour la listView
+                    //TODO Implémenter l'action de se connecter aux devices
+                    //TODO Conditions pour ne pouvoir se connecter que au skis
                 }
             }
 
@@ -254,7 +258,7 @@ public class SmartRide extends AppCompatActivity
             progress = ProgressDialog.show(SmartRide.this, "Find Bluetooth Device",
                     "Please wait...", true);
 
-           new Thread(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
 
@@ -331,7 +335,7 @@ public class SmartRide extends AppCompatActivity
 
     }
 
-   @Override
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
