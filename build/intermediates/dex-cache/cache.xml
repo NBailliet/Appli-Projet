@@ -25,7 +25,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="9e9dedb66e894b28dd2bbc305413c0510137397e">
+        sha1="e908976767eb4beb4f7193637650610d31db47e1">
         <dex dex="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_e73e5a6e3d6357c9802ac166ca1cfc50f8369cfe\classes.dex" />
     </item>
     <item
@@ -39,15 +39,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
-        <dex dex="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.0.1_ef643df928feb2cfa1ffbd381fd635822a829ed4\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\libs\internal_impl-25.0.1.jar"
         jumboMode="true"
         optimize="true"
@@ -57,11 +48,20 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
+        <dex dex="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.0.1_ef643df928feb2cfa1ffbd381fd635822a829ed4\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="304d6305e91080e9b66d7b0ddcb3d5573c0ff3cc">
+        sha1="069f98d389e2a7b9175a4a3fc49d578be5c04853">
         <dex dex="C:\Users\Valentin\AndroidStudioProjects\Appli-Projet\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_8a9c3ab4c7d95e5f07e50b97b75305f725ad3cc3\classes.dex" />
     </item>
     <item
