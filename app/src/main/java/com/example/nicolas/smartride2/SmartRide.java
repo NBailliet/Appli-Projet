@@ -148,7 +148,7 @@ public class SmartRide extends AppCompatActivity
                 //make something
                 findDevice();
             }
-            
+
             return true;
         }
         else if (id == R.id.action_profile) {
