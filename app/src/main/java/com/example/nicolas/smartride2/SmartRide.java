@@ -191,12 +191,13 @@ public class SmartRide extends AppCompatActivity
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 /*String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address*/
-                mDeviceList.add(device.getName() + "\n" + device.getAddress());
-                Log.i("BT", device.getName() + "\n" + device.getAddress());
+                if(device.getName()!=null && !mDeviceList.contains(device.getName() + "\n" + device.getAddress())) {
+                    mDeviceList.add(device.getName() + "\n" + device.getAddress());
+                }
+                    Log.i("BT", device.getName() + "\n" + device.getAddress());
                 //Toast.makeText(SmartRide.this,"yo", Toast.LENGTH_SHORT).show();
                 if(findDevice==1) {
                     listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
-                    //TODO comparer les éléments de la list pour ne pas ajouter plusieurs fois le même device
                     //TODO un meilleur design pour la listView
                     //TODO Implémenter l'action de se connecter aux devices
                     //TODO Conditions pour ne pouvoir se connecter que au skis
@@ -305,17 +306,22 @@ public class SmartRide extends AppCompatActivity
 
                                 LayoutInflater inflater = getLayoutInflater();
                                 View convertView = (View) inflater.inflate(R.layout.bluetooth_device_list, null);
-                                builder.setView(convertView);
 
+
+
+
+                                listView = (ListView) convertView.findViewById(R.id.listViewBluetoothDevice);
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this,android.R.layout.simple_list_item_1,mDeviceList);
+                                listView.setAdapter(adapter);
+
+                                builder.setView(convertView);
 
                                 // Create the AlertDialog
                                 AlertDialog dialog = builder.create();
 
-                                listView = (ListView) convertView.findViewById(R.id.listView1);
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this,android.R.layout.simple_list_item_1,mDeviceList);
-                                listView.setAdapter(adapter);
-
                                 dialog.show();
+                                //dialog.getWindow().setLayout(700, 600);
+                                //dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
                                 findDevice = 1;
                                 progress.dismiss();
 
