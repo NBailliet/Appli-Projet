@@ -31,6 +31,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.ArrayList;
 
 public class SmartRide extends AppCompatActivity
@@ -44,6 +46,11 @@ public class SmartRide extends AppCompatActivity
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private String action;
     private int findDevice;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +104,6 @@ public class SmartRide extends AppCompatActivity
 
         registerReceiver(mReceiver, filter);
 
-
-
     }
 
     @Override
@@ -129,7 +134,7 @@ public class SmartRide extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            fm.beginTransaction().replace(R.id.frame,new SettingsFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new SettingsFragment()).commit();
             setTitle(getString(R.string.action_settings));
             return true;
         } else if (id == R.id.action_bluetooth) {
@@ -150,9 +155,8 @@ public class SmartRide extends AppCompatActivity
             }
 
             return true;
-        }
-        else if (id == R.id.action_profile) {
-            fm.beginTransaction().replace(R.id.frame,new ProfileFragment()).commit();
+        } else if (id == R.id.action_profile) {
+            fm.beginTransaction().replace(R.id.frame, new ProfileFragment()).commit();
             setTitle(getString(R.string.action_profile));
             return true;
         } else if (id == R.id.action_quitter) {
@@ -184,20 +188,21 @@ public class SmartRide extends AppCompatActivity
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             action = intent.getAction();
-            Log.i("BT",intent.getAction());
-            if (BluetoothDevice.ACTION_FOUND.equals(action) ) {
+            Log.i("BT", intent.getAction());
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 /*String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address*/
-                if(device.getName()!=null && !mDeviceList.contains(device.getName() + "\n" + device.getAddress())) {
+                if (device.getName() != null && !mDeviceList.contains(device.getName() + "\n" + device.getAddress())) {
                     mDeviceList.add(device.getName() + "\n" + device.getAddress());
                 }
-                    Log.i("BT", device.getName() + "\n" + device.getAddress());
+                Log.i("BT", device.getName() + "\n" + device.getAddress());
                 //Toast.makeText(SmartRide.this,"yo", Toast.LENGTH_SHORT).show();
-                if(findDevice==1) {
+                if (findDevice == 1) {
                     listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
+                    //TODO Expandable List item nom du device et sub item adresse mac
                     //TODO un meilleur design pour la listView
                     //TODO Implémenter l'action de se connecter aux devices
                     //TODO Conditions pour ne pouvoir se connecter que au skis
@@ -215,22 +220,22 @@ public class SmartRide extends AppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
 
         if (id == R.id.home) {
-            fm.beginTransaction().replace(R.id.frame,new HomeFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).commit();
             setTitle(getString(R.string.action_home));
         } else if (id == R.id.record) {
-            fm.beginTransaction().replace(R.id.frame,new RecordFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new RecordFragment()).commit();
             setTitle(getString(R.string.action_record));
         } else if (id == R.id.overview) {
-            fm.beginTransaction().replace(R.id.frame,new OverviewFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new OverviewFragment()).commit();
             setTitle(getString(R.string.action_overview));
         } else if (id == R.id.map) {
-            fm.beginTransaction().replace(R.id.frame,new MapFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).commit();
             setTitle(getString(R.string.action_map));
         } else if (id == R.id.nav_share) {
-            fm.beginTransaction().replace(R.id.frame,new ShareFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new ShareFragment()).commit();
             setTitle(getString(R.string.action_share));
         } else if (id == R.id.nav_send) {
-            fm.beginTransaction().replace(R.id.frame,new SendFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new SendFragment()).commit();
             setTitle(getString(R.string.action_send));
         }
 
@@ -255,7 +260,7 @@ public class SmartRide extends AppCompatActivity
         }
     }
 
-    public void findDevice(){
+    public void findDevice() {
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -278,15 +283,14 @@ public class SmartRide extends AppCompatActivity
 
                     runOnUiThread(new Runnable() {
                         @Override
-                        public void run()
-                        {
-                            if(BluetoothDevice.ACTION_FOUND.equals(action) ) {
+                        public void run() {
+                            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SmartRide.this);
                                 // Add the buttons
                                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // User clicked OK button
-                                        findDevice=0;
+                                        findDevice = 0;
                                         mBluetoothAdapter.cancelDiscovery();
                                         mDeviceList.clear();
                                     }
@@ -294,7 +298,7 @@ public class SmartRide extends AppCompatActivity
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // User cancelled the dialog
-                                        findDevice=0;
+                                        findDevice = 0;
                                         mBluetoothAdapter.cancelDiscovery();
                                         mDeviceList.clear();
                                     }
@@ -308,10 +312,8 @@ public class SmartRide extends AppCompatActivity
                                 View convertView = (View) inflater.inflate(R.layout.bluetooth_device_list, null);
 
 
-
-
                                 listView = (ListView) convertView.findViewById(R.id.listViewBluetoothDevice);
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this,android.R.layout.simple_list_item_1,mDeviceList);
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this, android.R.layout.simple_list_item_1, mDeviceList);
                                 listView.setAdapter(adapter);
 
                                 builder.setView(convertView);
@@ -325,12 +327,12 @@ public class SmartRide extends AppCompatActivity
                                 findDevice = 1;
                                 progress.dismiss();
 
-                            }else  {Toast.makeText(SmartRide.this, "No Bluetooth device found...", Toast.LENGTH_SHORT).show();
-                                findDevice=0;
+                            } else {
+                                Toast.makeText(SmartRide.this, "No Bluetooth device found...", Toast.LENGTH_SHORT).show();
+                                findDevice = 0;
                                 mBluetoothAdapter.cancelDiscovery();
                                 progress.dismiss();
                             }
-
 
 
                         }
@@ -340,8 +342,9 @@ public class SmartRide extends AppCompatActivity
             }).start();
 
 
-        }
-        else Toast.makeText(SmartRide.this, "Application can't work fine without access to the location...", Toast.LENGTH_SHORT).show(); findDevice=0;
+        } else
+            Toast.makeText(SmartRide.this, "Application can't work fine without access to the location...", Toast.LENGTH_SHORT).show();
+        findDevice = 0;
 
     }
 
@@ -352,4 +355,8 @@ public class SmartRide extends AppCompatActivity
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(mReceiver);
     }
+
+
 }
+
+//TODO Faire un tableau de données des capteurs avec valeurs et temps

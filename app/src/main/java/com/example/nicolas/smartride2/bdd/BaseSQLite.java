@@ -38,5 +38,7 @@ public class BaseSQLite extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //TODO Finir la BDD pour le profils
+
 }
 
