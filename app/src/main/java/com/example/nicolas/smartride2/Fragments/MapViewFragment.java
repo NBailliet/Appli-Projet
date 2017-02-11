@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.Localisation;
@@ -140,6 +141,17 @@ public class MapViewFragment extends Fragment {
               Intent myIntentServiceIntent = new Intent(getActivity(), RideLocationGetter.class);
 
               getActivity().stopService(myIntentServiceIntent);
+            }
+        });
+
+        FloatingActionButton myFabClean = (FloatingActionButton)  rootView.findViewById(R.id.floatingActionButtonCleantable);
+        myFabClean.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                bdd.clearTable("TABLE_LOC");
+                Toast.makeText(getActivity(), "Location table clean", Toast.LENGTH_SHORT).show();
+                if (googleMap!=null) {
+                    googleMap.clear();
+                }
             }
         });
 

@@ -34,4 +34,15 @@
         android:layout_alignStart="@+id/floatingActionButtonEnd"
         android:layout_marginBottom="15dp" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/cancel"
+        android:id="@+id/floatingActionButtonCleantable"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/floatingActionButtonStart"
+        android:layout_marginTop="109dp" />
+
 </RelativeLayout>

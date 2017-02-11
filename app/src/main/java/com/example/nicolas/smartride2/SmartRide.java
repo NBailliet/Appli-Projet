@@ -71,7 +71,7 @@ public class SmartRide extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         bdd=new BDD(this);
-       bdd.clearTable("TABLE_LOC");
+       //bdd.clearTable("TABLE_LOC");
 
 
 

@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.Localisation;
@@ -54,6 +55,7 @@ public class RideLocationGetter extends Service {
             return;
         }
         locationMangaer.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+        Toast.makeText(getBaseContext(), "Location service started", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -73,7 +75,7 @@ public class RideLocationGetter extends Service {
         @Override
         public void onLocationChanged(Location loc) {
 
-            //Toast.makeText(getBaseContext(), "Location changed : Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "Location changed : Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
             String longitude = "Longitude: " + loc.getLongitude();
             Log.v(TAG, longitude);
             String latitude = "Latitude: " + loc.getLatitude();
@@ -146,6 +148,7 @@ public class RideLocationGetter extends Service {
             return;
         }
         locationMangaer.removeUpdates(locationListener);
+        Toast.makeText(getBaseContext(), "Location service stoped", Toast.LENGTH_SHORT).show();
         Log.w(TAG, "serviceLoc destroy");
     }
 }

@@ -222,5 +222,6 @@ public class BDD {
     public void clearTable(String nameoftable){
         bdd=maBaseSQLite.getWritableDatabase();
         bdd.delete(nameoftable,null,null);
+        bdd.close();
     }
 }
