@@ -31,6 +31,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.nicolas.smartride2.BDD.BDD;
+import com.example.nicolas.smartride2.Fragments.HomeFragment;
+import com.example.nicolas.smartride2.Fragments.MapViewFragment;
+import com.example.nicolas.smartride2.Fragments.OverviewFragment;
+import com.example.nicolas.smartride2.Fragments.ProfileFragment;
+import com.example.nicolas.smartride2.Fragments.RecordFragment;
+import com.example.nicolas.smartride2.Fragments.SendFragment;
+import com.example.nicolas.smartride2.Fragments.SettingsFragment;
+import com.example.nicolas.smartride2.Fragments.ShareFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
@@ -52,12 +61,20 @@ public class SmartRide extends AppCompatActivity
      */
     private GoogleApiClient client;
 
+    private BDD bdd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_ride);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        bdd=new BDD(this);
+       bdd.clearTable("TABLE_LOC");
+
+
+
         findDevice = 0;
 ///////demande permission
         if (ContextCompat.checkSelfPermission(this,

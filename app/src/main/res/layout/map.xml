@@ -15,11 +15,23 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         app:fabSize="normal"
-        app:srcCompat="@drawable/calendrier"
+        app:srcCompat="@drawable/horloge"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
-        android:id="@+id/floatingActionButton" />
+        android:id="@+id/floatingActionButtonEnd"
+        android:onClick="RunService"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:srcCompat="@android:drawable/ic_media_play"
+        android:id="@+id/floatingActionButtonStart"
+        android:layout_above="@+id/floatingActionButtonEnd"
+        android:layout_alignStart="@+id/floatingActionButtonEnd"
+        android:layout_marginBottom="15dp" />
 
 </RelativeLayout>
