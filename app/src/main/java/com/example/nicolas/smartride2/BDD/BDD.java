@@ -26,12 +26,12 @@ public class BDD {
     private static final String NOM_BDD = "SmartRideBDD.db";
 
     //Profil Table
-    private static final String TABLE_PROFIL = "table_profil";
-    private static final String COL_PROFIL_ID = "profil_ID";
+    private static final String TABLE_PROFIL = "TABLE_PROFIL";
+    private static final String COL_PROFIL_ID = "PROFIL_ID";
     private static final int NUM_COL_PROFIL_ID = 0;
-    private static final String COL_PROFIL_NAME = "profil_name";
+    private static final String COL_PROFIL_NAME = "PROFIL_NAME";
     private static final int NUM_COL_PROFIL_NAME = 1;
-    private static final String COL_PROFIL_PWD = "profil_pwd";
+    private static final String COL_PROFIL_PWD = "PROFIL_PWD";
     private static final int NUM_COL_PROFIL_PWD = 2;
 
     //Run Table
@@ -79,8 +79,8 @@ public class BDD {
         return bdd;
     }
 
-    //Localisation Table
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Localisation Table
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public long insertLoc(Localisation localisation){
         //Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = new ContentValues();
@@ -107,7 +107,7 @@ public class BDD {
         return bdd.update(TABLE_LOC, values, COL_LOC_ID + " = " +id, null);
     }
 
-    public Localisation getLocalisationWithTitre(String name){
+    public Localisation getLocalisationWithRunName(String name){
         //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
         Cursor c = bdd.query(TABLE_LOC, new String[] {COL_LOC_ID, COL_LOC_RUN_NAME, COL_LOC, COL_LOC_TIME}, COL_LOC_RUN_NAME + " LIKE \"" + name +"\"", null, null, null, null);
         return cursorToLoc(c);
@@ -150,12 +150,77 @@ public class BDD {
         return localisation;
     }
 
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Profil Table
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /*   public long insertProfil(User user){
+        //Création d'un ContentValues (fonctionne comme une HashMap)
+        ContentValues values = new ContentValues();
+        //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+        values.put(COL_PROFIL_NAME, user.getLogin());
+        values.put(COL_PROFIL_PWD, user.getPWD );
+       /* String t2=gson.toJson(user.getTime());
+        values.put(COL_LOC_TIME, t2);*/ //todo add date of profil creation
+        //on insère l'objet dans la BDD via le ContentValues
+  /*      return bdd.insert(TABLE_LOC, null, values);
+    }
+
+    public int updateProfil(int id, User user){
+        //La mise à jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
+        //il faut simple préciser quelle livre on doit mettre à jour grâce à l'ID
+        ContentValues values = new ContentValues();
+        values.put(COL_PROFIL_NAME, user.getLogin());
+        values.put(COL_PROFIL_PWD, user.getPWD );
+       /* String t2=gson.toJson(user.getTime());
+        values.put(COL_LOC_TIME, t2);*/ //todo add date of profil creation
+  /*      return bdd.update(TABLE_PROFIL, values, COL_PROFIL_ID + " = " +id, null);
+    }
+
+    public User getUserWithLogin(String Login){
+       */ //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
+      //  Cursor c = bdd.query(TABLE_LOC, new String[] {COL_PROFIL_ID, COL_PROFIL_NAME, COL_PROFIL_PWD/*, COL_LOC_TIME*/}, COL_PROFIL_NAME + " LIKE \"" + login +"\"", null, null, null, null);
+    /*    return cursorToProfil(c);
+    }
+
+    public List<User> getAllProfil() {
+        List<User> users = new ArrayList<User>();
+        Cursor cursor = bdd.query(TABLE_PROFIL,
+        *///        new String[] {COL_PROFIL_ID, COL_PROFIL_NAME, COL_PROFIL_PWD/*, COL_LOC_TIME*/}, null, null, null, null, null);
+      /*  cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            User user = cursorToProfil(cursor);
+            users.add(user);
+            cursor.moveToNext();
+        }
+        // assurez-vous de la fermeture du curseur
+        cursor.close();
+        return users;
+    }
+
+    private User cursorToProfil(Cursor c){
+        //si aucun élément n'a été retourné dans la requête, on renvoie null
+        if (c.getCount() == 0)
+            return null;
+
+        //On créé un livre
+        User user = new User(null,null,null);
+        //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
+        user.setLogin(c.getString(NUM_COL_PROFIL_NAME));
+        user.setPWD(c.getString(NUM_COL_PROFIL_PWD));
+
+       /* Type type = new TypeToken<Time>() {}.getType();
+        Time time = gson.fromJson(c.getString(NUM_COL_LOC_TIME), type);
+        user.setTime(time);*/
+
+        //On retourne le livre
+ /*       return user;
+    }*/
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public void clearTable(String nameoftable){
         bdd=maBaseSQLite.getWritableDatabase();
         bdd.delete(nameoftable,null,null);
     }
-
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 }
