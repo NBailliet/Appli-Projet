@@ -58,19 +58,11 @@ public class MapViewFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+
         rootView = inflater.inflate(R.layout.map, container, false);
 
         bdd = new BDD(getContext());
         setUserVisibleHint(false);
-
-
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Toast.makeText(getActivity(), "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
-        }else{
-            showGPSDisabledAlertToUser();
-        }
 
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -125,14 +117,14 @@ public class MapViewFragment extends Fragment {
                 bdd.close();
                 if(locs.size()!=0) {
                     for (int i = 0; i < locs.size(); i++) {
-                        polylineOptions.add(new LatLng(locs.get(i).getLocation().getLatitude(), locs.get(i).getLocation().getLongitude()));
+                        polylineOptions.add(locs.get(i).getLocation());
                     }
                     Polyline line = googleMap.addPolyline(polylineOptions);
                     //googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
 
 
                     // For zooming automatically to the location of the marker
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(locs.get(0).getLocation().getLatitude(), locs.get(0).getLocation().getLongitude())).zoom(14).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(locs.get(0).getLocation()).zoom(14).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }else {
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(45.3766465,-71.9255638)).zoom(14).build();
@@ -140,6 +132,15 @@ public class MapViewFragment extends Fragment {
                 }
             }
         });
+
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(getActivity(), "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        }else{
+           showGPSDisabledAlertToUser();
+            //Toast.makeText(getActivity(), "GPS is Disabled ! Please enable it to get better locations.", Toast.LENGTH_SHORT).show();
+        }
 
         FloatingActionButton myFabStart = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButtonStart);
         myFabStart.setOnClickListener(new View.OnClickListener() {
@@ -195,7 +196,7 @@ public class MapViewFragment extends Fragment {
 
                 if (locs.size() != 0) {
                     for (int i = 0; i < locs.size(); i++) {
-                        polylineOptions.add(new LatLng(locs.get(i).getLocation().getLatitude(), locs.get(i).getLocation().getLongitude()));
+                        polylineOptions.add(locs.get(i).getLocation());
                     }
                     Polyline line = googleMap.addPolyline(polylineOptions);
                     //googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
@@ -253,3 +254,4 @@ public class MapViewFragment extends Fragment {
         mMapView.onLowMemory();
     }
 }
+//todo some "Fatal signal 11 (SIGSEGV), code 2" error without any reasons

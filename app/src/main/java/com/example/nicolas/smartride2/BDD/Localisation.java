@@ -1,6 +1,6 @@
 package com.example.nicolas.smartride2.BDD;
 
-import android.location.Location;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by Valentin on 10/02/2017.
@@ -9,13 +9,15 @@ import android.location.Location;
 public class Localisation {
 
     String NameOfRun;
-    Location location;
+    LatLng location;
     Time time;
+    double altitude;
 
-    public Localisation(String nameOfRun, Location location, Time time) {
+    public Localisation(String nameOfRun, LatLng location, Time time, double altitude) {
         NameOfRun = nameOfRun;
         this.location = location;
         this.time = time;
+        this.altitude = altitude;
     }
 
     public String getNameOfRun() {
@@ -26,11 +28,11 @@ public class Localisation {
         NameOfRun = nameOfRun;
     }
 
-    public Location getLocation() {
+    public LatLng getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LatLng location) {
         this.location = location;
     }
 
@@ -42,4 +44,11 @@ public class Localisation {
         this.time = time;
     }
 
+    public double getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
+    }
 }

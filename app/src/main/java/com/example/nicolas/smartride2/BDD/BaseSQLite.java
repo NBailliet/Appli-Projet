@@ -14,11 +14,16 @@ public class BaseSQLite extends SQLiteOpenHelper {
     //Profil Table
     private static final String TABLE_PROFIL = "TABLE_PROFIL";
     private static final String COL_PROFIL_ID = "PROFIL_ID";
-    private static final String COL_PROFIL_NAME = "PROFIL_NAME";
+    private static final String COL_PROFIL_LOGIN = "PROFIL_LOGIN";
     private static final String COL_PROFIL_PWD = "PROFIL_PWD";
+    private static final String COL_PROFIL_NAME = "PROFIL_NAME";
+    private static final String COL_PROFIL_SURNAME = "PROFIL_SURNAME";
+    private static final String COL_PROFIL_AGE = "PROFIL_AGE";
+    private static final String COL_PROFIL_CREATION = "PROFIL_CREATION";
 
     private static final String CREATE_TABLE_PROFIL = "CREATE TABLE " + TABLE_PROFIL + " ("
-            + COL_PROFIL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_PROFIL_NAME + " TEXT, "+ COL_PROFIL_PWD +" TEXT);";
+            + COL_PROFIL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +COL_PROFIL_LOGIN + " TEXT, "+ COL_PROFIL_PWD + " TEXT, "
+            +COL_PROFIL_NAME + " TEXT, "+ COL_PROFIL_SURNAME + " TEXT, "+ COL_PROFIL_AGE + " REAL, " +  COL_PROFIL_CREATION+" TEXT);";
 
     //Run Table
     private static final String TABLE_RUN = "TABLE_RUN";
@@ -36,9 +41,10 @@ public class BaseSQLite extends SQLiteOpenHelper {
     private static final String COL_LOC_RUN_NAME = "LOC_RUN_NAME";
     private static final String COL_LOC = "LOC";
     private static final String COL_LOC_TIME = "LOC_TIME";
+    private static final String COL_LOC_ALT = "LOC_ALT";
 
     private static final String CREATE_TABLE_LOCATION = "CREATE TABLE " + TABLE_LOC + " ("
-            + COL_LOC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_LOC_RUN_NAME + " TEXT, "+ COL_LOC +" BLOB, " + COL_LOC_TIME + " BLOB );";
+            + COL_LOC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_LOC_RUN_NAME + " TEXT, "+ COL_LOC +" TEXT, " + COL_LOC_TIME+ " TEXT, " + COL_LOC_ALT + " TEXT );";
 
     //todo create tables ( x number of sensors on ONE ski) for sensors and data
 

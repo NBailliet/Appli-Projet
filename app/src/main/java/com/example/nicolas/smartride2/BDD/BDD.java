@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -22,17 +22,25 @@ public class BDD {
 
     Gson gson = new Gson();
 
-    private static final int VERSION_BDD = 2;
+    private static final int VERSION_BDD = 3;
     private static final String NOM_BDD = "SmartRideBDD.db";
 
     //Profil Table
     private static final String TABLE_PROFIL = "TABLE_PROFIL";
     private static final String COL_PROFIL_ID = "PROFIL_ID";
     private static final int NUM_COL_PROFIL_ID = 0;
-    private static final String COL_PROFIL_NAME = "PROFIL_NAME";
-    private static final int NUM_COL_PROFIL_NAME = 1;
+    private static final String COL_PROFIL_LOGIN = "PROFIL_LOGIN";
+    private static final int NUM_COL_PROFIL_LOGIN =1;
     private static final String COL_PROFIL_PWD = "PROFIL_PWD";
     private static final int NUM_COL_PROFIL_PWD = 2;
+    private static final String COL_PROFIL_NAME = "PROFIL_NAME";
+    private static final int NUM_COL_PROFIL_NAME = 3;
+    private static final String COL_PROFIL_SURNAME = "PROFIL_SURNAME";
+    private static final int NUM_COL_PROFIL_SURNAME = 4;
+    private static final String COL_PROFIL_AGE = "PROFIL_AGE";
+    private static final int NUM_COL_PROFIL_AGE = 5;
+    private static final String COL_PROFIL_CREATION = "PROFIL_CREATION";
+    private static final int NUM_COL_PROFIL_CREATION = 6;
 
     //Run Table
     private static final String TABLE_RUN = "table_run";
@@ -55,6 +63,9 @@ public class BDD {
     private static final int NUM_COL_LOC = 2;
     private static final String COL_LOC_TIME = "LOC_TIME";
     private static final int NUM_COL_LOC_TIME = 3;
+    private static final String COL_LOC_ALT = "LOC_ALT";
+    private static final int NUM_COL_LOC_ALT = 4;
+
 
     private SQLiteDatabase bdd;
 
@@ -91,32 +102,32 @@ public class BDD {
         Log.v("BDD",t1);
         String t2=gson.toJson(localisation.getTime());
         values.put(COL_LOC_TIME, t2);
+        values.put(COL_LOC_ALT,localisation.getAltitude());
         //on insère l'objet dans la BDD via le ContentValues
         return bdd.insert(TABLE_LOC, null, values);
     }
 
-    public int updateLoc(int id, Localisation localisation){
-        //La mise à jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
-        //il faut simple préciser quelle livre on doit mettre à jour grâce à l'ID
+    public int updateLoc(Localisation localisation){
         ContentValues values = new ContentValues();
         values.put(COL_LOC_RUN_NAME, localisation.getNameOfRun());
         String t1=gson.toJson(localisation.getLocation());
         values.put(COL_LOC, t1 );
         String t2=gson.toJson(localisation.getTime());
         values.put(COL_LOC_TIME, t2);
-        return bdd.update(TABLE_LOC, values, COL_LOC_ID + " = " +id, null);
+        values.put(COL_LOC_ALT,localisation.getAltitude());
+        return bdd.update(TABLE_LOC, values, COL_LOC_RUN_NAME + " = " +localisation.getNameOfRun(), null);
     }
 
     public Localisation getLocalisationWithRunName(String name){
         //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
-        Cursor c = bdd.query(TABLE_LOC, new String[] {COL_LOC_ID, COL_LOC_RUN_NAME, COL_LOC, COL_LOC_TIME}, COL_LOC_RUN_NAME + " LIKE \"" + name +"\"", null, null, null, null);
+        Cursor c = bdd.query(TABLE_LOC, new String[] {COL_LOC_ID, COL_LOC_RUN_NAME, COL_LOC, COL_LOC_TIME, COL_LOC_ALT}, COL_LOC_RUN_NAME + " LIKE \"" + name +"\"", null, null, null, null);
         return cursorToLoc(c);
     }
 
     public List<Localisation> getAllLoc() {
         List<Localisation> locs = new ArrayList<Localisation>();
         Cursor cursor = bdd.query(TABLE_LOC,
-                new String[] {COL_LOC_ID, COL_LOC_RUN_NAME, COL_LOC, COL_LOC_TIME}, null, null, null, null, null);
+                new String[] {COL_LOC_ID, COL_LOC_RUN_NAME, COL_LOC, COL_LOC_TIME , COL_LOC_ALT}, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Localisation localisation = cursorToLoc(cursor);
@@ -134,17 +145,19 @@ public class BDD {
             return null;
 
         //On créé un livre
-        Localisation localisation = new Localisation(null,null,null);
+        Localisation localisation = new Localisation(null,null,null,0);
         //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
         localisation.setNameOfRun(c.getString(NUM_COL_LOC_RUN_NAME));
 
-        Type type2 = new TypeToken<Location>() {}.getType();
-        Location location = gson.fromJson(c.getString(NUM_COL_LOC), type2);
+        Type type2 = new TypeToken<LatLng>() {}.getType();
+        LatLng location = gson.fromJson(c.getString(NUM_COL_LOC), type2);
         localisation.setLocation(location);
 
         Type type = new TypeToken<Time>() {}.getType();
         Time time = gson.fromJson(c.getString(NUM_COL_LOC_TIME), type);
         localisation.setTime(time);
+
+        localisation.setAltitude(c.getDouble(NUM_COL_LOC_ALT));
 
         //On retourne le livre
         return localisation;
@@ -154,40 +167,44 @@ public class BDD {
 
 //Profil Table
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- /*   public long insertProfil(User user){
+   public long insertProfil(User user){
         //Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = new ContentValues();
         //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
-        values.put(COL_PROFIL_NAME, user.getLogin());
-        values.put(COL_PROFIL_PWD, user.getPWD );
-       /* String t2=gson.toJson(user.getTime());
-        values.put(COL_LOC_TIME, t2);*/ //todo add date of profil creation
+        values.put(COL_PROFIL_LOGIN, user.getLogin());
+        values.put(COL_PROFIL_PWD, user.getPassword());
+       values.put(COL_PROFIL_NAME, user.getName());
+       values.put(COL_PROFIL_SURNAME, user.getSurname());
+       values.put(COL_PROFIL_AGE, user.getAge());
+       String t2=gson.toJson(user.getCreationDate());
+       values.put(COL_PROFIL_CREATION, t2);
         //on insère l'objet dans la BDD via le ContentValues
-  /*      return bdd.insert(TABLE_LOC, null, values);
+        return bdd.insert(TABLE_PROFIL, null, values);
     }
 
-    public int updateProfil(int id, User user){
-        //La mise à jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
-        //il faut simple préciser quelle livre on doit mettre à jour grâce à l'ID
+    public int updateProfil(User user){
         ContentValues values = new ContentValues();
-        values.put(COL_PROFIL_NAME, user.getLogin());
-        values.put(COL_PROFIL_PWD, user.getPWD );
-       /* String t2=gson.toJson(user.getTime());
-        values.put(COL_LOC_TIME, t2);*/ //todo add date of profil creation
-  /*      return bdd.update(TABLE_PROFIL, values, COL_PROFIL_ID + " = " +id, null);
+        values.put(COL_PROFIL_LOGIN, user.getLogin());
+        values.put(COL_PROFIL_PWD, user.getPassword());
+        values.put(COL_PROFIL_NAME, user.getName());
+        values.put(COL_PROFIL_SURNAME, user.getSurname());
+        values.put(COL_PROFIL_AGE, user.getAge());
+        String t2=gson.toJson(user.getCreationDate());
+        values.put(COL_PROFIL_CREATION, t2);
+       return bdd.update(TABLE_PROFIL, values, COL_PROFIL_LOGIN + " LIKE \"" + user.getLogin() +"\"", null);
     }
 
-    public User getUserWithLogin(String Login){
-       */ //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
-      //  Cursor c = bdd.query(TABLE_LOC, new String[] {COL_PROFIL_ID, COL_PROFIL_NAME, COL_PROFIL_PWD/*, COL_LOC_TIME*/}, COL_PROFIL_NAME + " LIKE \"" + login +"\"", null, null, null, null);
-    /*    return cursorToProfil(c);
+    public User getUserWithLogin(String login){
+        Cursor c = bdd.query(TABLE_PROFIL, new String[] {COL_PROFIL_ID, COL_PROFIL_LOGIN, COL_PROFIL_PWD, COL_PROFIL_NAME,COL_PROFIL_SURNAME,COL_PROFIL_AGE, COL_PROFIL_CREATION}, COL_PROFIL_LOGIN + " LIKE \"" + login +"\"", null, null, null, null);
+        c.moveToFirst();
+        return cursorToProfil(c);
     }
 
     public List<User> getAllProfil() {
         List<User> users = new ArrayList<User>();
         Cursor cursor = bdd.query(TABLE_PROFIL,
-        *///        new String[] {COL_PROFIL_ID, COL_PROFIL_NAME, COL_PROFIL_PWD/*, COL_LOC_TIME*/}, null, null, null, null, null);
-      /*  cursor.moveToFirst();
+              new String[] {COL_PROFIL_ID, COL_PROFIL_LOGIN, COL_PROFIL_PWD, COL_PROFIL_NAME,COL_PROFIL_SURNAME, COL_PROFIL_AGE, COL_PROFIL_CREATION}, null, null, null, null, null);
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             User user = cursorToProfil(cursor);
             users.add(user);
@@ -200,22 +217,29 @@ public class BDD {
 
     private User cursorToProfil(Cursor c){
         //si aucun élément n'a été retourné dans la requête, on renvoie null
-        if (c.getCount() == 0)
-            return null;
-
-        //On créé un livre
-        User user = new User(null,null,null);
-        //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
-        user.setLogin(c.getString(NUM_COL_PROFIL_NAME));
-        user.setPWD(c.getString(NUM_COL_PROFIL_PWD));
-
-       /* Type type = new TypeToken<Time>() {}.getType();
-        Time time = gson.fromJson(c.getString(NUM_COL_LOC_TIME), type);
-        user.setTime(time);*/
-
-        //On retourne le livre
- /*       return user;
-    }*/
+        Log.v("cursor", Integer.toString(c.getCount()));
+        if (c.getCount() >= 1) {
+            Log.v("cursor", "in the if");
+            User user = new User(null, null, null, null, 0, null);
+            Log.v("cursor", "after new user");
+            //Log.v("cursor", "Namelogincolonne"+c.getString(1));
+            user.setLogin(c.getString(NUM_COL_PROFIL_LOGIN));
+            Log.v("cursor", "after set login"+user.getLogin());
+            user.setPassword(c.getString(NUM_COL_PROFIL_PWD));
+            Log.v("cursor", "after set pwd");
+            user.setName(c.getString(NUM_COL_PROFIL_NAME));
+            Log.v("cursor", "after set name");
+            user.setSurname(c.getString(NUM_COL_PROFIL_SURNAME));
+            Log.v("cursor", "after set Surname");
+            user.setAge(c.getInt(NUM_COL_PROFIL_AGE));
+            Type type = new TypeToken<Time>() {
+            }.getType();
+            Time time = gson.fromJson(c.getString(NUM_COL_PROFIL_CREATION), type);
+            user.setCreationDate(time);
+            Log.v("cursor", "after time");
+            return user;
+        } else  return null;
+    }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.Localisation;
 import com.example.nicolas.smartride2.BDD.Time;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,7 +76,7 @@ public class RideLocationGetter extends Service {
         @Override
         public void onLocationChanged(Location loc) {
 
-            Toast.makeText(getBaseContext(), "Location changed : Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getBaseContext(), "Location changed : Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
             String longitude = "Longitude: " + loc.getLongitude();
             Log.v(TAG, longitude);
             String latitude = "Latitude: " + loc.getLatitude();
@@ -93,7 +94,7 @@ public class RideLocationGetter extends Service {
             Log.v(TAG, String.valueOf("y=" + year + " mo=" + month + " day=" + day + " h=" + hours + " m=" + mins + " s=" + seconds + " ms=" + milliseconds));
             //listDataTime.add(new Time(year,month,day,hours,mins,seconds,milliseconds));
             Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
-            Localisation localisation = new Localisation("FIRST", loc, time);
+            Localisation localisation = new Localisation("FIRST", new LatLng(loc.getLatitude(),loc.getLongitude()), time , loc.getAltitude());
             bdd.open();
             bdd.insertLoc(localisation);
             bdd.close();
