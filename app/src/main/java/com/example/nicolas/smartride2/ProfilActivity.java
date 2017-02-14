@@ -20,7 +20,7 @@ public class ProfilActivity extends AppCompatActivity {
 
         User user = bdd.getUserWithLogin("");
 
-        if(user!=null) {
+        if  (user!=null) {
             TextView loginP = (TextView) findViewById(R.id.textlogin);
             loginP.setText(user.getLogin());
             TextView pswdP = (TextView) findViewById(R.id.textpswd);

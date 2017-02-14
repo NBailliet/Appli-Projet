@@ -85,7 +85,7 @@ public class SmartRide extends AppCompatActivity
 
 
         findDevice = 0;
-///////demande permission
+        ///////demande permission
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -130,7 +130,7 @@ public class SmartRide extends AppCompatActivity
 
         registerReceiver(mReceiver, filter);
 
-        View headerview = navigationView.getHeaderView(0);
+        /*View headerview = navigationView.getHeaderView(0);
         LinearLayout header = (LinearLayout) headerview.findViewById(R.id.header);
         header.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +147,7 @@ public class SmartRide extends AppCompatActivity
                 drawer.closeDrawer(GravityCompat.START);
                 Log.i(TAG, "getProfil: toast");
             }
-        });
+        });*/
 
         showBeginDialog();
 
@@ -442,8 +442,9 @@ public class SmartRide extends AppCompatActivity
 
             return true;
         } else if (id == R.id.action_profile) {
-            fm.beginTransaction().replace(R.id.frame, new ProfileFragment()).commit();
-            setTitle(getString(R.string.action_profile));
+            Intent intent = new Intent(this, ProfilActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_quitter) {
             finish();

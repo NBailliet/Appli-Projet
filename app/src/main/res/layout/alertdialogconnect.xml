@@ -5,9 +5,11 @@
 
     <TextView
         android:text="Please Log in"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="#000000"
+        android:id="@+id/textInfo1" />
 
     <EditText
         android:layout_width="wrap_content"

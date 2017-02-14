@@ -173,11 +173,11 @@ public class BDD {
         //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
         values.put(COL_PROFIL_LOGIN, user.getLogin());
         values.put(COL_PROFIL_PWD, user.getPassword());
-       values.put(COL_PROFIL_NAME, user.getName());
-       values.put(COL_PROFIL_SURNAME, user.getSurname());
-       values.put(COL_PROFIL_AGE, user.getAge());
-       String t2=gson.toJson(user.getCreationDate());
-       values.put(COL_PROFIL_CREATION, t2);
+        values.put(COL_PROFIL_NAME, user.getName());
+        values.put(COL_PROFIL_SURNAME, user.getSurname());
+        values.put(COL_PROFIL_AGE, user.getAge());
+        String t2=gson.toJson(user.getCreationDate());
+        values.put(COL_PROFIL_CREATION, t2);
         //on insère l'objet dans la BDD via le ContentValues
         return bdd.insert(TABLE_PROFIL, null, values);
     }
