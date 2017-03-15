@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
         android:id="@+id/textlogin"
         android:layout_marginTop="240dp"
         android:layout_centerHorizontal="true" />
@@ -52,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
         android:layout_marginTop="310dp"
         android:id="@+id/textpswd"
         android:layout_centerHorizontal="true"/>
@@ -60,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Nom"
+        android:text="Name"
         android:id="@+id/textView9"
         android:textStyle="bold"
         android:layout_marginTop="360dp"
@@ -70,6 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
         android:layout_marginTop="380dp"
         android:id="@+id/textnomprofil"
         android:layout_centerHorizontal="true" />
@@ -78,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Prenom"
+        android:text="Surname"
         android:id="@+id/textView10"
         android:textStyle="bold"
         android:layout_marginTop="430dp"
@@ -88,6 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
         android:layout_marginTop="450dp"
         android:id="@+id/textprenomprofil"
         android:layout_centerHorizontal="true" />
@@ -106,6 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
         android:id="@+id/textageprofil"
         android:layout_marginTop="520dp"
         android:layout_centerHorizontal="true" />

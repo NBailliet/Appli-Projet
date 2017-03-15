@@ -1,6 +1,11 @@
 package com.example.nicolas.smartride2.BDD;
 
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 public class User {
 
     private String login;
@@ -28,6 +33,10 @@ public class User {
         this.creationDate = creationDate;
     }
 
+    public User(String login){
+        this.login=login;
+    }
+
     public void setLogin(String login) {
         this.login = login;
     }
@@ -51,4 +60,7 @@ public class User {
     public void setCreationDate(Time creationDate) {
         this.creationDate = creationDate;
     }
+
+
+
 }
