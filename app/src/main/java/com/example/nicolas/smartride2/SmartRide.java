@@ -56,6 +56,8 @@ public class SmartRide extends AppCompatActivity
     public Boolean connectionFlag;
 
     private static final int REQUEST_ENABLE_BT = 0;
+    private static final int REQUEST_VOICE_RECOGNIZER = 1;
+
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
@@ -80,9 +82,8 @@ public class SmartRide extends AppCompatActivity
 
         bdd=new BDD(this);
         //bdd.clearTable("TABLE_LOC");
-        bdd.clearTable("TABLE_PROFIL");
-
-
+        //bdd.clearTable("TABLE_PROFIL");
+//todo http://stackoverflow.com/questions/14940657/android-speech-recognition-as-a-service-on-android-4-1-4-2
 
         findDevice = 0;
 ///////demande permission
@@ -149,7 +150,8 @@ public class SmartRide extends AppCompatActivity
             }
         });
 
-        showBeginDialog();
+       // showBeginDialog();
+
 
     }
 
@@ -468,7 +470,10 @@ public class SmartRide extends AppCompatActivity
 
 
         }
-    }
+
+        }
+
+
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {

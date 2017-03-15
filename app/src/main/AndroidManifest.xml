@@ -41,6 +41,10 @@
         <service
             android:name=".Services.RideLocationGetter"
             android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".Services.VoiceService"
+            android:enabled="true"
             android:exported="true"></service>
     </application>
 

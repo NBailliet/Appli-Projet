@@ -254,4 +254,3 @@ public class MapViewFragment extends Fragment {
         mMapView.onLowMemory();
     }
 }
-//todo some "Fatal signal 11 (SIGSEGV), code 2" error without any reasons
