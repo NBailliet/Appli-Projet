@@ -20,9 +20,22 @@ public class ProfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profil);
         setTitle("Profile");
 
-        User user = bdd.getUserWithLogin("");
+        String login = null;
+        if (savedInstanceState == null) {
+            Bundle extras = this.getIntent().getExtras();
+            if (extras == null) {
+                login = null;
+            } else {
+                login = extras.getString("User_for_BDD");
+            }
+        }
 
-        if(user!=null) {
+        bdd.open();
+        User user = bdd.getUserWithLogin(login);
+        bdd.close();
+        String ageS = Integer.toString(user.getAge());
+
+        if  (user!=null) {
             TextView loginP = (TextView) findViewById(R.id.textlogin);
             loginP.setText(user.getLogin());
             TextView pswdP = (TextView) findViewById(R.id.textpswd);
@@ -32,7 +45,7 @@ public class ProfilActivity extends AppCompatActivity {
             TextView surnameP = (TextView) findViewById(R.id.textprenomprofil);
             surnameP.setText(user.getSurname());
             TextView ageP = (TextView) findViewById(R.id.textageprofil);
-            ageP.setText(user.getAge());
+            ageP.setText(ageS);
         }
 
     }

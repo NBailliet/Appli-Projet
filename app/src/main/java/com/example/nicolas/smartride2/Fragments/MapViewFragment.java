@@ -224,6 +224,7 @@ public class MapViewFragment extends Fragment {
                 new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         dialog.cancel();
+                        Toast.makeText(getActivity(), "Location service will not work correctly without GPS...", Toast.LENGTH_SHORT).show();
                     }
                 });
         AlertDialog alert = alertDialogBuilder.create();

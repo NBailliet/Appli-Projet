@@ -23,9 +23,16 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="Logout"
+        app:showAsAction="never" />
+
+
+    <item
         android:id="@+id/action_quitter"
         android:orderInCategory="100"
-        android:title="Quitter Application"
+        android:title="Quit Application"
         app:showAsAction="never" />
 
 </menu>
