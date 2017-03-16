@@ -47,11 +47,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-//import com.google.android.gms.appindexing.Action;
-//import com.google.android.gms.appindexing.AppIndex;
-//import com.google.android.gms.appindexing.Thing;
-//import com.google.android.gms.common.api.GoogleApiClient;
-
 public class SmartRide extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -67,7 +62,6 @@ public class SmartRide extends AppCompatActivity
     public ProgressDialog progress;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private String action;
-    private int findDevice;
     SessionManager session;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -79,11 +73,6 @@ public class SmartRide extends AppCompatActivity
     public User user;
     public User utilisateurCo;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    //private GoogleApiClient client2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,10 +90,9 @@ public class SmartRide extends AppCompatActivity
         if (connectionFlag==null){
             connectionFlag=false;
         }
-        //bdd.clearTable("TABLE_PROFIL");
+
 //todo http://stackoverflow.com/questions/14940657/android-speech-recognition-as-a-service-on-android-4-1-4-2
 
-        findDevice = 0;
         ///////demande permission
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -554,7 +542,7 @@ public class SmartRide extends AppCompatActivity
                 }
                 Log.i("BT", device.getName() + "\n" + device.getAddress());
                 //Toast.makeText(SmartRide.this,"yo", Toast.LENGTH_SHORT).show();
-                if (findDevice == 1) {
+                if (listView!=null) {
                     listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
                     //TODO Expandable List item nom du device et sub item adresse mac
                     //TODO un meilleur design pour la listView
@@ -628,66 +616,71 @@ public class SmartRide extends AppCompatActivity
 
                     mBluetoothAdapter.startDiscovery();
 
-                    try {
+                    /*try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }*/
+                    long start = System.currentTimeMillis();
+                    long end = start + 8*1000; // 60 seconds * 1000 ms/sec
+                    Log.i("BT", start + "   " + end);
+                    while((!BluetoothDevice.ACTION_FOUND.equals(action)) && (System.currentTimeMillis() < end)){
+                       /* try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                        Log.i("BT",  Long.toString(System.currentTimeMillis()));*/
                     }
 
-
+                   // progress.dismiss();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SmartRide.this);
-                                // Add the buttons
-                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // User clicked OK button
-                                        findDevice = 0;
-                                        mBluetoothAdapter.cancelDiscovery();
-                                        mDeviceList.clear();
-                                    }
-                                });
-                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // User cancelled the dialog
-                                        findDevice = 0;
-                                        mBluetoothAdapter.cancelDiscovery();
-                                        mDeviceList.clear();
-                                    }
-                                });
 
-                                builder.setIcon(R.drawable.bluetooth);
+                                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(SmartRide.this);
+                                    // Add the buttons
+                                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // User clicked OK button
+                                            mBluetoothAdapter.cancelDiscovery();
+                                            mDeviceList.clear();
+                                        }
+                                    });
+                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // User cancelled the dialog
+                                            mBluetoothAdapter.cancelDiscovery();
+                                            mDeviceList.clear();
+                                        }
+                                    });
 
-                                builder.setTitle("Bluetooth devices");
+                                    builder.setIcon(R.drawable.bluetooth);
 
-                                LayoutInflater inflater = getLayoutInflater();
-                                View convertView = (View) inflater.inflate(R.layout.bluetooth_device_list, null);
+                                    builder.setTitle("Bluetooth devices");
+
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View convertView = (View) inflater.inflate(R.layout.bluetooth_device_list, null);
 
 
-                                listView = (ListView) convertView.findViewById(R.id.listViewBluetoothDevice);
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this, android.R.layout.simple_list_item_1, mDeviceList);
-                                listView.setAdapter(adapter);
+                                    listView = (ListView) convertView.findViewById(R.id.listViewBluetoothDevice);
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this, android.R.layout.simple_list_item_1, mDeviceList);
+                                    listView.setAdapter(adapter);
 
-                                builder.setView(convertView);
+                                    builder.setView(convertView);
 
-                                // Create the AlertDialog
-                                AlertDialog dialog = builder.create();
+                                    // Create the AlertDialog
+                                    AlertDialog dialog = builder.create();
 
-                                dialog.show();
-                                //dialog.getWindow().setLayout(700, 600);
-                                //dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-                                findDevice = 1;
-                                progress.dismiss();
+                                    dialog.show();
+                                    progress.dismiss();
 
-                            } else {
-                                Toast.makeText(SmartRide.this, "No Bluetooth device found...", Toast.LENGTH_SHORT).show();
-                                findDevice = 0;
-                                mBluetoothAdapter.cancelDiscovery();
-                                progress.dismiss();
-                            }
-
+                                } else {
+                                    Toast.makeText(SmartRide.this, "No Bluetooth device found...", Toast.LENGTH_SHORT).show();
+                                    mBluetoothAdapter.cancelDiscovery();
+                                    progress.dismiss();
+                                }
 
                         }
 
@@ -698,7 +691,6 @@ public class SmartRide extends AppCompatActivity
 
         } else
             Toast.makeText(SmartRide.this, "Application can't work fine without access to the location...", Toast.LENGTH_SHORT).show();
-        findDevice = 0;
 
     }
 
@@ -709,47 +701,6 @@ public class SmartRide extends AppCompatActivity
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(mReceiver);
     }
-
-    /*public User getUser() {
-        return User;
-    }*/
-
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    /*public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("SmartRide Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client2.connect();
-        AppIndex.AppIndexApi.start(client2, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client2, getIndexApiAction());
-        client2.disconnect();
-    }*/
 }
 
 //TODO Faire un tableau de données des capteurs avec valeurs et temps
