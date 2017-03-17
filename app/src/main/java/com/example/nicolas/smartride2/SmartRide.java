@@ -27,9 +27,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicolas.smartride2.BDD.BDD;
@@ -46,6 +48,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class SmartRide extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,8 +60,10 @@ public class SmartRide extends AppCompatActivity
     private static final int REQUEST_VOICE_RECOGNIZER = 1;
 
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    private ListView listView;
+    private ListView listViewBluetoothDevices;
+    private ListView listViewProfiles;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
+    private ArrayList<String> mProfilesList = new ArrayList<String>();
     public ProgressDialog progress;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private String action;
@@ -167,8 +172,6 @@ public class SmartRide extends AppCompatActivity
             System.out.println(utilisateurCo.getLogin());
             connectionFlag=true;
             Toast.makeText(SmartRide.this, "Welcome back " + utilisateurCo.getLogin(), Toast.LENGTH_SHORT).show();
-
-
         }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -181,7 +184,32 @@ public class SmartRide extends AppCompatActivity
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SmartRide.this);
 
-        builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SmartRide.this, android.R.layout.simple_list_item_1);
+        bdd.open();
+        List<User> list = bdd.getAllProfil();
+        bdd.close();
+        int i =0;
+        while(i<list.size()){
+            mProfilesList.add(list.get(i).getLogin());
+            i++;
+        }
+        //mProfilesList.add("add item");
+
+
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.profiles_list, null);
+
+        listViewProfiles = (ListView) convertView.findViewById(R.id.listViewProfiles);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this, android.R.layout.simple_list_item_1, mProfilesList);
+        View footerView = getLayoutInflater().inflate(R.layout.new_account_item_custom, null);
+        listViewProfiles.addFooterView(footerView);
+        listViewProfiles.setAdapter(adapter);
+
+
+
+        builder.setView(convertView);
+
+       /* builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 showConnectDialog();
                 dialog.cancel();
@@ -192,7 +220,9 @@ public class SmartRide extends AppCompatActivity
                 showNewAccDialog();
                 dialog.cancel();
             }
-        });
+        });*/
+
+
 
         builder.setIcon(R.drawable.logosmartrideg);
         builder.setTitle("Welcome on SmartRide !");
@@ -200,8 +230,29 @@ public class SmartRide extends AppCompatActivity
         builder.setCancelable(false);
 
         // Create the AlertDialog
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
+
+        listViewProfiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String temp = (String) listViewProfiles.getItemAtPosition(position);
+
+                if(temp!=null){
+                    showConnectDialog(temp);
+                    mProfilesList.clear();
+                    dialog.cancel();
+                    //Toast.makeText(SmartRide.this, temp, Toast.LENGTH_SHORT).show();
+                }else{
+                    //Toast.makeText(SmartRide.this, "footview", Toast.LENGTH_SHORT).show();
+                    showNewAccDialog();
+                    mProfilesList.clear();
+                    dialog.cancel();
+                }
+
+            }
+        });
+
 
     }
 
@@ -248,7 +299,7 @@ public class SmartRide extends AppCompatActivity
 
                         Toast.makeText(SmartRide.this, "Account created successfuly !" + user.getLogin() + user.getPassword(), Toast.LENGTH_SHORT).show();
                         dialog.cancel();
-                        showConnectDialog();
+                        showConnectDialog(login);
                     } else {
                         Toast.makeText(SmartRide.this, "Account already existing, please choose an other one !", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
@@ -273,14 +324,17 @@ public class SmartRide extends AppCompatActivity
         adb.show();
     }
 
-    public void showConnectDialog() {
+    public void showConnectDialog(final String log) {
 
         Log.v("Connect dialog...", "Start");
 
         LayoutInflater factory = LayoutInflater.from(this);
         final View alertDialogView = factory.inflate(R.layout.alertdialogconnect, null);
         android.app.AlertDialog.Builder adb = new android.app.AlertDialog.Builder(this);
+        EditText editText = (EditText) alertDialogView.findViewById(R.id.identifiant);
+        editText.setText(log, TextView.BufferType.EDITABLE);
         adb.setView(alertDialogView);
+
 
         adb.setTitle("Login");
         adb.setIcon(R.drawable.logosmartrideg);
@@ -322,13 +376,13 @@ public class SmartRide extends AppCompatActivity
                     } else {
                         Toast.makeText(SmartRide.this, "Login or password incorrect, please try again !", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
-                        showConnectDialog();
+                        showConnectDialog(log);
                         Log.v("Connect dialog", "startcom1");
                     }
                 } else {
                     Toast.makeText(SmartRide.this, "No user found, a problem has happened...", Toast.LENGTH_SHORT).show();
                     dialog.cancel();
-                    showConnectDialog();
+                    showConnectDialog(log);
                     Log.v("Connect dialog", "startcom2");
                 }
 
@@ -422,7 +476,8 @@ public class SmartRide extends AppCompatActivity
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                showConnectDialog();
+                //showConnectDialog();
+                showBeginDialog();
             }
         });
         adb.show();
@@ -542,10 +597,10 @@ public class SmartRide extends AppCompatActivity
                 }
                 Log.i("BT", device.getName() + "\n" + device.getAddress());
                 //Toast.makeText(SmartRide.this,"yo", Toast.LENGTH_SHORT).show();
-                if (listView!=null) {
-                    listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
+                if (listViewBluetoothDevices !=null) {
+                    listViewBluetoothDevices.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
                     //TODO Expandable List item nom du device et sub item adresse mac
-                    //TODO un meilleur design pour la listView
+                    //TODO un meilleur design pour la listViewBluetoothDevices
                     //TODO Implémenter l'action de se connecter aux devices
                     //TODO Conditions pour ne pouvoir se connecter que au skis
                 }
@@ -659,14 +714,15 @@ public class SmartRide extends AppCompatActivity
                                     builder.setIcon(R.drawable.bluetooth);
 
                                     builder.setTitle("Bluetooth devices");
+                                    builder.setMessage("Please select a device");
 
                                     LayoutInflater inflater = getLayoutInflater();
                                     View convertView = (View) inflater.inflate(R.layout.bluetooth_device_list, null);
 
 
-                                    listView = (ListView) convertView.findViewById(R.id.listViewBluetoothDevice);
+                                    listViewBluetoothDevices = (ListView) convertView.findViewById(R.id.listViewBluetoothDevice);
                                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(SmartRide.this, android.R.layout.simple_list_item_1, mDeviceList);
-                                    listView.setAdapter(adapter);
+                                    listViewBluetoothDevices.setAdapter(adapter);
 
                                     builder.setView(convertView);
 
@@ -675,6 +731,16 @@ public class SmartRide extends AppCompatActivity
 
                                     dialog.show();
                                     progress.dismiss();
+
+                                    listViewBluetoothDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                            String temp = (String) listViewBluetoothDevices.getItemAtPosition(position);
+                                            Toast.makeText(SmartRide.this, temp, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
                                 } else {
                                     Toast.makeText(SmartRide.this, "No Bluetooth device found...", Toast.LENGTH_SHORT).show();

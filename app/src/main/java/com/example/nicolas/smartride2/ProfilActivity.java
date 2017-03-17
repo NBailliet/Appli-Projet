@@ -10,7 +10,6 @@ import com.example.nicolas.smartride2.BDD.User;
 public class ProfilActivity extends AppCompatActivity {
     private BDD bdd;
 
-    //todo make it work, just need to get login of the account
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
