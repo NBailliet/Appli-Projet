@@ -3,6 +3,7 @@ package com.example.nicolas.smartride2.Fragments;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,65 +18,47 @@ import com.example.nicolas.smartride2.R;
 
 public class RecordFragment extends Fragment implements View.OnClickListener {
 
-    Button buttonStartRun;
-    Button buttonStopRun;
+    Button buttonMotion;
+    Button buttonManual;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View recordView = inflater.inflate(R.layout.record, container, false);
-        buttonStartRun = (Button) recordView.findViewById(R.id.buttonStartRun);
-        buttonStartRun.setOnClickListener(this);
-        buttonStopRun = (Button) recordView.findViewById(R.id.buttonStopRun);
-        buttonStopRun.setOnClickListener(this);
+        buttonMotion = (Button) recordView.findViewById(R.id.buttonMotion);
+        buttonMotion.setOnClickListener(this);
+        buttonManual = (Button) recordView.findViewById(R.id.buttonManual);
+        buttonManual.setOnClickListener(this);
         return recordView;
     }
 
     @Override
     public void onClick(View v) {
 
-        View parent = (View)v.getParent();
-
         if (v.hasOnClickListeners()) {
-
-            Button buttonStopRun = (Button) parent.findViewById(R.id.buttonStopRun);
-            Button buttonStartRun = (Button) parent.findViewById(R.id.buttonStartRun);
-            Chronometer chronometerRun = (Chronometer) parent.findViewById(R.id.chronometer);
 
             switch (v.getId()) {
 
-                case (R.id.buttonStartRun):
-
-                    System.out.println("Bouton Start OK");
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    chronometerRun.setBase(SystemClock.elapsedRealtime());
-                    chronometerRun.start();
-                    buttonStartRun.setVisibility(View.INVISIBLE);
-                    buttonStopRun.setVisibility(View.VISIBLE);
+                case (R.id.buttonMotion):
+                    System.out.println("Bouton Motion OK");
+                    MotionCaptureFragment motionFrag= new MotionCaptureFragment();
+                    this.getFragmentManager().beginTransaction()
+                            .replace(R.id.frame, motionFrag,"Motion Fragment OK")
+                            .addToBackStack(null)
+                            .commit();
                     break;
 
-                case (R.id.buttonStopRun):
-
-                    System.out.println("Bouton Stop OK");
-                    chronometerRun.stop();
-                    chronometerRun.setBase(SystemClock.elapsedRealtime());
-                    buttonStopRun.setVisibility(View.INVISIBLE);
-                    buttonStartRun.setVisibility(View.VISIBLE);
+                case (R.id.buttonManual):
+                    System.out.println("Bouton Manual OK");
+                    ManualModeFragment manualFrag= new ManualModeFragment();
+                    this.getFragmentManager().beginTransaction()
+                            .replace(R.id.frame, manualFrag,"Manual Fragment OK")
+                            .addToBackStack(null)
+                            .commit();
                     break;
 
             }
 
         }
     }
-
-    /*@Override
-    public void onChronometerTick(Chronometer chronometer) {
-        String s = String.valueOf(chronometer.getBase());
-        chronometer.setText(s);
-    }*/
-
 
 }

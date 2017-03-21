@@ -17,17 +17,23 @@ import com.example.nicolas.smartride2.R;
 
 public class MotionCaptureFragment extends Fragment implements View.OnClickListener {
 
-    Button buttonStartRun;
     Button buttonStopRun;
-
+    Chronometer chronometer;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View recordView = inflater.inflate(R.layout.record, container, false);
-        buttonStartRun = (Button) recordView.findViewById(R.id.buttonStartRun);
-        buttonStartRun.setOnClickListener(this);
-        buttonStopRun = (Button) recordView.findViewById(R.id.buttonStopRun);
+        View motionView = inflater.inflate(R.layout.motioncapture, container, false);
+        buttonStopRun = (Button) motionView.findViewById(R.id.buttonStopRun);
         buttonStopRun.setOnClickListener(this);
-        return recordView;
+        chronometer = (Chronometer) motionView.findViewById(R.id.chronometer);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        chronometer.start();
+        setHasOptionsMenu(true);
+        return motionView;
     }
 
     @Override
@@ -38,44 +44,22 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
         if (v.hasOnClickListeners()) {
 
             Button buttonStopRun = (Button) parent.findViewById(R.id.buttonStopRun);
-            Button buttonStartRun = (Button) parent.findViewById(R.id.buttonStartRun);
             Chronometer chronometerRun = (Chronometer) parent.findViewById(R.id.chronometer);
 
             switch (v.getId()) {
 
-                case (R.id.buttonStartRun):
-
-                    System.out.println("Bouton Start OK");
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    chronometerRun.setBase(SystemClock.elapsedRealtime());
-                    chronometerRun.start();
-                    buttonStartRun.setVisibility(View.INVISIBLE);
-                    buttonStopRun.setVisibility(View.VISIBLE);
-                    break;
 
                 case (R.id.buttonStopRun):
 
                     System.out.println("Bouton Stop OK");
                     chronometerRun.stop();
                     chronometerRun.setBase(SystemClock.elapsedRealtime());
-                    buttonStopRun.setVisibility(View.INVISIBLE);
-                    buttonStartRun.setVisibility(View.VISIBLE);
                     break;
 
             }
 
         }
     }
-
-    /*@Override
-    public void onChronometerTick(Chronometer chronometer) {
-        String s = String.valueOf(chronometer.getBase());
-        chronometer.setText(s);
-    }*/
 
 
 }

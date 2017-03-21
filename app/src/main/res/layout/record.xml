@@ -2,20 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/record_layout">
 
     <TextView
-        android:text="Manual Mode"
-        android:textColor="#FFFFFF"
-        android:textSize="75px"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="105dp"
-        android:id="@+id/textManual" />
-
-    <TextView
-        android:text="In this Manual Mode menu, you can start a record by pressing the Start Run button."
+        android:text="Here, you can either choose between the Motion Capture Mode or the Manual Mode."
         android:textColor="#FFFFFF"
         android:textSize="45px"
         android:textStyle="bold"
@@ -28,57 +19,33 @@
         android:id="@+id/text1"
         android:textAlignment="center"/>
 
-    <TextView
-        android:text="When pressed, the chronometer starts counting, you can stop it as well as your run by clicking on the Stop Run button."
-        android:textColor="#FFFFFF"
-        android:textSize="45px"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text1"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:textAlignment="center"
-        android:id="@+id/text2"/>
 
 
     <Button
-        android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_width="320dp"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:text="Start Run"
+        android:layout_marginTop="170dp"
+        android:text="Motion Capture Mode"
         android:textStyle="bold"
         android:backgroundTint="#00F000"
-        android:layout_below="@+id/text2"
         android:onClick="onClick"
-        android:id="@+id/buttonStartRun"
-        android:visibility="visible"/>
+        android:id="@+id/buttonMotion"
+        />
 
     <Button
-        android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_width="320dp"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
-        android:text="Stop Run"
-        android:layout_below="@+id/text2"
+        android:text="Manual Mode"
+        android:layout_below="@+id/buttonMotion"
         android:textStyle="bold"
         android:backgroundTint="#FF0000"
         android:onClick="onClick"
-        android:id="@+id/buttonStopRun"
-        android:visibility="invisible"/>
+        android:id="@+id/buttonManual"
+        />
 
-    <Chronometer
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonStartRun"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:textStyle="bold"
-        android:textSize="140px"
-        android:id="@+id/chronometer"
-        android:textColor="#FE2E2E"/>
 
 
 </RelativeLayout>

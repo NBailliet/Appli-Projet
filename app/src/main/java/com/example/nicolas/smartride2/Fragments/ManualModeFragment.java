@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.TextView;
 
 import com.example.nicolas.smartride2.R;
 
@@ -16,19 +15,19 @@ import com.example.nicolas.smartride2.R;
  * Created by Nicolas on 30/01/2017.
  */
 
-public class RecordFragment extends Fragment implements View.OnClickListener {
+public class ManualModeFragment extends Fragment implements View.OnClickListener {
 
     Button buttonStartRun;
     Button buttonStopRun;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View recordView = inflater.inflate(R.layout.record, container, false);
-        buttonStartRun = (Button) recordView.findViewById(R.id.buttonStartRun);
+        View manualView = inflater.inflate(R.layout.manualmode, container, false);
+        buttonStartRun = (Button) manualView.findViewById(R.id.buttonStartRun);
         buttonStartRun.setOnClickListener(this);
-        buttonStopRun = (Button) recordView.findViewById(R.id.buttonStopRun);
+        buttonStopRun = (Button) manualView.findViewById(R.id.buttonStopRun);
         buttonStopRun.setOnClickListener(this);
-        return recordView;
+        return manualView;
     }
 
     @Override
@@ -71,12 +70,5 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
         }
     }
-
-    /*@Override
-    public void onChronometerTick(Chronometer chronometer) {
-        String s = String.valueOf(chronometer.getBase());
-        chronometer.setText(s);
-    }*/
-
 
 }

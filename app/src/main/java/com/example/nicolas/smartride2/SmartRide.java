@@ -10,7 +10,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +32,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,8 +50,13 @@ import com.example.nicolas.smartride2.Fragments.SettingsFragment;
 import com.example.nicolas.smartride2.Fragments.ShareFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import static android.R.attr.content;
 
 //import com.google.android.gms.appindexing.Action;
 //import com.google.android.gms.appindexing.AppIndex;
@@ -69,6 +80,7 @@ public class SmartRide extends AppCompatActivity
     private String action;
     private int findDevice;
     SessionManager session;
+    private android.widget.ShareActionProvider mShareActionProvider;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -577,6 +589,7 @@ public class SmartRide extends AppCompatActivity
             fm.beginTransaction().replace(R.id.frame, new HomeFragment()).commit();
             setTitle(getString(R.string.action_home));
         } else if (id == R.id.record) {
+            //if (findDevice == 0) {
             fm.beginTransaction().replace(R.id.frame, new RecordFragment()).commit();
             setTitle(getString(R.string.action_record));
         } else if (id == R.id.overview) {
@@ -586,11 +599,60 @@ public class SmartRide extends AppCompatActivity
             fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).commit();
             setTitle(getString(R.string.action_map));
         } else if (id == R.id.nav_share) {
-            fm.beginTransaction().replace(R.id.frame, new ShareFragment()).commit();
+            // Get access to ImageView
+            View content = findViewById(R.id.logoHome);
+            content.setDrawingCacheEnabled(true);
+            Bitmap bitmap = content.getDrawingCache();
+            File root = Environment.getExternalStorageDirectory();
+            File cachePath = new File(root.getAbsolutePath() + "/DCIM/Camera/image.jpg");
+            try
+            {
+                root.createNewFile();
+                FileOutputStream ostream = new FileOutputStream(root);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                ostream.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/*");
+            share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(root.getAbsolutePath() + "/DCIM/Camera/image.jpg")));
+            startActivity(Intent.createChooser(share,"Share via"));
+
+            /*Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+            shareIntent.setType("image/*");
+            //fm.beginTransaction().replace(R.id.frame, new ShareFragment()).commit();
             setTitle(getString(R.string.action_share));
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("image/jpeg");
+            String shareBody = "Here is the share content body";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));*/
         } else if (id == R.id.nav_send) {
-            fm.beginTransaction().replace(R.id.frame, new SendFragment()).commit();
             setTitle(getString(R.string.action_send));
+
+            /*Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setType("text/html");
+            intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+            intent.putExtra(Intent.EXTRA_TEXT, "I'm email body.");
+
+            startActivity(Intent.createChooser(intent, "Send Email"));*/
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/html");
+            intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "SmartRide Data");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT, "From My App");
+            File root = Environment.getExternalStorageDirectory();
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(root.getAbsolutePath() + "/DCIM/100MEDIA/IMG0398.jpg"))); //ATTENTION CHANGER NOM FICHIER JPG POUR TEST !!!
+            intent.putExtra(Intent.EXTRA_TEXT, "Hey, you can find attached my recent results with SmartRide system !");
+
+            startActivity(Intent.createChooser(intent, "Send Email"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

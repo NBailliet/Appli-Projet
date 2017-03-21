@@ -2,24 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/motion_layout">
 
     <TextView
-        android:text="Manual Mode"
+        android:text="Motion Capture Mode"
         android:textColor="#FFFFFF"
-        android:textSize="75px"
+        android:textSize="60px"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="105dp"
-        android:id="@+id/textManual" />
+        android:layout_marginLeft="85dp"
+        android:id="@+id/textMotion" />
 
     <TextView
-        android:text="In this menu, you can start a record by pressing the Start Run button."
+        android:text="In this Motion Capture menu, the SmartRide system will automatically detect when you start moving and also start your run on the application."
         android:textColor="#FFFFFF"
         android:textSize="45px"
         android:textStyle="bold"
-        android:layout_below="@+id/textManual"
+        android:layout_below="@+id/textMotion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -29,7 +30,7 @@
         android:textAlignment="center"/>
 
     <TextView
-        android:text="When pressed, the chronometer starts counting, you can stop it as well as your run by clicking on the Stop Run button."
+        android:text="The chronometer will then start counting and stop when you will press the Stop Run Button"
         android:textColor="#FFFFFF"
         android:textSize="45px"
         android:textStyle="bold"
@@ -48,31 +49,18 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
-        android:text="Start Run"
-        android:textStyle="bold"
-        android:backgroundTint="#00F000"
-        android:layout_below="@+id/text2"
-        android:onClick="onClick"
-        android:id="@+id/buttonStartRun"
-        android:visibility="visible"/>
-
-    <Button
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
         android:text="Stop Run"
-        android:layout_below="@+id/text2"
         android:textStyle="bold"
         android:backgroundTint="#FF0000"
+        android:layout_below="@+id/text2"
         android:onClick="onClick"
-        android:id="@+id/buttonStopRun"
-        android:visibility="invisible"/>
+        android:id="@+id/buttonStopRun" />
+
 
     <Chronometer
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonStartRun"
+        android:layout_below="@+id/buttonStopRun"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:textStyle="bold"

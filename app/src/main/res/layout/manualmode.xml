@@ -2,20 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/manual_layout">
 
     <TextView
         android:text="Manual Mode"
         android:textColor="#FFFFFF"
-        android:textSize="75px"
+        android:textSize="60px"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="105dp"
+        android:layout_marginLeft="120dp"
         android:id="@+id/textManual" />
 
     <TextView
-        android:text="In this menu, you can start a record by pressing the Start Run button."
+        android:text="In this Manual Mode menu, you can start a record by pressing the Start Run button."
         android:textColor="#FFFFFF"
         android:textSize="45px"
         android:textStyle="bold"
