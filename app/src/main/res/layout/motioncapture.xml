@@ -15,7 +15,7 @@
         android:id="@+id/textManual" />
 
     <TextView
-        android:text="In this Manual Mode menu, you can start a record by pressing the Start Run button."
+        android:text="In this menu, you can start a record by pressing the Start Run button."
         android:textColor="#FFFFFF"
         android:textSize="45px"
         android:textStyle="bold"

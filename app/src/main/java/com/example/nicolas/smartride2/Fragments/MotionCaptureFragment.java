@@ -15,7 +15,7 @@ import com.example.nicolas.smartride2.R;
  * Created by Nicolas on 30/01/2017.
  */
 
-public class RecordFragment extends Fragment implements View.OnClickListener {
+public class MotionCaptureFragment extends Fragment implements View.OnClickListener {
 
     Button buttonStartRun;
     Button buttonStopRun;
