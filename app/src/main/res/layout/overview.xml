@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/action_overview"
-        android:textColor="#FFFFFF"
-        android:layout_width="150dp"
-        android:layout_height="50dp" />
+<ScrollView android:id="@+id/scrollview1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ap="http://schemas.android.com/apk/res-auto">
 
-</RelativeLayout>
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="1000dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:text="@string/action_overview"
+            android:textColor="#FFFFFF"
+            android:layout_width="150dp"
+            android:layout_height="50dp" />
+
+        <com.androidplot.xy.XYPlot
+            style="@style/APDefacto.Dark"
+            android:id="@+id/plot"
+            android:layout_width="wrap_content"
+            android:layout_height="600dp"
+            android:layout_marginTop="400dp"
+            ap:title="SmartRide Chart"
+            ap:rangeTitle="range"
+            ap:domainTitle="domain"
+            ap:lineLabels="left|bottom"
+            ap:lineLabelRotationBottom="-45"
+            ap:graphVerticalPositioning="absolute_from_center"/>
+
+        <TextView
+            android:text="Bonjour"
+            android:textColor="#FFFFFF"
+            android:textSize="100px"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="1000dp"/>
+    </RelativeLayout>
+
+</ScrollView>
+
+
+
