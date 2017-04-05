@@ -16,21 +16,47 @@
         <TextView
             android:text="@string/action_overview"
             android:textColor="#FFFFFF"
-            android:layout_width="150dp"
-            android:layout_height="50dp" />
-
-        <com.androidplot.xy.XYPlot
-            style="@style/APDefacto.Dark"
-            android:id="@+id/plot"
+            android:textSize="80px"
             android:layout_width="wrap_content"
-            android:layout_height="600dp"
-            android:layout_marginTop="400dp"
-            ap:title="SmartRide Chart"
-            ap:rangeTitle="range"
-            ap:domainTitle="domain"
-            ap:lineLabels="left|bottom"
-            ap:lineLabelRotationBottom="-45"
-            ap:graphVerticalPositioning="absolute_from_center"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="121dp"
+            android:id="@+id/textView1"/>
+
+        <TextView
+            android:text="Graph Test 1"
+            android:textColor="#FFFFFF"
+            android:textSize="60px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="116dp"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/textGraph1"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graph"
+            android:layout_below="@+id/textGraph1"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Graph Test 2"
+            android:textColor="#FFFFFF"
+            android:textSize="60px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="116dp"
+            android:layout_below="@+id/graph"
+            android:layout_marginTop="20dp"
+            android:id="@+id/textGraph2"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graph2"
+            android:layout_below="@+id/textGraph2"
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:text="Bonjour"
