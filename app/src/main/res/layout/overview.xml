@@ -1,73 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.app.FragmentTabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<ScrollView android:id="@+id/scrollview1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ap="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:orientation="vertical"
+    <ScrollView android:id="@+id/scrollview1"
         android:layout_width="fill_parent"
-        android:layout_height="1000dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_height="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ap="http://schemas.android.com/apk/res-auto">
 
-        <TextView
-            android:text="@string/action_overview"
-            android:textColor="#FFFFFF"
-            android:textSize="80px"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="121dp"
-            android:id="@+id/textView1"/>
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-        <TextView
-            android:text="Graph Test 1"
-            android:textColor="#FFFFFF"
-            android:textSize="60px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="116dp"
-            android:layout_below="@+id/textView1"
-            android:layout_marginTop="20dp"
-            android:id="@+id/textGraph1"/>
+            <android.support.design.widget.CoordinatorLayout
+                android:id="@+id/main_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <com.jjoe64.graphview.GraphView
-            android:layout_width="match_parent"
-            android:layout_height="200dip"
-            android:id="@+id/graph"
-            android:layout_below="@+id/textGraph1"
-            android:layout_marginTop="20dp"/>
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:text="Graph Test 2"
-            android:textColor="#FFFFFF"
-            android:textSize="60px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="116dp"
-            android:layout_below="@+id/graph"
-            android:layout_marginTop="20dp"
-            android:id="@+id/textGraph2"/>
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/result_tabs"
+                        android:background="#3F51B5"
+                        app:tabTextColor="#FFFFFF"
+                        app:tabSelectedTextColor="#CC6600"
+                        app:tabIndicatorColor="@color/colorPrimary"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        app:tabMode="scrollable" />
 
-        <com.jjoe64.graphview.GraphView
-            android:layout_width="match_parent"
-            android:layout_height="200dip"
-            android:id="@+id/graph2"
-            android:layout_below="@+id/textGraph2"
-            android:layout_marginTop="20dp"/>
+                </android.support.design.widget.AppBarLayout>
 
-        <TextView
-            android:text="Bonjour"
-            android:textColor="#FFFFFF"
-            android:textSize="100px"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="1000dp"/>
-    </RelativeLayout>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</ScrollView>
+            </android.support.design.widget.CoordinatorLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</android.support.v4.app.FragmentTabHost>
 
 
 

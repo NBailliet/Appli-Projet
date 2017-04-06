@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Actual Ride"
+        android:textSize="80px"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textViewActual"/>
+
+    <TextView
+        android:text="Graph Test 1"
+        android:textColor="#FFFFFF"
+        android:textSize="60px"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="125dp"
+        android:layout_below="@+id/textViewActual"
+        android:layout_marginTop="40dp"
+        android:id="@+id/textGraph1"/>
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:id="@+id/graph"
+        android:layout_below="@+id/textGraph1"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:text="Graph Test 2"
+        android:textColor="#FFFFFF"
+        android:textSize="60px"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="125dp"
+        android:layout_below="@+id/graph"
+        android:layout_marginTop="20dp"
+        android:id="@+id/textGraph2"/>
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:id="@+id/graph2"
+        android:layout_below="@+id/textGraph2"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:text="Graph Test 3"
+        android:textColor="#FFFFFF"
+        android:textSize="60px"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="125dp"
+        android:layout_below="@+id/graph2"
+        android:layout_marginTop="20dp"
+        android:id="@+id/textGraph3" />
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:id="@+id/graph3"
+        android:layout_below="@+id/textGraph3"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:text="Graph Test 4"
+        android:textColor="#FFFFFF"
+        android:textSize="60px"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="125dp"
+        android:layout_below="@+id/graph3"
+        android:layout_marginTop="20dp"
+        android:id="@+id/textGraph4" />
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:id="@+id/graph4"
+        android:layout_below="@+id/textGraph4"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>
