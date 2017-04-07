@@ -1,87 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/action_settings"
-        android:textColor="#FFFFFF"
-        android:textSize="80px"
-        android:textStyle="bold"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="130dp"
-        android:id="@+id/textView2" />
+<ScrollView android:id="@+id/scrollview2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:text="Test Checkbox"
-        android:textColor="#FFFFFF"
-        android:textSize="60px"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="108dp"
-        android:id="@+id/textView5"
-        android:layout_below="@+id/textView2"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <CheckBox
-        android:text="Test1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView5"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="100dp"
-        android:id="@+id/checkBox1"
-        android:onClick="onClick"
-        android:checked="true"/>
+        <TextView
+            android:text="@string/action_settings"
+            android:textColor="#FFFFFF"
+            android:textSize="80px"
+            android:textStyle="bold"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="130dp"
+            android:id="@+id/textView2" />
 
-    <CheckBox
-        android:text="Test2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView5"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="100dp"
-        android:id="@+id/checkBox2"
-        android:onClick="onClick"/>
+        <TextView
+            android:text="Test Checkbox"
+            android:textColor="#FFFFFF"
+            android:textSize="60px"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="108dp"
+            android:id="@+id/textView5"
+            android:layout_below="@+id/textView2"/>
 
-    <TextView
-        android:text="Voice command"
-        android:textColor="#FFFFFF"
-        android:textSize="60px"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/textView3"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/checkBox2"/>
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/textView3">
-
-        <RadioButton
-            android:text="Voice Command ON"
+        <CheckBox
+            android:text="Test1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/radioButton1"
+            android:layout_below="@+id/textView5"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="100dp"
+            android:id="@+id/checkBox1"
+            android:onClick="onClick"
             android:checked="true"
-            android:onClick="onClick"/>
+            android:textColor="#A4A4A4"/>
 
-        <RadioButton
-            android:text="Voice Command OFF"
+        <CheckBox
+            android:text="Test2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/radioButton2"
-            android:onClick="onClick" />
+            android:layout_below="@+id/textView5"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="100dp"
+            android:id="@+id/checkBox2"
+            android:onClick="onClick"
+            android:textColor="#A4A4A4"/>
 
-    </RadioGroup>
+        <TextView
+            android:text="Voice command"
+            android:textColor="#000000"
+            android:textSize="60px"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textView3"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/checkBox2"/>
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchVoice"
+            android:layout_below="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:text="Voice Command   "
+            android:textColor="#A4A4A4"
+            android:textStyle="bold" />
+
+        <TextView
+            android:text="Choix des données"
+            android:textColor="#FFFFFF"
+            android:textSize="60px"
+            android:textAlignment="center"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textView6"
+            android:layout_below="@+id/switchVoice"/>
+
+        <TextView
+            android:text="Ski G         Ski D"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="50px"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="100dp"
+            android:layout_below="@+id/textView6"
+            android:id="@+id/textView7"
+            android:layout_centerHorizontal="true"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageski"
+            android:layout_below="@+id/textView6"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/imageski2"/>
+
+        <CheckBox
+            android:text="Accéléromètres G"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView6"
+            android:layout_marginTop="35dp"
+            android:id="@+id/checkBox3"
+            android:onClick="onClick"
+            android:checked="true"/>
+
+        <CheckBox
+            android:text="Accéléromètres D"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView6"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="225dp"
+            android:id="@+id/checkBox4"
+            android:onClick="onClick"
+            android:checked="true"/>
+
+        <CheckBox
+            android:text="Gyroscopes G"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox4"
+            android:layout_marginTop="50dp"
+            android:id="@+id/checkBox5"
+            android:onClick="onClick"
+            android:checked="true"/>
+
+        <CheckBox
+            android:text="Gyroscopes D"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox4"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="225dp"
+            android:id="@+id/checkBox6"
+            android:onClick="onClick"
+            android:checked="true"/>
+
+        <CheckBox
+            android:text="Capteurs de pression G"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox6"
+            android:layout_marginTop="50dp"
+            android:id="@+id/checkBox7"
+            android:onClick="onClick"
+            android:checked="true"/>
+
+        <CheckBox
+            android:text="Capteurs de pression D"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox6"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="225dp"
+            android:id="@+id/checkBox8"
+            android:onClick="onClick"
+            android:checked="true"/>
+
+        <CheckBox
+            android:text="Capteurs de pression G"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox8"
+            android:layout_marginTop="50dp"
+            android:id="@+id/checkBox9"
+            android:onClick="onClick"
+            android:checked="true"/>
+
+        <CheckBox
+            android:text="Jauges de contrainte D"
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox8"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="225dp"
+            android:id="@+id/checkBox10"
+            android:onClick="onClick"
+            android:checked="true"/>
 
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>

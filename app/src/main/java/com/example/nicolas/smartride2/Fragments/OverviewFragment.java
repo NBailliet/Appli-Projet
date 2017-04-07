@@ -22,6 +22,8 @@ import static android.support.design.widget.TabLayout.GRAVITY_FILL;
 
 public class OverviewFragment extends Fragment {
 
+    TabLayout tabs;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,15 +35,34 @@ public class OverviewFragment extends Fragment {
         View overView = inflater.inflate(R.layout.overview, container, false);
         ViewPager viewPager = (ViewPager) overView.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-        TabLayout tabs = (TabLayout) overView.findViewById(R.id.result_tabs);
+        tabs = (TabLayout) overView.findViewById(R.id.result_tabs);
         tabs.setupWithViewPager(viewPager);
-        tabs.setTabGravity(GRAVITY_FILL);
+        tabs.post(mTabLayout_config);
         return overView;
     }
 
-    // Add Fragments to Tabs
-    private void setupViewPager(ViewPager viewPager) {
+        Runnable mTabLayout_config = new Runnable()
+        {
+            @Override
+            public void run()
+            {
 
+                if(tabs.getWidth() < OverviewFragment.this.getResources().getDisplayMetrics().widthPixels)
+                {
+                    tabs.setTabMode(TabLayout.MODE_FIXED);
+                    ViewGroup.LayoutParams mParams = tabs.getLayoutParams();
+                    mParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    tabs.setLayoutParams(mParams);
+
+                }
+                else
+                {
+                    tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+                }
+            }
+        };
+
+    private void setupViewPager(ViewPager viewPager) {
 
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new ActualRideFragment(), "Actual Ride");
