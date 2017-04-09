@@ -79,7 +79,7 @@
         android:textStyle="bold"
         android:textSize="140px"
         android:id="@+id/chronometer"
-        android:textColor="#FE2E2E"/>
+        android:textColor="#FE2E2E" />
 
 
 </RelativeLayout>

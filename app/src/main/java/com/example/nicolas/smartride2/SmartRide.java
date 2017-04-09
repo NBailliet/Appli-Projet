@@ -43,6 +43,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.Time;
 import com.example.nicolas.smartride2.BDD.User;
@@ -54,7 +55,13 @@ import com.example.nicolas.smartride2.Fragments.SendFragment;
 import com.example.nicolas.smartride2.Fragments.SettingsFragment;
 import com.example.nicolas.smartride2.Fragments.ShareFragment;
 import com.example.nicolas.smartride2.Services.BluetoothService;
+import com.example.nicolas.smartride2.Services.LocalService;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.nicolas.smartride2
+        .SessionManager;
+import com.example.nicolas.smartride2.SettingsManager;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -90,12 +97,7 @@ public class SmartRide extends AppCompatActivity
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private String action;
     SessionManager session;
-    private android.widget.ShareActionProvider mShareActionProvider;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+    static SettingsManager settings;
 
     private BDD bdd;
     public User user;
@@ -114,6 +116,7 @@ public class SmartRide extends AppCompatActivity
         //bdd.clearTable("TABLE_PROFIL");
 
         session = new SessionManager(getApplicationContext());
+        settings = new SettingsManager(getApplicationContext());
 
         if (connectionFlag==null){
             connectionFlag=false;
@@ -363,6 +366,7 @@ public class SmartRide extends AppCompatActivity
                         if (utilisateurCo.getName() == null || utilisateurCo.getSurname() == null || utilisateurCo.getAge() == 0) {
                             dialog.cancel();
                             session.createLoginSession(login,connectionFlag);
+                            settings.setRunPref(false);
                             System.out.println(session.isLoggedIn());
                             System.out.println(session.getLoginPref());
                             showInfoDialog(utilisateurCo);
@@ -398,25 +402,6 @@ public class SmartRide extends AppCompatActivity
         });
         adb.show();
     }
-
-    /*public void showErrorDialog() {
-
-        final LayoutInflater factory = LayoutInflater.from(this);
-        final View alertDialogView = factory.inflate(R.layout.alertdialogerror, null);
-
-        final android.app.AlertDialog.Builder adb = new android.app.AlertDialog.Builder(this);
-
-        adb.setView(alertDialogView);
-        adb.setTitle("Error...");
-        adb.setIcon(R.drawable.logosmartrideg);
-        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.cancel();
-
-            }
-        });
-    }*/
 
     public void showInfoDialog(final User user) {
 
@@ -880,11 +865,17 @@ public class SmartRide extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //onDestroy(LocalService.this);
 
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(mReceiver);
     }
 
+    public static SettingsManager getSettingsManager() {
+        return settings;
+    }
+
 }
+
 
 //TODO Faire un tableau de données des capteurs avec valeurs et temps

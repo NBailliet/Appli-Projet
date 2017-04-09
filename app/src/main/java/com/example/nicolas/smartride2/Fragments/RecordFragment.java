@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 
 import com.example.nicolas.smartride2.R;
+import com.example.nicolas.smartride2.SettingsManager;
 
 /**
  * Created by Nicolas on 30/01/2017.

@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.Chronometer;
 
 import com.example.nicolas.smartride2.R;
+import com.example.nicolas.smartride2.SettingsManager;
+import com.example.nicolas.smartride2.SmartRide;
 
 /**
  * Created by Nicolas on 30/01/2017.
@@ -19,6 +21,7 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
 
     Button buttonStopRun;
     Chronometer chronometer;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View motionView = inflater.inflate(R.layout.motioncapture, container, false);
@@ -45,6 +48,20 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
 
             Button buttonStopRun = (Button) parent.findViewById(R.id.buttonStopRun);
             Chronometer chronometerRun = (Chronometer) parent.findViewById(R.id.chronometer);
+            chronometerRun.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+                @Override
+                public void onChronometerTick(Chronometer cArg) {
+                    long time = SystemClock.elapsedRealtime() - cArg.getBase();
+                    int h = (int) (time / 3600000);
+                    int m = (int) (time - h * 3600000) / 60000;
+                    int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+                    String hh = h < 10 ? "0" + h : h + "";
+                    String mm = m < 10 ? "0" + m : m + "";
+                    String ss = s < 10 ? "0" + s : s + "";
+                    cArg.setText(hh + ":" + mm + ":" + ss);
+
+                }
+            });
 
             switch (v.getId()) {
 
@@ -52,6 +69,8 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
                 case (R.id.buttonStopRun):
 
                     System.out.println("Bouton Stop OK");
+                    SettingsManager settings = SmartRide.getSettingsManager();
+                    settings.setRunPref(true);
                     chronometerRun.stop();
                     chronometerRun.setBase(SystemClock.elapsedRealtime());
                     break;

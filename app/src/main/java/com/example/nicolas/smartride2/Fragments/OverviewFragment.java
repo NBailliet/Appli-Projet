@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.nicolas.smartride2.R;
+import com.example.nicolas.smartride2.SettingsManager;
+import com.example.nicolas.smartride2.SmartRide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +66,14 @@ public class OverviewFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
 
+        SettingsManager settings;
+        settings = SmartRide.getSettingsManager();
+
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new ActualRideFragment(), "Actual Ride");
-        adapter.addFragment(new LastRideFragment(), "Last Ride");
+        if (settings.getRunPref()==true) {
+            adapter.addFragment(new LastRideFragment(), "Last Ride");
+        }
         viewPager.setAdapter(adapter);
 
     }
