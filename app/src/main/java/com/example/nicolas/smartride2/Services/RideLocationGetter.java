@@ -39,7 +39,7 @@ public class RideLocationGetter extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.w(TAG, "serviceLoc created");
+        Log.w(TAG, "ServiceLoc created TEST");
         locationListener = new LocationListenerTest();
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         bdd = new BDD(getApplicationContext());
@@ -56,7 +56,7 @@ public class RideLocationGetter extends Service {
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-        Toast.makeText(getBaseContext(), "Location service started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Location service started TEST", Toast.LENGTH_SHORT).show();
     }
 
     @Override

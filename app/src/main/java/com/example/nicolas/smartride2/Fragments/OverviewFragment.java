@@ -71,7 +71,7 @@ public class OverviewFragment extends Fragment {
 
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new ActualRideFragment(), "Actual Ride");
-        if (settings.getRunPref()==true) {
+        if (settings.getMotionRunPref() || settings.getManualRunPref()) {
             adapter.addFragment(new LastRideFragment(), "Last Ride");
         }
         viewPager.setAdapter(adapter);

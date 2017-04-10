@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.Toast;
 
 import com.example.nicolas.smartride2.R;
 import com.example.nicolas.smartride2.Services.LocalService;
@@ -27,12 +28,14 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
     Button buttonStartRun;
     Button buttonStopRun;
     Chronometer chronometer;
+    SettingsManager settings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         int min = 0;
         int hour = 0;
         int sec = 0;
+        settings = SmartRide.getSettingsManager();
         View manualView = inflater.inflate(R.layout.manualmode, container, false);
         buttonStartRun = (Button) manualView.findViewById(R.id.buttonStartRun);
         buttonStartRun.setOnClickListener(this);
@@ -53,7 +56,7 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
 
             }
         });
-        if (isMyServiceRunning(LocalService.class)==true) {
+        if (isMyServiceRunning(LocalService.class) && !settings.getMotionRunPref()) {
             buttonStartRun.setVisibility(View.INVISIBLE);
             buttonStopRun.setVisibility(View.VISIBLE);
             System.out.println(LocalService.getSeconds());
@@ -91,26 +94,35 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                 switch (v.getId()) {
 
                     case (R.id.buttonStartRun):
-                        System.out.println(isMyServiceRunning(LocalService.class));
-                        if (isMyServiceRunning(LocalService.class)==false) {
+                        if (!settings.getMotionRunPref()) {
+                            System.out.println(isMyServiceRunning(LocalService.class));
+                            if (!isMyServiceRunning(LocalService.class)) {
 
-                            System.out.println("Bouton Start OK");
-                            try {
-                                Thread.sleep(5);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                System.out.println("Bouton Start OK");
+                                try {
+                                    Thread.sleep(5);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                chronometerRun.setBase(SystemClock.elapsedRealtime());
+                                //chronometerRun.setFormat("H:MM:SS");
+                                chronometerRun.start();
+                                Intent intentChrono = new Intent(getActivity(), LocalService.class);
+                                getActivity().startService(intentChrono);
+                                Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
+                                getActivity().startService(intentGPS);
+                                System.out.println("GPS lancé :)");
+                                SettingsManager settings = SmartRide.getSettingsManager();
+                                settings.setManualRunPref(true);
+                                buttonStartRun.setVisibility(View.INVISIBLE);
+                                buttonStopRun.setVisibility(View.VISIBLE);
+                            } else {
+                                buttonStartRun.setVisibility(View.INVISIBLE);
+                                buttonStopRun.setVisibility(View.VISIBLE);
                             }
-                            chronometerRun.setBase(SystemClock.elapsedRealtime());
-                            //chronometerRun.setFormat("H:MM:SS");
-                            chronometerRun.start();
-                            Intent intentChrono = new Intent(getActivity(), LocalService.class);
-                            getActivity().startService(intentChrono);
-                            buttonStartRun.setVisibility(View.INVISIBLE);
-                            buttonStopRun.setVisibility(View.VISIBLE);
                         }
                         else {
-                            buttonStartRun.setVisibility(View.INVISIBLE);
-                            buttonStopRun.setVisibility(View.VISIBLE);
+                            Toast.makeText(getActivity(), "Error : 2 runs at the same time, please stop the other run !", Toast.LENGTH_SHORT).show();
                         }
 
                         break;
@@ -118,14 +130,17 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                     case (R.id.buttonStopRun):
 
                         System.out.println("Bouton Stop OK");
-                        SettingsManager settings = SmartRide.getSettingsManager();
-                        settings.setRunPref(true);
                         Intent intentChrono2 = new Intent(getActivity(), LocalService.class);
                         getActivity().stopService(intentChrono2);
                         chronometerRun.stop();
+                        SettingsManager settings = SmartRide.getSettingsManager();
+                        settings.setManualRunPref(false);
                         chronometerRun.setBase(SystemClock.elapsedRealtime());
                         buttonStopRun.setVisibility(View.INVISIBLE);
                         buttonStartRun.setVisibility(View.VISIBLE);
+                        Intent intentGPS2 = new Intent(getActivity(), RideLocationGetter.class);
+                        getActivity().stopService(intentGPS2);
+                        System.out.println("GPS stoppé :)");
                         break;
 
                 }

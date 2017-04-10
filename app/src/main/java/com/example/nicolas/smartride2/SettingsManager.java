@@ -28,35 +28,52 @@ public class SettingsManager {
     // Sharedpref file name
     private static final String PREF_NAME = "SmartRideSettingsPref";
 
-    // Memorized run
-    public static final String KEY_RUN = "IsThereRun";
+    // Memorized Manual run
+    public static final String KEY_RUNMANUAL = "IsThereManualRun";
+
+    // Memorized Motion Capture run
+    public static final String KEY_RUNMOTION = "IsThereMotionRun";
+
 
     // Constructor
     public SettingsManager(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
+        editor.putBoolean(KEY_RUNMANUAL,false);
+        editor.putBoolean(KEY_RUNMOTION,false);
+        editor.commit();
     }
 
     /**
      * Create settings session
      * */
-    public void createSettingsSession(Boolean run){
+    public void createSettingsSession(Boolean runManualPref, Boolean runMotionPref){
 
         // Storing name in pref
-        editor.putBoolean(KEY_RUN, run);
-
+        editor.putBoolean(KEY_RUNMANUAL, runManualPref);
+        editor.putBoolean(KEY_RUNMOTION, runMotionPref);
         // commit changes
         editor.commit();
     }
 
-    public Boolean getRunPref(){
-        Boolean runPref = pref.getBoolean(KEY_RUN,false);
-        return runPref;
+    public Boolean getManualRunPref(){
+        Boolean runManualPref = pref.getBoolean(KEY_RUNMANUAL,false);
+        return runManualPref;
     }
 
-    public void setRunPref(Boolean runPref){
-        editor.putBoolean(KEY_RUN,runPref);
+    public void setManualRunPref(Boolean runManualPref){
+        editor.putBoolean(KEY_RUNMANUAL,runManualPref);
+        editor.commit();
+    }
+
+    public Boolean getMotionRunPref(){
+        Boolean runMotionPref = pref.getBoolean(KEY_RUNMOTION,false);
+        return runMotionPref;
+    }
+
+    public void setMotionRunPref(Boolean runMotionPref){
+        editor.putBoolean(KEY_RUNMOTION,runMotionPref);
         editor.commit();
     }
 

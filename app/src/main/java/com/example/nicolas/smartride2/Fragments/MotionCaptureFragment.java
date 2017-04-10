@@ -1,5 +1,8 @@
 package com.example.nicolas.smartride2.Fragments;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -8,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.Toast;
 
 import com.example.nicolas.smartride2.R;
+import com.example.nicolas.smartride2.Services.LocalService;
+import com.example.nicolas.smartride2.Services.RideLocationGetter;
 import com.example.nicolas.smartride2.SettingsManager;
 import com.example.nicolas.smartride2.SmartRide;
 
@@ -21,21 +27,67 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
 
     Button buttonStopRun;
     Chronometer chronometer;
+    SettingsManager settings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        int min = 0;
+        int hour = 0;
+        int sec = 0;
+        settings = SmartRide.getSettingsManager();
         View motionView = inflater.inflate(R.layout.motioncapture, container, false);
         buttonStopRun = (Button) motionView.findViewById(R.id.buttonStopRun);
         buttonStopRun.setOnClickListener(this);
-        chronometer = (Chronometer) motionView.findViewById(R.id.chronometer);
+        chronometer = (Chronometer) motionView.findViewById(R.id.chronometer2);
         chronometer.setBase(SystemClock.elapsedRealtime());
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer cArg) {
+                long time = SystemClock.elapsedRealtime() - cArg.getBase();
+                int h = (int) (time / 3600000);
+                int m = (int) (time - h * 3600000) / 60000;
+                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+                String hh = h < 10 ? "0" + h : h + "";
+                String mm = m < 10 ? "0" + m : m + "";
+                String ss = s < 10 ? "0" + s : s + "";
+                cArg.setText(hh + ":" + mm + ":" + ss);
+            }
+        });
+
+        if (!settings.getManualRunPref()) {
+
+            if (isMyServiceRunning(LocalService.class)) {
+                sec = LocalService.getSeconds();
+                if (sec > 60) {
+                    min = (sec % 3600) / 60;
+                    if (min > 60) {
+                        hour = sec / 3600;
+                    }
+                    sec = sec - (hour * 3600 + min * 60);
+                }
+                System.out.println(sec);
+                System.out.println(min);
+                System.out.println(hour);
+                chronometer.setBase(SystemClock.elapsedRealtime() - (hour * 60000 + min * 60000 + sec * 1000));
+                //chronometer.setText(hh+":"+mm+":"+ss);
+                chronometer.start();
+            } else {
+
+                chronometer.start();
+                Intent intentChrono = new Intent(getActivity(), LocalService.class);
+                getActivity().startService(intentChrono);
+                Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
+                getActivity().startService(intentGPS);
+                System.out.println("GPS lancé :)");
+                SettingsManager settings = SmartRide.getSettingsManager();
+                settings.setMotionRunPref(true);
+                setHasOptionsMenu(true);
+            }
         }
-        chronometer.start();
-        setHasOptionsMenu(true);
+        else {
+            Toast.makeText(getActivity(), "Error : 2 runs at the same time, please stop the other run !", Toast.LENGTH_SHORT).show();
+        }
+
         return motionView;
     }
 
@@ -47,21 +99,7 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
         if (v.hasOnClickListeners()) {
 
             Button buttonStopRun = (Button) parent.findViewById(R.id.buttonStopRun);
-            Chronometer chronometerRun = (Chronometer) parent.findViewById(R.id.chronometer);
-            chronometerRun.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-                @Override
-                public void onChronometerTick(Chronometer cArg) {
-                    long time = SystemClock.elapsedRealtime() - cArg.getBase();
-                    int h = (int) (time / 3600000);
-                    int m = (int) (time - h * 3600000) / 60000;
-                    int s = (int) (time - h * 3600000 - m * 60000) / 1000;
-                    String hh = h < 10 ? "0" + h : h + "";
-                    String mm = m < 10 ? "0" + m : m + "";
-                    String ss = s < 10 ? "0" + s : s + "";
-                    cArg.setText(hh + ":" + mm + ":" + ss);
-
-                }
-            });
+            Chronometer chronometerRun = (Chronometer) parent.findViewById(R.id.chronometer2);
 
             switch (v.getId()) {
 
@@ -69,15 +107,29 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
                 case (R.id.buttonStopRun):
 
                     System.out.println("Bouton Stop OK");
-                    SettingsManager settings = SmartRide.getSettingsManager();
-                    settings.setRunPref(true);
+                    settings = SmartRide.getSettingsManager();
+                    settings.setMotionRunPref(false);
+                    Intent intentChrono2 = new Intent(getActivity(), LocalService.class);
+                    getActivity().stopService(intentChrono2);
                     chronometerRun.stop();
                     chronometerRun.setBase(SystemClock.elapsedRealtime());
+                    Intent intentGPS2 = new Intent(getActivity(), RideLocationGetter.class);
+                    getActivity().stopService(intentGPS2);
+                    System.out.println("GPS stoppé :)");
                     break;
 
             }
 
         }
+    }
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

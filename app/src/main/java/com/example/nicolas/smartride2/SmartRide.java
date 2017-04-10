@@ -1,6 +1,7 @@
 package com.example.nicolas.smartride2;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -366,7 +367,7 @@ public class SmartRide extends AppCompatActivity
                         if (utilisateurCo.getName() == null || utilisateurCo.getSurname() == null || utilisateurCo.getAge() == 0) {
                             dialog.cancel();
                             session.createLoginSession(login,connectionFlag);
-                            settings.setRunPref(false);
+                            //settings.setRunPref(false);
                             System.out.println(session.isLoggedIn());
                             System.out.println(session.getLoginPref());
                             showInfoDialog(utilisateurCo);
@@ -869,10 +870,24 @@ public class SmartRide extends AppCompatActivity
 
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(mReceiver);
+        if (isMyServiceRunning(LocalService.class)){
+            Intent intentService = new Intent(SmartRide.this, LocalService.class);
+            SmartRide.this.stopService(intentService);
+        }
     }
 
     public static SettingsManager getSettingsManager() {
         return settings;
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) SmartRide.this.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
