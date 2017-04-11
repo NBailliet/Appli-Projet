@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,7 +18,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -27,7 +25,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,9 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,31 +47,19 @@ import com.example.nicolas.smartride2.Fragments.HomeFragment;
 import com.example.nicolas.smartride2.Fragments.MapViewFragment;
 import com.example.nicolas.smartride2.Fragments.OverviewFragment;
 import com.example.nicolas.smartride2.Fragments.RecordFragment;
-import com.example.nicolas.smartride2.Fragments.SendFragment;
 import com.example.nicolas.smartride2.Fragments.SettingsFragment;
-import com.example.nicolas.smartride2.Fragments.ShareFragment;
 import com.example.nicolas.smartride2.Services.BluetoothService;
 import com.example.nicolas.smartride2.Services.LocalService;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.example.nicolas.smartride2
-        .SessionManager;
-import com.example.nicolas.smartride2.SettingsManager;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import static android.R.attr.content;
 
 //import com.google.android.gms.appindexing.Action;
 //import com.google.android.gms.appindexing.AppIndex;
 //import com.google.android.gms.appindexing.Thing;
 //import com.google.android.gms.common.api.GoogleApiClient;
-import java.util.List;
 import java.util.Set;
 
 public class SmartRide extends AppCompatActivity
@@ -624,41 +607,6 @@ public class SmartRide extends AppCompatActivity
         } else if (id == R.id.map) {
             fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).commit();
             setTitle(getString(R.string.action_map));
-        } else if (id == R.id.nav_share) {
-            // Get access to ImageView
-            View content = findViewById(R.id.logoHome);
-            content.setDrawingCacheEnabled(true);
-            Bitmap bitmap = content.getDrawingCache();
-            File root = Environment.getExternalStorageDirectory();
-            File cachePath = new File(root.getAbsolutePath() + "/DCIM/Camera/image.jpg");
-            try
-            {
-                root.createNewFile();
-                FileOutputStream ostream = new FileOutputStream(root);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-                ostream.close();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("image/*");
-            share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(root.getAbsolutePath() + "/DCIM/Camera/image.jpg")));
-            startActivity(Intent.createChooser(share,"Share via"));
-
-            /*Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
-            shareIntent.setType("image/*");
-            //fm.beginTransaction().replace(R.id.frame, new ShareFragment()).commit();
-            setTitle(getString(R.string.action_share));
-            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-            sharingIntent.setType("image/jpeg");
-            String shareBody = "Here is the share content body";
-            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-            startActivity(Intent.createChooser(sharingIntent, "Share via"));*/
         } else if (id == R.id.nav_send) {
             setTitle(getString(R.string.action_send));
 
