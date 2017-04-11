@@ -20,6 +20,61 @@
         android:src="@drawable/logohome"
         android:visibility="visible"/>
 
+        <TextView
+            android:text="Welcome on SmartRide application. You can open the navigation bar on the left to start using the app."
+            android:textColor="#FFFFFF"
+            android:textSize="50px"
+            android:textStyle="bold"
+            android:layout_below="@+id/logoHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:id="@+id/textHome"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:text="RUN STARTED"
+            android:textColor="#2EFE2E"
+            android:textSize="80px"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textHome"
+            android:layout_marginTop="50dp"
+            android:id="@+id/textViewRun"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:text="NO RUN STARTED"
+            android:textColor="#000000"
+            android:textSize="80px"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textHome"
+            android:layout_marginTop="50dp"
+            android:id="@+id/textViewNoRun"
+            android:visibility="visible"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:text="Go To Current Run Record"
+            android:textStyle="bold"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:id="@+id/buttonRun"
+            android:backgroundTint="#FAAC58"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/textViewRun"
+            android:visibility="invisible"
+            android:onClick="onClick"/>
+
+
+
     </RelativeLayout>
 
 </LinearLayout>

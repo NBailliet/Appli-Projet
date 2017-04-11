@@ -30,7 +30,7 @@ public class RideLocationGetter extends Service {
     }
 
 
-    private LocationManager locationMangaer = null;
+    private LocationManager locationManager = null;
     private LocationListener locationListener = null;
     private ArrayList<Location> listDataLoc = new ArrayList<>();
     private ArrayList<Time> listDataTime = new ArrayList<>();
@@ -39,9 +39,9 @@ public class RideLocationGetter extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.w(TAG, "serviceLoc created");
+        Log.w(TAG, "ServiceLoc created TEST");
         locationListener = new LocationListenerTest();
-        locationMangaer = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         bdd = new BDD(getApplicationContext());
 
 
@@ -55,8 +55,8 @@ public class RideLocationGetter extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationMangaer.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-        Toast.makeText(getBaseContext(), "Location service started", Toast.LENGTH_SHORT).show();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+        Toast.makeText(getBaseContext(), "Location service started TEST", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -148,7 +148,7 @@ public class RideLocationGetter extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationMangaer.removeUpdates(locationListener);
+        locationManager.removeUpdates(locationListener);
         Toast.makeText(getBaseContext(), "Location service stoped", Toast.LENGTH_SHORT).show();
         Log.w(TAG, "serviceLoc destroy");
     }

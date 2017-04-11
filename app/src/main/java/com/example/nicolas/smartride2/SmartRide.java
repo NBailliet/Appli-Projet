@@ -1,6 +1,7 @@
 package com.example.nicolas.smartride2;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -10,7 +11,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
@@ -43,17 +46,21 @@ import com.example.nicolas.smartride2.Fragments.HomeFragment;
 import com.example.nicolas.smartride2.Fragments.MapViewFragment;
 import com.example.nicolas.smartride2.Fragments.OverviewFragment;
 import com.example.nicolas.smartride2.Fragments.RecordFragment;
-import com.example.nicolas.smartride2.Fragments.SendFragment;
 import com.example.nicolas.smartride2.Fragments.SettingsFragment;
-import com.example.nicolas.smartride2.Fragments.ShareFragment;
 import com.example.nicolas.smartride2.Services.BluetoothService;
 import com.example.nicolas.smartride2.Services.Constants;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.nicolas.smartride2.Services.LocalService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+
+//import com.google.android.gms.appindexing.Action;
+//import com.google.android.gms.appindexing.AppIndex;
+//import com.google.android.gms.appindexing.Thing;
+//import com.google.android.gms.common.api.GoogleApiClient;
 
 public class SmartRide extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -74,11 +81,7 @@ public class SmartRide extends AppCompatActivity
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private String action;
     SessionManager session;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+    static SettingsManager settings;
 
     private BDD bdd;
     public User user;
@@ -97,6 +100,10 @@ public class SmartRide extends AppCompatActivity
         //bdd.clearTable("TABLE_PROFIL");
 
         session = new SessionManager(getApplicationContext());
+
+        if (!isMyServiceRunning(LocalService.class)) {
+            settings = new SettingsManager(getApplicationContext());
+        }
 
         if (connectionFlag==null){
             connectionFlag=false;
@@ -346,6 +353,7 @@ public class SmartRide extends AppCompatActivity
                         if (utilisateurCo.getName() == null || utilisateurCo.getSurname() == null || utilisateurCo.getAge() == 0) {
                             dialog.cancel();
                             session.createLoginSession(login,connectionFlag);
+                            //settings.setRunPref(false);
                             System.out.println(session.isLoggedIn());
                             System.out.println(session.getLoginPref());
                             showInfoDialog(utilisateurCo);
@@ -381,25 +389,6 @@ public class SmartRide extends AppCompatActivity
         });
         adb.show();
     }
-
-    /*public void showErrorDialog() {
-
-        final LayoutInflater factory = LayoutInflater.from(this);
-        final View alertDialogView = factory.inflate(R.layout.alertdialogerror, null);
-
-        final android.app.AlertDialog.Builder adb = new android.app.AlertDialog.Builder(this);
-
-        adb.setView(alertDialogView);
-        adb.setTitle("Error...");
-        adb.setIcon(R.drawable.logosmartrideg);
-        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.cancel();
-
-            }
-        });
-    }*/
 
     public void showInfoDialog(final User user) {
 
@@ -471,6 +460,8 @@ public class SmartRide extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+        //TODO GERER BACK OPTIONS VERS DRAWER
     }
 
     @Override
@@ -635,6 +626,7 @@ public class SmartRide extends AppCompatActivity
             fm.beginTransaction().replace(R.id.frame, new HomeFragment()).commit();
             setTitle(getString(R.string.action_home));
         } else if (id == R.id.record) {
+            //if (findDevice == 0) {
             fm.beginTransaction().replace(R.id.frame, new RecordFragment()).commit();
             setTitle(getString(R.string.action_record));
         } else if (id == R.id.overview) {
@@ -643,18 +635,34 @@ public class SmartRide extends AppCompatActivity
         } else if (id == R.id.map) {
             fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).commit();
             setTitle(getString(R.string.action_map));
-        } else if (id == R.id.nav_share) {
-            fm.beginTransaction().replace(R.id.frame, new ShareFragment()).commit();
-            setTitle(getString(R.string.action_share));
         } else if (id == R.id.nav_send) {
-            fm.beginTransaction().replace(R.id.frame, new SendFragment()).commit();
             setTitle(getString(R.string.action_send));
+
+            /*Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setType("text/html");
+            intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+            intent.putExtra(Intent.EXTRA_TEXT, "I'm email body.");
+
+            startActivity(Intent.createChooser(intent, "Send Email"));*/
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/html");
+            intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "SmartRide Data");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT, "From My App");
+            File root = Environment.getExternalStorageDirectory();
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(root.getAbsolutePath() + "/DCIM/100MEDIA/IMG0398.jpg"))); //ATTENTION CHANGER NOM FICHIER JPG POUR TEST !!!
+            intent.putExtra(Intent.EXTRA_TEXT, "Hey, you can find attached my recent results with SmartRide system !");
+
+            startActivity(Intent.createChooser(intent, "Send Email"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[],
@@ -842,9 +850,14 @@ public class SmartRide extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //onDestroy(LocalService.this);
 
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(mReceiver);
+        if (isMyServiceRunning(LocalService.class)){
+            Intent intentService = new Intent(SmartRide.this, LocalService.class);
+            SmartRide.this.stopService(intentService);
+        }
         if (mBTService != null) {
             mBTService.stop();
         }
@@ -853,6 +866,21 @@ public class SmartRide extends AppCompatActivity
         }
     }
 
+    public static SettingsManager getSettingsManager() {
+        return settings;
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) SmartRide.this.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
+
 
 //TODO Faire un tableau de données des capteurs avec valeurs et temps

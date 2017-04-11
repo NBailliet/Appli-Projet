@@ -36,6 +36,7 @@ class SessionManager {
     public static final String KEY_LOGIN = "login";
 
 
+
     // Constructor
     public SessionManager(Context context){
         this._context = context;
@@ -95,7 +96,5 @@ class SessionManager {
         String loginPref = pref.getString(KEY_LOGIN,null);
         return loginPref;
     }
-
-
 
 }
