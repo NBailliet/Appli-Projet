@@ -20,6 +20,29 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/textView1"/>
 
+        <TextView
+            android:text="You can select another last ride by clicking on the spinner below."
+            android:textColor="#FFFFFF"
+            android:textSize="45px"
+            android:textStyle="bold"
+            android:layout_below="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:id="@+id/text1"
+            android:textAlignment="center"/>
+
+        <Spinner
+            android:id="@+id/ride_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/text1"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#FFFFFF"/>
+
     </RelativeLayout>
 
 </ScrollView>

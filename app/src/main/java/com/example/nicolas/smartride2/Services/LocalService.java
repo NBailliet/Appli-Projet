@@ -116,7 +116,6 @@ public class LocalService extends Service
     public void startService()
     {
         System.out.println("Service started");
-        //timer.scheduleAtFixedRate(new mainTask(), 0, 1000);
         chronometer = new Chronometer(LocalService.this);
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
@@ -133,7 +132,7 @@ public class LocalService extends Service
     {
         System.out.println("Service resumed");
         resumeTimer();
-    }*/
+    }
 
     private class mainTask extends TimerTask
     {
@@ -142,7 +141,7 @@ public class LocalService extends Service
             toastHandler.sendEmptyMessage(0);
             Log.e("in", "timertask");
         }
-    }
+    }*/
 
     public void onDestroy()
     {

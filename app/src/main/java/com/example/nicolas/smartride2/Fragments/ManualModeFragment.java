@@ -104,7 +104,6 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
             System.out.println("Test Service Running : " + isMyServiceRunning(LocalService.class));
             SettingsManager settings = SmartRide.getSettingsManager();
 
-
             switch (v.getId()) {
 
                     case (R.id.buttonStartRun):
@@ -119,7 +118,6 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                                     e.printStackTrace();
                                 }
                                 chronometerRun.setBase(SystemClock.elapsedRealtime());
-                                //chronometerRun.setFormat("H:MM:SS");
                                 chronometerRun.start();
                                 Intent intentChrono = new Intent(getActivity(), LocalService.class);
                                 getActivity().startService(intentChrono);
@@ -166,8 +164,6 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
 
                     case (R.id.buttonStartPauseRun):
                         System.out.println("Bouton Start Pause OK");
-                        //settings.setStopPausePref(false);
-                        //System.out.println("STOP PAUSE SET TO FALSE");
                         settings = SmartRide.getSettingsManager();
                         settings.setStartPausePref(true);
                         System.out.println("START PAUSE SET TO TRUE");
@@ -183,8 +179,6 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                     case (R.id.buttonStopPauseRun):
                         System.out.println("Bouton Stop Pause OK");
                         settings = SmartRide.getSettingsManager();
-                        //settings.setStartPausePref(false);
-                        //System.out.println("START PAUSE SET TO FALSE");
                         settings.setStopPausePref(true);
                         System.out.println("STOP PAUSE SET TO TRUE");
                         Intent intentChrono4 = new Intent(getActivity(), LocalService.class);

@@ -107,7 +107,7 @@ public class OverviewFragment extends Fragment {
                 mFragmentList.add(new ActualRideFragment());
                 mFragmentTitleList.add("Actual Ride");
                 mFragmentList.add(new LastRideFragment());
-                mFragmentTitleList.add("Last Ride");
+                mFragmentTitleList.add("Last Rides");
             }
         }
         else {
