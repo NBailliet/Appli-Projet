@@ -47,6 +47,7 @@ import com.example.nicolas.smartride2.Fragments.SendFragment;
 import com.example.nicolas.smartride2.Fragments.SettingsFragment;
 import com.example.nicolas.smartride2.Fragments.ShareFragment;
 import com.example.nicolas.smartride2.Services.BluetoothService;
+import com.example.nicolas.smartride2.Services.Constants;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
@@ -512,17 +513,45 @@ public class SmartRide extends AppCompatActivity
                 mBTService = new BluetoothService(this,mHandler);
                 //ensureDiscoverable();
 
-                //BluetoothDevice skiR;
-                //BluetoothDevice skiG;
-               // if (pairedDevices.size() > 0) {
-                    //if(pairedDevices.containsAll()){
+                List<BluetoothDevice> listPairedDevices = new ArrayList<>();
+                listPairedDevices.addAll(pairedDevices);
+                List<String> listNamePairedDevices = new ArrayList<>();
+                Log.i(TAG,Integer.toString(listPairedDevices.size()));
+                int i=0;
+                while(i<listPairedDevices.size()){
+                    listNamePairedDevices.add(listPairedDevices.get(i).getName());
+                    Log.i(TAG,listPairedDevices.get(i).getName());
+                    i++;
+                }
+                i=0;
+               if (pairedDevices.size() > 0 && (listNamePairedDevices.contains("SkiRight") || listNamePairedDevices.contains("SkiLeft"))) {
+                   if(listNamePairedDevices.contains("SkiRight")){
+                       //lancer connection ski droit
+                       //BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                       // Attempt to connect to the device
+                       /*if(device!=null) {
+                           mBTService.connect(device);
+                       }*/
+                   }else{
+                       findDevice();
+                       Toast.makeText(SmartRide.this, "Right Ski not paired", Toast.LENGTH_SHORT).show();
+                   }
+                   if(listNamePairedDevices.contains("SkiLeft")){
+                       //lancer connection ski droit
+                       //BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                       // Attempt to connect to the device
+                       /*if(device!=null) {
+                           mBTService.connect(device);
+                       }*/
+                   }else{
+                       findDevice();
+                       Toast.makeText(SmartRide.this, "Left Ski not paired", Toast.LENGTH_SHORT).show();
+                   }
 
-                   //}else{
-                      //  findDevice();
-                   // }
-                //} else {
+                } else {
                     findDevice();
-                //}
+                //mBTService.start();//todo voir si c utile
+               }
             }
 
             return true;
@@ -748,50 +777,53 @@ public class SmartRide extends AppCompatActivity
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            /*//FragmentActivity activity = getActivity();
+
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
-                        case BluetoothChatService.STATE_CONNECTED:
-                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mConversationArrayAdapter.clear();
+                        case BluetoothService.STATE_CONNECTED:
+                            //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            //mConversationArrayAdapter.clear();
                             break;
-                        case BluetoothChatService.STATE_CONNECTING:
-                            setStatus(R.string.title_connecting);
+                        case BluetoothService.STATE_CONNECTING:
+                            //setStatus(R.string.title_connecting);
                             break;
-                        case BluetoothChatService.STATE_LISTEN:
-                        case BluetoothChatService.STATE_NONE:
-                            setStatus(R.string.title_not_connected);
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
+                            //setStatus(R.string.title_not_connected);
                             break;
                     }
                     break;
                 case Constants.MESSAGE_WRITE:
-                    byte[] writeBuf = (byte[]) msg.obj;
+                    //byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
-                    String writeMessage = new String(writeBuf);
-                    mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    //String writeMessage = new String(writeBuf);
+                    //mConversationArrayAdapter.add("Me:  " + writeMessage);
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                   // mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    Log.d("message recu",readMessage);
+                    Toast.makeText(SmartRide.this, readMessage,
+                            Toast.LENGTH_SHORT).show();
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
-                    mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
-                    if (null != activity) {
-                        Toast.makeText(activity, "Connected to "
+                   String mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
+                    if (null != SmartRide.this) {
+                        Toast.makeText(SmartRide.this, "Connected to "
                                 + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case Constants.MESSAGE_TOAST:
-                    if (null != activity) {
-                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
+                    if (null != SmartRide.this) {
+                        Toast.makeText(SmartRide.this, msg.getData().getString(Constants.TOAST),
                                 Toast.LENGTH_SHORT).show();
                     }
                     break;
-            }*/
+            }
         }
     };
 
@@ -813,6 +845,12 @@ public class SmartRide extends AppCompatActivity
 
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(mReceiver);
+        if (mBTService != null) {
+            mBTService.stop();
+        }
+        if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.cancelDiscovery();
+        }
     }
 
 }
