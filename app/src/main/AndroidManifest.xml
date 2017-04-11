@@ -16,21 +16,29 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC2UOx4MxrxxWH-Z-rW2kU9Pnq3hbCc-2g" />
-
+        <!-- Splash screen -->
         <activity
-            android:name=".SmartRide"
+            android:name=".SplashScreen"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SmartRide"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC2UOx4MxrxxWH-Z-rW2kU9Pnq3hbCc-2g" />
+
 
         <activity android:name=".ProfilActivity"
             android:label="@string/app_name"
