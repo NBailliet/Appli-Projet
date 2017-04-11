@@ -8,11 +8,11 @@
     <TextView
         android:text="Manual Mode"
         android:textColor="#FFFFFF"
-        android:textSize="60px"
+        android:textSize="80px"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="120dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/textManual" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_below="@+id/textManual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:id="@+id/text1"
@@ -48,7 +48,7 @@
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="50dp"
         android:text="Start Run"
         android:textStyle="bold"
         android:backgroundTint="#00F000"
@@ -61,7 +61,7 @@
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="50dp"
         android:text="Stop Run"
         android:layout_below="@+id/text2"
         android:textStyle="bold"
@@ -70,12 +70,38 @@
         android:id="@+id/buttonStopRun"
         android:visibility="invisible"/>
 
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Pause Run"
+        android:layout_below="@+id/buttonStartRun"
+        android:textStyle="bold"
+        android:backgroundTint="#FFFFFF"
+        android:onClick="onClick"
+        android:id="@+id/buttonStartPauseRun"
+        android:visibility="invisible"/>
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Start Again Run"
+        android:layout_below="@+id/buttonStartRun"
+        android:textStyle="bold"
+        android:backgroundTint="#FFFFFF"
+        android:onClick="onClick"
+        android:id="@+id/buttonStopPauseRun"
+        android:visibility="invisible"/>
+
     <Chronometer
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonStartRun"
+        android:layout_below="@+id/buttonStartPauseRun"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:textSize="140px"
         android:id="@+id/chronometer"

@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             buttonRun = (Button) homeView.findViewById(R.id.buttonRun);
             buttonRun.setOnClickListener(this);
             settings = SmartRide.getSettingsManager();
-            if ((settings.getMotionRunPref()==true || settings.getManualRunPref()==true) || isMyServiceRunning(LocalService.class) == true) {
+            if ((settings.getStartMotionRunPref()==true || settings.getStartManualRunPref()==true) || isMyServiceRunning(LocalService.class) == true) {
                 textrun.setVisibility(View.VISIBLE);
                 textnorun.setVisibility(View.INVISIBLE);
                 buttonRun.setVisibility(View.VISIBLE);
@@ -59,19 +59,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 case (R.id.buttonRun):
 
-                    if (settings.getMotionRunPref() == true) {
+                    if (settings.getStartMotionRunPref()) {
                         MotionCaptureFragment motionFrag = new MotionCaptureFragment();
                         this.getFragmentManager().beginTransaction()
                                 .replace(R.id.frame, motionFrag, "Motion Fragment OK")
                                 .addToBackStack(null)
                                 .commit();
-                    } else if (settings.getManualRunPref() == true) {
+                    } else if (settings.getStartManualRunPref()) {
                         ManualModeFragment manualFrag = new ManualModeFragment();
                         this.getFragmentManager().beginTransaction()
                                 .replace(R.id.frame, manualFrag, "Manual Fragment OK")
                                 .addToBackStack(null)
                                 .commit();
-                    } else if (settings.getMotionRunPref() == true && settings.getManualRunPref() == true) {
+                    } else if (settings.getStartMotionRunPref() && settings.getStartManualRunPref()) {
                         Toast.makeText(getActivity(), "Error : 2 runs at the same time !", Toast.LENGTH_SHORT).show();
                     }
 

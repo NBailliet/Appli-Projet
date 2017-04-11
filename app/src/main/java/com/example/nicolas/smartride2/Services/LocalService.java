@@ -18,6 +18,7 @@ import android.widget.Chronometer;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.example.nicolas.smartride2.Fragments.HomeFragment;
 import com.example.nicolas.smartride2.Fragments.ManualModeFragment;
 import com.example.nicolas.smartride2.Fragments.MotionCaptureFragment;
 import com.example.nicolas.smartride2.R;
@@ -39,11 +40,11 @@ public class LocalService extends Service
     private Date date;
     Chronometer chronometer;
     static long seconds;
+    static long lastSeconds;
+
     SettingsManager settings;
     private static final int LOC_API_CALL_INTERVAL = 1000;
-    NotificationCompat.Builder mBuilder;
     NotificationManager mNotificationManager;
-    Intent resultIntent = new Intent();
 
 
     public IBinder onBind(Intent arg0)
@@ -56,64 +57,60 @@ public class LocalService extends Service
         Context context = this;
         super.onCreate();
         ctx = this;
-        System.out.println("Service start :D");
+        settings=SmartRide.getSettingsManager();
+        System.out.println("Service created");
         startService();
         int mId = 0;
-        int layout = R.id.home_layout;
-        settings = SmartRide.getSettingsManager();
 
-        if (settings.getManualRunPref()) {
-            resultIntent = new Intent(LocalService.this, ManualModeFragment.class);
-            layout = R.layout.manualmode;
+            /*if (settings.getManualRunPref()) {
+                resultIntent = new Intent(LocalService.this, ManualModeFragment.class);
             System.out.println("Go back to Manual Mode Notification");
-        }
-        else if (settings.getMotionRunPref()) {
+            }
+            else if (settings.getMotionRunPref()) {
             resultIntent = new Intent(LocalService.this, MotionCaptureFragment.class);
-            layout = R.layout.motioncapture;
             System.out.println("Go back to Motion Capture Notification");
-        }
+            }*/
+        Intent intent = new Intent(this, SmartRide.class);
+        // use System.currentTimeMillis() to have a unique ID for the pending intent
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
-        PendingIntent pIntent = PendingIntent.getActivity(LocalService.this,1,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-        mBuilder =
+        NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logosmartridemini)
                         .setContentTitle("SmartRide Run")
                         .setContentText("Click to go back to SmartRide app")
-                        .setAutoCancel(true)
                         .setColor(2)
-                        .setContentIntent(pIntent)
                         .setUsesChronometer(true)
-                        .setProgress(10,1,true);
-
-        Notification notification = mBuilder.build();
+                        .setProgress(0,0,true)
+                        .setContentIntent(pIntent);
 
 
         // Creates an explicit intent for an Activity in your app
 
 
-        //TODO Add chronometer and go back to runs
+            /*Intent resultIntent = new Intent(this, SmartRide.class);
 
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(SmartRide.class);
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
+            // The stack builder object will contain an artificial back stack for the
+            // started Activity.
+            // This ensures that navigating backward from the Activity leads out of
+            // your application to the Home screen.
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            // Adds the back stack for the Intent (but not the Intent itself)
+            stackBuilder.addParentStack(SmartRide.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
-        mBuilder.setContentIntent(resultPendingIntent);
+            mBuilder.setContentIntent(resultPendingIntent);*/
         mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
-        mNotificationManager.notify(mId, notification);
+        mNotificationManager.notify(mId, mBuilder.build());
+
     }
 
     public void startService()
@@ -121,15 +118,22 @@ public class LocalService extends Service
         System.out.println("Service started");
         //timer.scheduleAtFixedRate(new mainTask(), 0, 1000);
         chronometer = new Chronometer(LocalService.this);
-        Log.e("Coucou", "1");
         chronometer.setBase(SystemClock.elapsedRealtime());
-        Log.e("Coucou", "2");
         chronometer.start();
-        Log.e("Coucou", "avant");
-
         startTimer();
-        Log.e("Coucou", "apres");
     }
+
+    /*public void pauseService()
+    {
+        System.out.println("Service paused");
+        pauseTimer();
+    }
+
+    public void resumeService()
+    {
+        System.out.println("Service resumed");
+        resumeTimer();
+    }*/
 
     private class mainTask extends TimerTask
     {
@@ -159,40 +163,52 @@ public class LocalService extends Service
     //Timer related functions
 
     private void startTimer(){
-        Log.e("starttimer", "debut");
         if(timer!=null ){
-            Log.e("Coucou", "PROBLEME");
             return;
         }
+        final long[] newseconds = new long[1];
+        newseconds[0]=0;
         timer=new Timer();
-        Log.e("starttimer", "1");
+        final long[] counter = new long[1];
+        Log.e("START TIMER", "1");
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
 
-                long millis= SystemClock.elapsedRealtime() - chronometer.getBase();
+                if (settings.getStopPausePref()) {
+                    newseconds[0] = lastSeconds;
+                    System.out.println("NEW SECONDS VALUE = "+String.valueOf(newseconds[0]));
+                    counter[0] = counter[0] + 1;
+                    settings.setStopPausePref(false);
+                }
+                if (settings.getStartPausePref()) {
+                    lastSeconds = LocalService.getSeconds();
+                    System.out.println("LAST SECONDS VALUE = "+String.valueOf(lastSeconds));
+                    stopTimer();
+                    settings.setStartPausePref(false);
+                }
+                long millis= SystemClock.elapsedRealtime() - chronometer.getBase() + newseconds[0]*999;
                 seconds = millis / 1000;
-                Log.e("timefortest", "" + seconds);
+                Log.e("TIME SERVICE :", "" + seconds);
                 if (seconds>600) {
                     stopSelf();
                 }
             }
 
         }, 0, LOC_API_CALL_INTERVAL);
-        Log.e("starttimer", "2");
+        Log.e("START TIMER", "2");
     }
 
     private void stopTimer(){
 
         if(null!=timer){
+
             timer.cancel();
             timer=null;
         }
     }
 
     public static int getSeconds(){
-
-
         return (int) seconds;
     }
 

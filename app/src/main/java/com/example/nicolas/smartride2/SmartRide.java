@@ -117,7 +117,10 @@ public class SmartRide extends AppCompatActivity
         //bdd.clearTable("TABLE_PROFIL");
 
         session = new SessionManager(getApplicationContext());
-        settings = new SettingsManager(getApplicationContext());
+
+        if (!isMyServiceRunning(LocalService.class)) {
+            settings = new SettingsManager(getApplicationContext());
+        }
 
         if (connectionFlag==null){
             connectionFlag=false;
@@ -474,6 +477,8 @@ public class SmartRide extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+        //TODO GERER BACK OPTIONS VERS DRAWER
     }
 
     @Override

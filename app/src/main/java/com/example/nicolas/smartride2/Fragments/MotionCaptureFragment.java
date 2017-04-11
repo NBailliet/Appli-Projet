@@ -26,6 +26,7 @@ import com.example.nicolas.smartride2.SmartRide;
 public class MotionCaptureFragment extends Fragment implements View.OnClickListener {
 
     Button buttonStopRun;
+    Button buttonStartPauseRun;
     Chronometer chronometer;
     SettingsManager settings;
 
@@ -38,6 +39,8 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
         View motionView = inflater.inflate(R.layout.motioncapture, container, false);
         buttonStopRun = (Button) motionView.findViewById(R.id.buttonStopRun);
         buttonStopRun.setOnClickListener(this);
+        buttonStartPauseRun = (Button) motionView.findViewById(R.id.buttonStartPauseRun);
+        buttonStartPauseRun.setOnClickListener(this);
         chronometer = (Chronometer) motionView.findViewById(R.id.chronometer2);
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -54,7 +57,7 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
             }
         });
 
-        if (!settings.getManualRunPref()) {
+        if (!settings.getStartManualRunPref()) {
 
             if (isMyServiceRunning(LocalService.class)) {
                 sec = LocalService.getSeconds();
@@ -80,7 +83,7 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
                 getActivity().startService(intentGPS);
                 System.out.println("GPS lancé :)");
                 SettingsManager settings = SmartRide.getSettingsManager();
-                settings.setMotionRunPref(true);
+                settings.setStartMotionRunPref(true);
                 setHasOptionsMenu(true);
             }
         }
@@ -95,10 +98,13 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
 
         View parent = (View)v.getParent();
+        long timeWhenStopped = 0;
 
         if (v.hasOnClickListeners()) {
 
             Button buttonStopRun = (Button) parent.findViewById(R.id.buttonStopRun);
+            Button buttonStartPauseRun = (Button) parent.findViewById(R.id.buttonStartPauseRun);
+
             Chronometer chronometerRun = (Chronometer) parent.findViewById(R.id.chronometer2);
 
             switch (v.getId()) {
@@ -108,15 +114,26 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
 
                     System.out.println("Bouton Stop OK");
                     settings = SmartRide.getSettingsManager();
-                    settings.setMotionRunPref(false);
                     Intent intentChrono2 = new Intent(getActivity(), LocalService.class);
                     getActivity().stopService(intentChrono2);
                     chronometerRun.stop();
+                    settings.setStartMotionRunPref(false);
+                    settings.setFinishedMotionRunPref(true);
+                    System.out.println("FINISHED RUN CHANGED TO : "+String.valueOf(settings.getFinishedMotionRunPref()));
+                    settings.addRunNbPref();
+                    System.out.println("NB OF RUNS = "+String.valueOf(settings.getRunNbPref()));
                     chronometerRun.setBase(SystemClock.elapsedRealtime());
                     Intent intentGPS2 = new Intent(getActivity(), RideLocationGetter.class);
                     getActivity().stopService(intentGPS2);
                     System.out.println("GPS stoppé :)");
                     break;
+
+                case (R.id.buttonStartPauseRun):
+                    System.out.println("Bouton Pause OK");
+                    timeWhenStopped = chronometerRun.getBase() - SystemClock.elapsedRealtime();
+                    chronometerRun.stop();
+                    chronometerRun.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+                    chronometerRun.start();
 
             }
 
