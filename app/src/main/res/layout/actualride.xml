@@ -12,7 +12,7 @@
 
         <TextView
             android:text="Actual Ride"
-            android:textSize="80px"
+            android:textSize="25dp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
         <TextView
             android:text="Graph Test 1"
             android:textColor="#FFFFFF"
-            android:textSize="60px"
+            android:textSize="20dp"
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
         <TextView
             android:text="Graph Test 2"
             android:textColor="#FFFFFF"
-            android:textSize="60px"
+            android:textSize="20dp"
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
         <TextView
             android:text="Graph Test 3"
             android:textColor="#FFFFFF"
-            android:textSize="60px"
+            android:textSize="20dp"
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
         <TextView
             android:text="Graph Test 4"
             android:textColor="#FFFFFF"
-            android:textSize="60px"
+            android:textSize="20dp"
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
