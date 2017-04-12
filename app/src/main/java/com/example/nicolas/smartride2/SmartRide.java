@@ -807,6 +807,7 @@ public class SmartRide extends AppCompatActivity
                     // construct a string from the buffer
                     //String writeMessage = new String(writeBuf);
                     //mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    Log.d("Write","message envoyé");
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
@@ -816,6 +817,7 @@ public class SmartRide extends AppCompatActivity
                     Log.d("message recu",readMessage);
                     Toast.makeText(SmartRide.this, readMessage,
                             Toast.LENGTH_SHORT).show();
+                    SmartRide.this.sendMessage(readMessage);
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -844,6 +846,21 @@ public class SmartRide extends AppCompatActivity
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 60);
             startActivity(discoverableIntent);
+        }
+    }
+
+    private void sendMessage(String message) {
+        // Check that we're actually connected before trying anything
+        if (mBTService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(SmartRide.this,"not connected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            byte[] send = message.getBytes();
+            mBTService.write(send);
         }
     }
 
