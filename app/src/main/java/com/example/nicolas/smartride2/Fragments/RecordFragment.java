@@ -25,6 +25,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     Button buttonManual;
     TextView textGPSOn;
     TextView textGPSOff;
+    TextView textBluetoothOn;
+    TextView textBluetoothOff;
     SettingsManager settings;
 
     @Override
@@ -37,6 +39,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         buttonManual.setOnClickListener(this);
         textGPSOn = (TextView) recordView.findViewById(R.id.textGPSOn);
         textGPSOff = (TextView) recordView.findViewById(R.id.textGPSOff);
+        textBluetoothOn = (TextView) recordView.findViewById(R.id.textBluetoothOn);
+        textBluetoothOff = (TextView) recordView.findViewById(R.id.textBluetoothOff);
         if (settings.getGPSTrackPref()) {
             textGPSOff.setVisibility(View.INVISIBLE);
             textGPSOn.setVisibility(View.VISIBLE);
@@ -44,6 +48,14 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         else {
             textGPSOn.setVisibility(View.INVISIBLE);
             textGPSOff.setVisibility(View.VISIBLE);
+        }
+        if (settings.getBluetoothStatePref()) {
+            textBluetoothOff.setVisibility(View.INVISIBLE);
+            textBluetoothOn.setVisibility(View.VISIBLE);
+        }
+        else {
+            textBluetoothOn.setVisibility(View.INVISIBLE);
+            textBluetoothOff.setVisibility(View.VISIBLE);
         }
         return recordView;
     }

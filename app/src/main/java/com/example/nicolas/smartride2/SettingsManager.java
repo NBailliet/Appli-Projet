@@ -52,6 +52,8 @@ public class SettingsManager {
     // Memorized GPS Auto Tracking Settings
     public static final String KEY_GPSTRACK = "GPSAutoTracking";
 
+    // Memorized Bluetooth State
+    public static final String KEY_BLUETOOTH = "BluetoothState";
 
     // Constructor
     public SettingsManager(Context context){
@@ -66,6 +68,7 @@ public class SettingsManager {
         editor.putBoolean(KEY_STARTPAUSE,false);
         editor.putBoolean(KEY_STOPPAUSE,false);
         editor.putBoolean(KEY_GPSTRACK,true);
+        editor.putBoolean(KEY_BLUETOOTH,false);
         editor.commit();
     }
 
@@ -171,6 +174,16 @@ public class SettingsManager {
 
     public void setGPSTrackPref(Boolean runGPSTrackPref){
         editor.putBoolean(KEY_GPSTRACK,runGPSTrackPref);
+        editor.commit();
+    }
+
+    public Boolean getBluetoothStatePref(){
+        Boolean bluetoothStatePref = pref.getBoolean(KEY_BLUETOOTH,false);
+        return bluetoothStatePref;
+    }
+
+    public void setBluetoothStatePref(Boolean bluetoothStatePref){
+        editor.putBoolean(KEY_BLUETOOTH,bluetoothStatePref);
         editor.commit();
     }
 
