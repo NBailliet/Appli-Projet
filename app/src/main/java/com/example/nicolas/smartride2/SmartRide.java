@@ -682,7 +682,6 @@ public class SmartRide extends AppCompatActivity
                                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             // User clicked OK button
-                                            settings.setBluetoothStatePref(true);
                                             mBluetoothAdapter.cancelDiscovery();
                                             mDeviceList.clear();
                                         }
