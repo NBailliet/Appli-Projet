@@ -13,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textMotion" />
+        android:id="@+id/textMotion"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:text="In this Motion Capture menu, the SmartRide system will automatically detect when you start moving and also start your run on the application."
@@ -54,7 +55,8 @@
         android:backgroundTint="#FF0000"
         android:layout_below="@+id/text2"
         android:onClick="onClick"
-        android:id="@+id/buttonStopRun" />
+        android:id="@+id/buttonStopRun"
+        android:drawableBottom="@drawable/stop"/>
 
     <Button
         android:layout_width="300dp"
@@ -67,7 +69,8 @@
         android:layout_below="@+id/text2"
         android:onClick="onClick"
         android:id="@+id/buttonStartRun"
-        android:visibility="invisible"/>
+        android:drawableBottom="@drawable/play"
+        android:visibility="invisible" />
 
     <Button
         android:layout_width="300dp"
@@ -79,7 +82,8 @@
         android:textStyle="bold"
         android:backgroundTint="#FFFFFF"
         android:onClick="onClick"
-        android:id="@+id/buttonStartPauseRun" />
+        android:id="@+id/buttonStartPauseRun"
+        android:drawableBottom="@drawable/pause"/>
 
     <Button
         android:layout_width="300dp"
@@ -92,6 +96,7 @@
         android:backgroundTint="#FFFFFF"
         android:onClick="onClick"
         android:id="@+id/buttonStopPauseRun"
+        android:drawableBottom="@drawable/playagain"
         android:visibility="invisible"/>
 
 

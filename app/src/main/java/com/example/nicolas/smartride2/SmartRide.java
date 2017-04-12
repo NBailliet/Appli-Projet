@@ -80,7 +80,7 @@ public class SmartRide extends AppCompatActivity
     public ProgressDialog progress;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private String action;
-    SessionManager session;
+    static SessionManager session;
     static SettingsManager settings;
 
     private BDD bdd;
@@ -287,7 +287,7 @@ public class SmartRide extends AppCompatActivity
 
                         bdd.insertProfil(user);
 
-                        Toast.makeText(SmartRide.this, "Account created successfuly !" + user.getLogin() + user.getPassword(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SmartRide.this, "Account created successfuly !" + user.getLogin(), Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                         showConnectDialog(login);
                     } else {
@@ -831,6 +831,10 @@ public class SmartRide extends AppCompatActivity
 
     public static SettingsManager getSettingsManager() {
         return settings;
+    }
+
+    public static SessionManager getSessionManager() {
+        return session;
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

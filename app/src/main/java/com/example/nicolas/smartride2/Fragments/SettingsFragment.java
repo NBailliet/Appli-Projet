@@ -17,6 +17,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.nicolas.smartride2.R;
+import com.example.nicolas.smartride2.SettingsManager;
 import com.example.nicolas.smartride2.SmartRide;
 
 /**
@@ -38,14 +39,14 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     CheckBox checkBox9;
     CheckBox checkBox10;
     Switch switchVoice;
+    Switch switchGPS;
+    SettingsManager settings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View settingsView = inflater.inflate(R.layout.settings, container, false);
-//        radioButton1 = (RadioButton) settingsView.findViewById(R.id.radioButton1);
-//        radioButton1.setOnClickListener(this);
-//        radioButton2 = (RadioButton) settingsView.findViewById(R.id.radioButton2);
-//        radioButton2.setOnClickListener(this);
+        settings = SmartRide.getSettingsManager();
+
         checkBox1 = (CheckBox) settingsView.findViewById(R.id.checkBox1);
         checkBox1.setOnClickListener(this);
         checkBox2 = (CheckBox) settingsView.findViewById(R.id.checkBox2);
@@ -68,6 +69,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         checkBox10.setOnClickListener(this);
         switchVoice = (Switch) settingsView.findViewById(R.id.switchVoice);
         switchVoice.setOnCheckedChangeListener(this);
+        switchGPS = (Switch) settingsView.findViewById(R.id.switchGPS);
+        if (!settings.getGPSTrackPref()){
+            switchGPS.setChecked(false);
+        }
+        switchGPS.setOnCheckedChangeListener(this);
         return settingsView;
     }
 
@@ -191,6 +197,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
         Activity activity = getActivity();
+        settings = SmartRide.getSettingsManager();
         switch (buttonView.getId()) {
 
             case R.id.switchVoice :
@@ -200,6 +207,18 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 }
                 else {
                     Toast.makeText(activity, "Voice Command OFF", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.switchGPS :
+
+                if (switchGPS.isChecked()) {
+                    Toast.makeText(activity, "GPS Auto Tracking ON", Toast.LENGTH_SHORT).show();
+                    settings.setGPSTrackPref(true);
+                }
+                else {
+                    Toast.makeText(activity, "GPS Auto Tracking OFF", Toast.LENGTH_SHORT).show();
+                    settings.setGPSTrackPref(false);
                 }
                 break;
         }

@@ -13,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textManual" />
+        android:id="@+id/textManual"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:text="In this Manual Mode menu, you can start a record by pressing the Start Run button."
@@ -43,7 +44,6 @@
         android:textAlignment="center"
         android:id="@+id/text2"/>
 
-
     <Button
         android:layout_width="300dp"
         android:layout_height="100dp"
@@ -55,7 +55,8 @@
         android:layout_below="@+id/text2"
         android:onClick="onClick"
         android:id="@+id/buttonStartRun"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:drawableBottom="@drawable/play" />
 
     <Button
         android:layout_width="300dp"
@@ -68,6 +69,7 @@
         android:backgroundTint="#FF0000"
         android:onClick="onClick"
         android:id="@+id/buttonStopRun"
+        android:drawableBottom="@drawable/stop"
         android:visibility="invisible"/>
 
     <Button
@@ -81,7 +83,8 @@
         android:backgroundTint="#FFFFFF"
         android:onClick="onClick"
         android:id="@+id/buttonStartPauseRun"
-        android:visibility="invisible"/>
+        android:drawableBottom="@drawable/pause"
+        android:visibility="invisible" />
 
     <Button
         android:layout_width="300dp"
@@ -94,6 +97,7 @@
         android:backgroundTint="#FFFFFF"
         android:onClick="onClick"
         android:id="@+id/buttonStopPauseRun"
+        android:drawableBottom="@drawable/playagain"
         android:visibility="invisible"/>
 
     <Chronometer

@@ -10,8 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
         <TextView
             android:text="Test Checkbox"
             android:textColor="#FFFFFF"
@@ -45,16 +43,16 @@
             android:textColor="#A4A4A4"/>
 
         <TextView
-            android:text="Voice command"
-            android:textColor="#000000"
-            android:textSize="22dp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/textView3"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/checkBox2"/>
+        android:text="Voice command"
+        android:textColor="#000000"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView3"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/checkBox2"/>
 
         <Switch
             android:layout_width="wrap_content"
@@ -65,7 +63,44 @@
             android:layout_centerHorizontal="true"
             android:text="Voice Command   "
             android:textColor="#A4A4A4"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
+
+        <TextView
+            android:text="GPS"
+            android:textColor="#000000"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textViewGPS"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/switchVoice"/>
+
+        <TextView
+            android:text="Note : GPS Auto Tracking is ON by default during runs."
+            android:textColor="#FFFFFF"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/textViewGPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textNoteGPS"
+            android:textAlignment="center"/>
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchGPS"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/textNoteGPS"
+            android:layout_centerHorizontal="true"
+            android:text="Run GPS Auto Run Tracking    "
+            android:textColor="#A4A4A4"
+            android:textStyle="bold"
+            android:checked="true"/>
 
         <TextView
             android:text="Choix des données"
@@ -78,7 +113,7 @@
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:id="@+id/textView6"
-            android:layout_below="@+id/switchVoice"/>
+            android:layout_below="@+id/switchGPS"/>
 
         <TextView
             android:text="Ski G         Ski D"

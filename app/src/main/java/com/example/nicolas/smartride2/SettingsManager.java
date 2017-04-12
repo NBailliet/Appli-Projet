@@ -49,6 +49,9 @@ public class SettingsManager {
     // Memorized Stop Pause Needed
     public static final String KEY_STOPPAUSE = "IsStopPauseNeeded";
 
+    // Memorized GPS Auto Tracking Settings
+    public static final String KEY_GPSTRACK = "GPSAutoTracking";
+
 
     // Constructor
     public SettingsManager(Context context){
@@ -62,6 +65,7 @@ public class SettingsManager {
         editor.putInt(KEY_RUNNB,0);
         editor.putBoolean(KEY_STARTPAUSE,false);
         editor.putBoolean(KEY_STOPPAUSE,false);
+        editor.putBoolean(KEY_GPSTRACK,true);
         editor.commit();
     }
 
@@ -157,6 +161,16 @@ public class SettingsManager {
 
     public void setStopPausePref(Boolean runStopPausePref){
         editor.putBoolean(KEY_STOPPAUSE,runStopPausePref);
+        editor.commit();
+    }
+
+    public Boolean getGPSTrackPref(){
+        Boolean runGPSTrackPref = pref.getBoolean(KEY_GPSTRACK,false);
+        return runGPSTrackPref;
+    }
+
+    public void setGPSTrackPref(Boolean runGPSTrackPref){
+        editor.putBoolean(KEY_GPSTRACK,runGPSTrackPref);
         editor.commit();
     }
 

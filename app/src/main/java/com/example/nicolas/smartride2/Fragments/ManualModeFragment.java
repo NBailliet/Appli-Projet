@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicolas.smartride2.R;
@@ -19,6 +20,8 @@ import com.example.nicolas.smartride2.Services.RideLocationGetter;
 import com.example.nicolas.smartride2.SettingsManager;
 import com.example.nicolas.smartride2.Fragments.OverviewFragment;
 import com.example.nicolas.smartride2.SmartRide;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by Nicolas on 30/01/2017.
@@ -121,9 +124,11 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                                 chronometerRun.start();
                                 Intent intentChrono = new Intent(getActivity(), LocalService.class);
                                 getActivity().startService(intentChrono);
-                                Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
-                                getActivity().startService(intentGPS);
-                                System.out.println("GPS lancé :)");
+                                if (settings.getGPSTrackPref()) {
+                                    Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
+                                    getActivity().startService(intentGPS);
+                                    System.out.println("GPS lancé :)");
+                                }
                                 settings = SmartRide.getSettingsManager();
                                 settings.setStartManualRunPref(true);
                                 buttonStartRun.setVisibility(View.INVISIBLE);
@@ -157,9 +162,11 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                         buttonStopRun.setVisibility(View.INVISIBLE);
                         buttonStartPauseRun.setVisibility(View.INVISIBLE);
                         buttonStartRun.setVisibility(View.VISIBLE);
-                        Intent intentGPS2 = new Intent(getActivity(), RideLocationGetter.class);
-                        getActivity().stopService(intentGPS2);
-                        System.out.println("GPS stoppé :)");
+                        if (settings.getGPSTrackPref()) {
+                            Intent intentGPS2 = new Intent(getActivity(), RideLocationGetter.class);
+                            getActivity().stopService(intentGPS2);
+                            System.out.println("GPS stoppé :)");
+                        }
                         break;
 
                     case (R.id.buttonStartPauseRun):

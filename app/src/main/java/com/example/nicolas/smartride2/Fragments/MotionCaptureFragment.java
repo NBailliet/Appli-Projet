@@ -86,10 +86,12 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
                 chronometer.start();
                 Intent intentChrono = new Intent(getActivity(), LocalService.class);
                 getActivity().startService(intentChrono);
-                Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
-                getActivity().startService(intentGPS);
-                System.out.println("GPS lancé :)");
-                SettingsManager settings = SmartRide.getSettingsManager();
+                if (settings.getGPSTrackPref()) {
+
+                    Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
+                    getActivity().startService(intentGPS);
+                    System.out.println("GPS lancé :)");
+                }
                 settings.setStartMotionRunPref(true);
                 setHasOptionsMenu(true);
             }
@@ -133,9 +135,11 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
                     settings.addRunNbPref();
                     System.out.println("NB OF RUNS = "+String.valueOf(settings.getRunNbPref()));
                     chronometerRun.setBase(SystemClock.elapsedRealtime());
-                    Intent intentGPS2 = new Intent(getActivity(), RideLocationGetter.class);
-                    getActivity().stopService(intentGPS2);
-                    System.out.println("GPS stoppé :)");
+                    if (settings.getGPSTrackPref()) {
+                        Intent intentGPS2 = new Intent(getActivity(), RideLocationGetter.class);
+                        getActivity().stopService(intentGPS2);
+                        System.out.println("GPS stoppé :)");
+                    }
                     buttonStopRun.setVisibility(View.INVISIBLE);
                     buttonStartPauseRun.setVisibility(View.INVISIBLE);
                     buttonStartRun.setVisibility(View.VISIBLE);

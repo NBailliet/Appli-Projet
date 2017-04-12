@@ -67,7 +67,7 @@ public class RideLocationGetter extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.w(TAG, "serviceLoc started");
+        Log.w(TAG, "ServiceLoc started");
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -104,7 +104,7 @@ public class RideLocationGetter extends Service {
         }
 
         // Send an Intent with an action named "custom-event-name". The Intent sent should
-// be received by the ReceiverActivity.
+        // be received by the ReceiverActivity.
         private void sendMessage() {
             Log.d("sender", "Broadcasting message");
             Intent intent = new Intent("new location");
@@ -149,7 +149,7 @@ public class RideLocationGetter extends Service {
             return;
         }
         locationManager.removeUpdates(locationListener);
-        Toast.makeText(getBaseContext(), "Location service stoped", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Location service stopped", Toast.LENGTH_SHORT).show();
         Log.w(TAG, "serviceLoc destroy");
     }
 }

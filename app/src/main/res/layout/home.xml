@@ -21,7 +21,6 @@
         android:visibility="visible"/>
 
         <TextView
-            android:text="Welcome on SmartRide application. You can open the navigation bar on the left to start using the app."
             android:textColor="#FFFFFF"
             android:textSize="17dp"
             android:textStyle="bold"
@@ -58,7 +57,7 @@
             android:layout_marginTop="50dp"
             android:id="@+id/textViewNoRun"
             android:visibility="visible"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
 
         <Button
             android:text="Go To Current Run Record"
@@ -70,6 +69,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:layout_below="@+id/textViewRun"
+            android:drawableTop="@drawable/info"
             android:visibility="invisible"
             android:onClick="onClick"/>
 
