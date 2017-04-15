@@ -82,7 +82,7 @@ public class SmartRide extends AppCompatActivity
     private String action;
     SessionManager session;
     static SettingsManager settings;
-
+    String rxBuffer="";
     private BDD bdd;
     public User user;
     public User utilisateurCo;
@@ -815,9 +815,15 @@ public class SmartRide extends AppCompatActivity
                     String readMessage = new String(readBuf, 0, msg.arg1);
                    // mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     Log.d("message recu",readMessage);
-                    Toast.makeText(SmartRide.this, readMessage,
-                            Toast.LENGTH_SHORT).show();
-                    SmartRide.this.sendMessage(readMessage);
+                   //Toast.makeText(SmartRide.this, readMessage, Toast.LENGTH_SHORT).show();
+                    rxBuffer=rxBuffer+readMessage;
+                    Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
+                    if ((rxBuffer.contains("A")||rxBuffer.contains("G"))&& rxBuffer.endsWith("GZ")){
+                        testBuffer(rxBuffer);
+                        // Toast.makeText(SmartRide.this, rxBuffer, Toast.LENGTH_SHORT).show();
+                        rxBuffer="";
+                    }
+                    //SmartRide.this.sendMessage(readMessage);
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -836,6 +842,8 @@ public class SmartRide extends AppCompatActivity
             }
         }
     };
+
+
 
     /**
      * Makes this device discoverable for 300 seconds (5 minutes).
@@ -861,6 +869,33 @@ public class SmartRide extends AppCompatActivity
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
             mBTService.write(send);
+        }
+    }
+
+
+    private void testBuffer(String data) {
+        if (data.contains("A")) {
+            if (data.contains("X")) {
+                Log.d("testBufferAX",data);
+            }
+            if (data.contains("Y")) {
+                Log.d("testBufferAY",data);
+            }
+            if (data.contains("Z")) {
+                Log.d("testBufferAZ",data);
+            }
+
+        }
+        if (data.contains("G")) {
+            if (data.contains("X")) {
+                Log.d("testBufferGX",data);
+            }
+            if (data.contains("Y")) {
+                Log.d("testBufferGY",data);
+            }
+            if (data.contains("Z")) {
+                Log.d("testBufferGZ",data);
+            }
         }
     }
 

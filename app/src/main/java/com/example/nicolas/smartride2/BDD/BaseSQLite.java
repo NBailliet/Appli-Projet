@@ -33,7 +33,7 @@ public class BaseSQLite extends SQLiteOpenHelper {
     private static final String COL_RUN_PROFIL = "RUN_PROFIL";
 
     private static final String CREATE_TABLE_RUN = "CREATE TABLE " + TABLE_RUN + " ("
-            + COL_RUN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_RUN_NAME + " TEXT, "+ COL_RUN_DATE +" BLOB, " + COL_RUN_PROFIL + " TEXT );";
+            + COL_RUN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_RUN_NAME + " TEXT, "+ COL_RUN_DATE +" TEXT, " + COL_RUN_PROFIL + " TEXT );";
 
     //Localisation Table
     private static final String TABLE_LOC = "TABLE_LOC";

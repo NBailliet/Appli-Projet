@@ -43,14 +43,14 @@ public class BDD {
     private static final int NUM_COL_PROFIL_CREATION = 6;
 
     //Run Table
-    private static final String TABLE_RUN = "table_run";
-    private static final String COL_RUN_ID = "run_ID";
+    private static final String TABLE_RUN = "TABLE_RUN";
+    private static final String COL_RUN_ID = "RUN_ID";
     private static final int NUM_COL_RUN_ID = 0;
-    private static final String COL_RUN_NAME = "Loc_run_name";
+    private static final String COL_RUN_NAME = "RUN_NAME";
     private static final int NUM_COL_RUN_NAME = 1;
-    private static final String COL_RUN_DATE = "run_date";
+    private static final String COL_RUN_DATE = "RUN_DATE";
     private static final int NUM_COL_RUN_DATE = 2;
-    private static final String COL_RUN_PROFIL = "run_profil";
+    private static final String COL_RUN_PROFIL = "RUN_PROFIL";
     private static final int NUM_COL_RUN_PROFIL= 3;
 
     //Location Table
@@ -242,6 +242,81 @@ public class BDD {
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //Run Table
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public long insertRun(Run run){
+        //Création d'un ContentValues (fonctionne comme une HashMap)
+        ContentValues values = new ContentValues();
+        //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+        values.put(COL_RUN_NAME, run.getName());
+        values.put(COL_RUN_PROFIL, run.getName());
+        String t2=gson.toJson(run.getCreationDate());
+        values.put(COL_RUN_DATE, t2);
+        //on insère l'objet dans la BDD via le ContentValues
+        return bdd.insert(TABLE_RUN, null, values);
+    }
+
+    public int updateRun(Run run){
+        ContentValues values = new ContentValues();
+        values.put(COL_RUN_NAME, run.getName());
+        values.put(COL_RUN_PROFIL, run.getName());
+        String t2=gson.toJson(run.getCreationDate());
+        values.put(COL_RUN_DATE, t2);
+        return bdd.update(TABLE_RUN, values, COL_PROFIL_LOGIN + " LIKE \"" + run.getName() +"\"", null);//todo like profil et le name
+    }
+
+    public User getRunWithNameAndProfil(String name,String profil){
+        Cursor c = bdd.query(TABLE_PROFIL, new String[] {COL_PROFIL_ID, COL_PROFIL_LOGIN, COL_PROFIL_PWD, COL_PROFIL_NAME,COL_PROFIL_SURNAME,COL_PROFIL_AGE, COL_PROFIL_CREATION}, COL_PROFIL_LOGIN + " LIKE \"" + name +"\"", null, null, null, null);
+        c.moveToFirst();
+        return cursorToProfil(c);
+    }
+
+    public List<User> getAllRunWithProfil() {
+        List<User> users = new ArrayList<User>();
+        Cursor cursor = bdd.query(TABLE_PROFIL,
+                new String[] {COL_PROFIL_ID, COL_PROFIL_LOGIN, COL_PROFIL_PWD, COL_PROFIL_NAME,COL_PROFIL_SURNAME, COL_PROFIL_AGE, COL_PROFIL_CREATION}, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            User user = cursorToProfil(cursor);
+            users.add(user);
+            cursor.moveToNext();
+        }
+        // assurez-vous de la fermeture du curseur
+        cursor.close();
+        return users;
+    }
+
+    private User cursorToRun(Cursor c){
+        //si aucun élément n'a été retourné dans la requête, on renvoie null
+        Log.v("cursor", Integer.toString(c.getCount()));
+        if (c.getCount() >= 1) {
+            Log.v("cursor", "in the if");
+            User user = new User(null, null, null, null, 0, null);
+            Log.v("cursor", "after new user");
+            //Log.v("cursor", "Namelogincolonne"+c.getString(1));
+            user.setLogin(c.getString(NUM_COL_PROFIL_LOGIN));
+            Log.v("cursor", "after set login"+user.getLogin());
+            user.setPassword(c.getString(NUM_COL_PROFIL_PWD));
+            Log.v("cursor", "after set pwd");
+            user.setName(c.getString(NUM_COL_PROFIL_NAME));
+            Log.v("cursor", "after set name");
+            user.setSurname(c.getString(NUM_COL_PROFIL_SURNAME));
+            Log.v("cursor", "after set Surname");
+            user.setAge(c.getInt(NUM_COL_PROFIL_AGE));
+            Type type = new TypeToken<Time>() {
+            }.getType();
+            Time time = gson.fromJson(c.getString(NUM_COL_PROFIL_CREATION), type);
+            user.setCreationDate(time);
+            Log.v("cursor", "after time");
+            return user;
+        } else  return null;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     public void clearTable(String nameoftable){
         bdd=maBaseSQLite.getWritableDatabase();
