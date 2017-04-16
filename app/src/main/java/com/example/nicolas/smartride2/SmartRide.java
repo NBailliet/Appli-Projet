@@ -839,6 +839,14 @@ public class SmartRide extends AppCompatActivity
                         rxBuffer="";
                     }*/
                     //SmartRide.this.sendMessage(readMessage);
+                    bdd.open();
+                    List<DataSensor> dataSensorsA = new ArrayList<DataSensor>();
+                    dataSensorsA=bdd.getAllDataAccWithRunAndProfil("Run#1",session.getLoginPref());
+                    List<DataSensor> dataSensorsG = new ArrayList<DataSensor>();
+                    dataSensorsG=bdd.getAllDataGyroWithRunAndProfil("Run#1",session.getLoginPref());
+                    Log.d("bdd","length Acc ="+dataSensorsA.size());
+                    Log.d("bdd","length Gyro ="+dataSensorsG.size());
+                    bdd.close();
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -899,40 +907,55 @@ public class SmartRide extends AppCompatActivity
                     if (splitedString[i].compareTo("A") == 0) {
                         if (splitedString[i + 1].compareTo("X") == 0) {
                             String dataAX = data.substring(i - 11, i - 1);
-                            Log.d("ExtractData", "dataAX=" + dataAX);
-                            dataSensorAcc.setDataX(dataAX);
+                            if(!dataAX.contains("A")&&!dataAX.contains("G")&&!dataAX.contains("X")&&!dataAX.contains("Y")&&!dataAX.contains("Z")) {
+                                Log.d("ExtractData", "dataAX=" + dataAX);
+                                dataSensorAcc.setDataX(dataAX);
+                            }
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Y") == 0) {
                             String dataAY = data.substring(i - 11, i - 1);
-                            Log.d("ExtractData", "dataAY=" + dataAY);
-                            dataSensorAcc.setDataY(dataAY);
+                            if(!dataAY.contains("A")&&!dataAY.contains("G")&&!dataAY.contains("X")&&!dataAY.contains("Y")&&!dataAY.contains("Z")) {
+                                Log.d("ExtractData", "dataAY=" + dataAY);
+                                dataSensorAcc.setDataY(dataAY);
+                            }
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Z") == 0) {
                             String dataAZ = data.substring(i - 11, i - 1);
-                            Log.d("ExtractData", "dataAZ=" + dataAZ);
-                            dataSensorAcc.setDataZ(dataAZ);
+                            if(!dataAZ.contains("A")&&!dataAZ.contains("G")&&!dataAZ.contains("X")&&!dataAZ.contains("Y")&&!dataAZ.contains("Z")) {
+                                Log.d("ExtractData", "dataAZ=" + dataAZ);
+                                dataSensorAcc.setDataZ(dataAZ);
+                            }
                             indexOfLastLetter=i+1;
                         }
                     }
                     if (splitedString[i].compareTo("G") == 0) {
                         if (splitedString[i + 1].compareTo("X") == 0) {
                             String dataGX = data.substring(i - 11, i - 1);
-                            Log.d("ExtractData", "dataGX=" + dataGX);
-                            dataSensorGyro.setDataX(dataGX);
+                            if(!dataGX.contains("A")&&!dataGX.contains("G")&&!dataGX.contains("X")&&!dataGX.contains("Y")&&!dataGX.contains("Z")) {
+                                Log.d("ExtractData", "dataGX=" + dataGX);
+                                dataSensorGyro.setDataX(dataGX);
+                            }
+
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Y") == 0) {
                             String dataGY = data.substring(i - 11, i - 1);
-                            Log.d("ExtractData", "dataGY=" + dataGY);
-                            dataSensorGyro.setDataY(dataGY);
+                            if(!dataGY.contains("A")&&!dataGY.contains("G")&&!dataGY.contains("X")&&!dataGY.contains("Y")&&!dataGY.contains("Z")) {
+                                Log.d("ExtractData", "dataGY=" + dataGY);
+                                dataSensorGyro.setDataY(dataGY);
+                            }
+
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Z") == 0) {
                             String dataGZ = data.substring(i - 11, i - 1);
-                            Log.d("ExtractData", "dataGZ=" + dataGZ);
-                            dataSensorGyro.setDataZ(dataGZ);
+                            if(!dataGZ.contains("A")&&!dataGZ.contains("G")&&!dataGZ.contains("X")&&!dataGZ.contains("Y")&&!dataGZ.contains("Z")) {
+                                Log.d("ExtractData", "dataGZ=" + dataGZ);
+                                dataSensorGyro.setDataZ(dataGZ);
+                            }
+
                             indexOfLastLetter=i+1;
                         }
                     }

@@ -325,7 +325,7 @@ public class BDD {
 
     private Run cursorToRun(Cursor c){
         //si aucun élément n'a été retourné dans la requête, on renvoie null
-        Log.v("cursor", Integer.toString(c.getCount()));
+        //Log.v("cursor", Integer.toString(c.getCount()));
         if (c.getCount() >= 1) {
             Run run = new Run(null, null, null);
             run.setName(c.getString(NUM_COL_RUN_NAME));
@@ -392,7 +392,7 @@ public class BDD {
 
     private DataSensor cursorToAccData(Cursor c){
         //si aucun élément n'a été retourné dans la requête, on renvoie null
-        Log.v("cursor", Integer.toString(c.getCount()));
+        //Log.v("cursor", Integer.toString(c.getCount()));
         if (c.getCount() >= 1) {
             DataSensor dataSensor = new DataSensor(null, null,null,null,null,null);
             dataSensor.setRunName(c.getString(NUM_COL_ACC_RUN_NAME));
@@ -462,7 +462,7 @@ public class BDD {
 
     private DataSensor cursorToGyroData(Cursor c){
         //si aucun élément n'a été retourné dans la requête, on renvoie null
-        Log.v("cursor", Integer.toString(c.getCount()));
+       // Log.v("cursor", Integer.toString(c.getCount()));
         if (c.getCount() >= 1) {
             DataSensor dataSensor = new DataSensor(null, null,null,null,null,null);
             dataSensor.setRunName(c.getString(NUM_COL_GYRO_RUN_NAME));
