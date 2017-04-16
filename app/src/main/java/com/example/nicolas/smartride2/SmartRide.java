@@ -875,7 +875,6 @@ public class SmartRide extends AppCompatActivity
 
 
     private void testBuffer(String data) {
-        data.
         if (data.contains("A")) {
             if (data.contains("X")) {
                 //Log.d("testBufferAX",data);
