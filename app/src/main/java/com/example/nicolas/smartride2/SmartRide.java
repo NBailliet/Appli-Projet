@@ -814,16 +814,18 @@ public class SmartRide extends AppCompatActivity
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
                    // mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-                   Log.d("message recu",readMessage);
+                    readMessage=rxBuffer+readMessage;
+                   Log.d("message recu",readMessage + " size =" +readMessage.length());
+                    rxBuffer=extractData(readMessage);
                    //Toast.makeText(SmartRide.this, readMessage, Toast.LENGTH_SHORT).show();
                     //rxBuffer=rxBuffer+readMessage;
-                    //Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
-                    if (rxBuffer.contains("AX") && rxBuffer.contains("GX")&& rxBuffer.contains("AY") && rxBuffer.contains("GY") && rxBuffer.contains("AZ") && rxBuffer.contains("GZ")){
+                    Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
+                   /* if (rxBuffer.contains("AX") && rxBuffer.contains("GX")&& rxBuffer.contains("AY") && rxBuffer.contains("GY") && rxBuffer.contains("AZ") && rxBuffer.contains("GZ")){
                         //testBuffer(rxBuffer);
                         // Toast.makeText(SmartRide.this, rxBuffer, Toast.LENGTH_SHORT).show();
                         //Log.d("full data",rxBuffer + "   size ="+rxBuffer.length());
                         rxBuffer="";
-                    }
+                    }*/
                     //SmartRide.this.sendMessage(readMessage);
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
@@ -873,6 +875,57 @@ public class SmartRide extends AppCompatActivity
         }
     }
 
+    private String extractData(String data) {
+        String[] splitedString = data.split("");
+        Log.d("ExtractData","lenght="+splitedString.length);
+        int indexOfLastLetter=0;
+        String lastString="";
+        for (int i=0;i<splitedString.length;i++){
+            //Log.d("ExtractData",Integer.toString(i));
+            if(i>11) {
+                if (i + 1 < splitedString.length) {
+                    if (splitedString[i].compareTo("A") == 0) {
+                        if (splitedString[i + 1].compareTo("X") == 0) {
+                            String dataAX = data.substring(i - 11, i - 1);
+                            Log.d("ExtractData", "dataAX=" + dataAX);
+                            indexOfLastLetter=i+1;
+                        }
+                        if (splitedString[i + 1].compareTo("Y") == 0) {
+                            String dataAY = data.substring(i - 11, i - 1);
+                            Log.d("ExtractData", "dataAY=" + dataAY);
+                            indexOfLastLetter=i+1;
+                        }
+                        if (splitedString[i + 1].compareTo("Z") == 0) {
+                            String dataAZ = data.substring(i - 11, i - 1);
+                            Log.d("ExtractData", "dataAZ=" + dataAZ);
+                            indexOfLastLetter=i+1;
+                        }
+                    }
+                    if (splitedString[i].compareTo("G") == 0) {
+                        if (splitedString[i + 1].compareTo("X") == 0) {
+                            String dataGX = data.substring(i - 11, i - 1);
+                            Log.d("ExtractData", "dataGX=" + dataGX);
+                            indexOfLastLetter=i+1;
+                        }
+                        if (splitedString[i + 1].compareTo("Y") == 0) {
+                            String dataGY = data.substring(i - 11, i - 1);
+                            Log.d("ExtractData", "dataGY=" + dataGY);
+                            indexOfLastLetter=i+1;
+                        }
+                        if (splitedString[i + 1].compareTo("Z") == 0) {
+                            String dataGZ = data.substring(i - 11, i - 1);
+                            Log.d("ExtractData", "dataGZ=" + dataGZ);
+                            indexOfLastLetter=i+1;
+                        }
+                    }
+                }
+            }
+        }
+        if(indexOfLastLetter+13>=splitedString.length){
+            lastString=data.substring(indexOfLastLetter, indexOfLastLetter+(splitedString.length-1-indexOfLastLetter));
+        }
+        return lastString;
+    }
 
     private void testBuffer(String data) {
         if (data.contains("A")) {
