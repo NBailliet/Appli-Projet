@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicolas.smartride2.BDD.BDD;
+import com.example.nicolas.smartride2.BDD.DataSensor;
 import com.example.nicolas.smartride2.BDD.Time;
 import com.example.nicolas.smartride2.BDD.User;
 import com.example.nicolas.smartride2.Fragments.HomeFragment;
@@ -83,6 +84,8 @@ public class SmartRide extends AppCompatActivity
     SessionManager session;
     static SettingsManager settings;
     String rxBuffer="";
+    DataSensor dataSensorAcc;
+    DataSensor dataSensorGyro;
     private BDD bdd;
     public User user;
     public User utilisateurCo;
@@ -95,9 +98,14 @@ public class SmartRide extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         bdd = new BDD(this);
         //bdd.clearTable("TABLE_LOC");
         //bdd.clearTable("TABLE_PROFIL");
+        //bdd.clearTable("TABLE_RUN");
+        bdd.clearTable("TABLE_ACCELEROMETER");
+        bdd.clearTable("TABLE_GYRO");
+
 
         session = new SessionManager(getApplicationContext());
 
@@ -186,6 +194,9 @@ public class SmartRide extends AppCompatActivity
             connectionFlag=true;
             Toast.makeText(SmartRide.this, "Welcome back " + utilisateurCo.getLogin(), Toast.LENGTH_SHORT).show();
         }
+        //init DataSensor Object
+        dataSensorAcc= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+        dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
 
     }
 
@@ -817,6 +828,7 @@ public class SmartRide extends AppCompatActivity
                     readMessage=rxBuffer+readMessage;
                    Log.d("message recu",readMessage + " size =" +readMessage.length());
                     rxBuffer=extractData(readMessage);
+
                    //Toast.makeText(SmartRide.this, readMessage, Toast.LENGTH_SHORT).show();
                     //rxBuffer=rxBuffer+readMessage;
                     Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
@@ -888,16 +900,19 @@ public class SmartRide extends AppCompatActivity
                         if (splitedString[i + 1].compareTo("X") == 0) {
                             String dataAX = data.substring(i - 11, i - 1);
                             Log.d("ExtractData", "dataAX=" + dataAX);
+                            dataSensorAcc.setDataX(dataAX);
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Y") == 0) {
                             String dataAY = data.substring(i - 11, i - 1);
                             Log.d("ExtractData", "dataAY=" + dataAY);
+                            dataSensorAcc.setDataY(dataAY);
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Z") == 0) {
                             String dataAZ = data.substring(i - 11, i - 1);
                             Log.d("ExtractData", "dataAZ=" + dataAZ);
+                            dataSensorAcc.setDataZ(dataAZ);
                             indexOfLastLetter=i+1;
                         }
                     }
@@ -905,20 +920,59 @@ public class SmartRide extends AppCompatActivity
                         if (splitedString[i + 1].compareTo("X") == 0) {
                             String dataGX = data.substring(i - 11, i - 1);
                             Log.d("ExtractData", "dataGX=" + dataGX);
+                            dataSensorGyro.setDataX(dataGX);
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Y") == 0) {
                             String dataGY = data.substring(i - 11, i - 1);
                             Log.d("ExtractData", "dataGY=" + dataGY);
+                            dataSensorGyro.setDataY(dataGY);
                             indexOfLastLetter=i+1;
                         }
                         if (splitedString[i + 1].compareTo("Z") == 0) {
                             String dataGZ = data.substring(i - 11, i - 1);
                             Log.d("ExtractData", "dataGZ=" + dataGZ);
+                            dataSensorGyro.setDataZ(dataGZ);
                             indexOfLastLetter=i+1;
                         }
                     }
                 }
+            }
+            if(dataSensorAcc.getDataX()!=null && dataSensorAcc.getDataY()!=null && dataSensorAcc.getDataZ()!=null ){
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH) + 1;
+                int day = c.get(Calendar.DATE);
+                int hours = c.get(Calendar.HOUR);
+                int mins = c.get(Calendar.MINUTE);
+                int seconds = c.get(Calendar.SECOND);
+                int milliseconds = c.get(Calendar.MILLISECOND);
+                Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
+                dataSensorAcc.setTime(time);
+                bdd.open();
+                bdd.insertDataAcc(dataSensorAcc);
+                bdd.close();
+                //enregistrement dans la bdd
+                Log.d("save data","AccData save !");
+                dataSensorAcc= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+            }
+            if(dataSensorGyro.getDataX()!=null && dataSensorGyro.getDataY()!=null && dataSensorGyro.getDataZ()!=null ){
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH) + 1;
+                int day = c.get(Calendar.DATE);
+                int hours = c.get(Calendar.HOUR);
+                int mins = c.get(Calendar.MINUTE);
+                int seconds = c.get(Calendar.SECOND);
+                int milliseconds = c.get(Calendar.MILLISECOND);
+                Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
+                dataSensorAcc.setTime(time);
+                bdd.open();
+                bdd.insertDataGyro(dataSensorGyro);
+                bdd.close();
+                //enregistrement dans la bdd
+                Log.d("save data","GyroData save !");
+                dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
             }
         }
         if(indexOfLastLetter+13>=splitedString.length){

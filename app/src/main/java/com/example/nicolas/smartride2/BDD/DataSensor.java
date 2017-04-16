@@ -10,13 +10,15 @@ public class DataSensor {
     String dataX;
     String dataY;
     String dataZ;
+    Time time;
 
-    public DataSensor( String runName, String profil, String dataX, String dataY, String dataZ) {
+    public DataSensor(String runName, String profil, String dataX, String dataY, String dataZ, Time time) {
         this.runName = runName;
         this.profil = profil;
         this.dataX = dataX;
         this.dataY = dataY;
         this.dataZ = dataZ;
+        this.time = time;
     }
 
     public String getRunName() {
@@ -57,5 +59,13 @@ public class DataSensor {
 
     public void setDataZ(String dataZ) {
         this.dataZ = dataZ;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
     }
 }

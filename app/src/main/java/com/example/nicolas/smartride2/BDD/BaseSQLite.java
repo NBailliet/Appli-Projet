@@ -54,10 +54,11 @@ public class BaseSQLite extends SQLiteOpenHelper {
     private static final String COL_ACC_DATA_X = "ACC_DATA_X";
     private static final String COL_ACC_DATA_Y = "ACC_DATA_Y";
     private static final String COL_ACC_DATA_Z = "ACC_DATA_Z";
+    private static final String COL_ACC_TIME = "ACC_TIME";
 
 
     private static final String CREATE_TABLE_ACCELEROMETER = "CREATE TABLE " + TABLE_ACCELEROMETER + " ("
-            + COL_ACC_DATA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_ACC_RUN_NAME + " TEXT, "+ COL_ACC_RUN_PROFIL +" TEXT, "+ COL_ACC_DATA_X +" TEXT, "+ COL_ACC_DATA_Y +" TEXT, " + COL_ACC_DATA_Z + " TEXT );";
+            + COL_ACC_DATA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_ACC_RUN_NAME + " TEXT, "+ COL_ACC_RUN_PROFIL +" TEXT, "+ COL_ACC_DATA_X +" TEXT, "+ COL_ACC_DATA_Y +" TEXT, " + COL_ACC_DATA_Z +" TEXT, "+COL_ACC_TIME + " TEXT );";
 
 
     //Gyro Table
@@ -68,10 +69,11 @@ public class BaseSQLite extends SQLiteOpenHelper {
     private static final String COL_GYRO_DATA_X = "GYRO_DATA_X";
     private static final String COL_GYRO_DATA_Y = "GYRO_DATA_Y";
     private static final String COL_GYRO_DATA_Z = "GYRO_DATA_Z";
+    private static final String COL_GYRO_TIME = "GYRO_TIME";
 
 
     private static final String CREATE_TABLE_GYRO = "CREATE TABLE " + TABLE_GYRO + " ("
-            + COL_GYRO_DATA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_GYRO_RUN_NAME + " TEXT, "+ COL_GYRO_RUN_PROFIL +" TEXT, "+ COL_GYRO_DATA_X +" TEXT, "+ COL_GYRO_DATA_Y +" TEXT, " + COL_GYRO_DATA_Z + " TEXT );";
+            + COL_GYRO_DATA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_GYRO_RUN_NAME + " TEXT, "+ COL_GYRO_RUN_PROFIL +" TEXT, "+ COL_GYRO_DATA_X +" TEXT, "+ COL_GYRO_DATA_Y +" TEXT, " + COL_GYRO_DATA_Z +" TEXT, "+COL_GYRO_TIME + " TEXT );";
 
 
 
@@ -104,3 +106,4 @@ public class BaseSQLite extends SQLiteOpenHelper {
 
 }
 
+//todo rajouter colone gyro et acc time
