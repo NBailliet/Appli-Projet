@@ -43,14 +43,14 @@ public class BDD {
     private static final int NUM_COL_PROFIL_CREATION = 6;
 
     //Run Table
-    private static final String TABLE_RUN = "table_run";
-    private static final String COL_RUN_ID = "run_ID";
+    private static final String TABLE_RUN = "TABLE_RUN";
+    private static final String COL_RUN_ID = "RUN_ID";
     private static final int NUM_COL_RUN_ID = 0;
-    private static final String COL_RUN_NAME = "Loc_run_name";
+    private static final String COL_RUN_NAME = "RUN_NAME";
     private static final int NUM_COL_RUN_NAME = 1;
-    private static final String COL_RUN_DATE = "run_date";
+    private static final String COL_RUN_DATE = "RUN_DATE";
     private static final int NUM_COL_RUN_DATE = 2;
-    private static final String COL_RUN_PROFIL = "run_profil";
+    private static final String COL_RUN_PROFIL = "RUN_PROFIL";
     private static final int NUM_COL_RUN_PROFIL= 3;
 
     //Location Table
@@ -65,6 +65,37 @@ public class BDD {
     private static final int NUM_COL_LOC_TIME = 3;
     private static final String COL_LOC_ALT = "LOC_ALT";
     private static final int NUM_COL_LOC_ALT = 4;
+
+    //Accelerometer Table
+    private static final String TABLE_ACCELEROMETER = "TABLE_ACCELEROMETER";
+    private static final String COL_ACC_DATA_ID = "ACC_DATA_ID";
+    private static final int NUM_COL_ACC_DATA_ID = 0;
+    private static final String COL_ACC_RUN_NAME = "ACC_RUN_NAME";
+    private static final int NUM_COL_ACC_RUN_NAME = 1;
+    private static final String COL_ACC_RUN_PROFIL = "ACC_RUN_PROFIL";
+    private static final int NUM_COL_ACC_RUN_PROFIL = 2;
+    private static final String COL_ACC_DATA_X = "ACC_DATA_X";
+    private static final int NUM_COL_ACC_DATA_X = 3;
+    private static final String COL_ACC_DATA_Y = "ACC_DATA_Y";
+    private static final int NUM_COL_ACC_DATA_Y = 4;
+    private static final String COL_ACC_DATA_Z = "ACC_DATA_Z";
+    private static final int NUM_COL_ACC_DATA_Z = 5;
+
+    //Gyro Table
+    private static final String TABLE_GYRO = "TABLE_GYRO";
+    private static final String COL_GYRO_DATA_ID = "GYRO_DATA_ID";
+    private static final int NUM_COL_GYRO_DATA_ID = 0;
+    private static final String COL_GYRO_RUN_NAME = "GYRO_RUN_NAME";
+    private static final int NUM_COL_GYRO_RUN_NAME = 1;
+    private static final String COL_GYRO_RUN_PROFIL = "GYRO_RUN_PROFIL";
+    private static final int NUM_COL_GYRO_RUN_PROFIL = 2;
+    private static final String COL_GYRO_DATA_X = "GYRO_DATA_X";
+    private static final int NUM_COL_GYRO_DATA_X = 3;
+    private static final String COL_GYRO_DATA_Y = "GYRO_DATA_Y";
+    private static final int NUM_COL_GYRO_DATA_Y = 4;
+    private static final String COL_GYRO_DATA_Z = "GYRO_DATA_Z";
+    private static final int NUM_COL_GYRO_DATA_Z = 5;
+
 
 
     private SQLiteDatabase bdd;
@@ -242,6 +273,194 @@ public class BDD {
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //Run Table
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public long insertRun(Run run){
+        //Création d'un ContentValues (fonctionne comme une HashMap)
+        ContentValues values = new ContentValues();
+        //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+        values.put(COL_RUN_NAME, run.getName());
+        values.put(COL_RUN_PROFIL, run.getProfil());
+        String t2=gson.toJson(run.getCreationDate());
+        values.put(COL_RUN_DATE, t2);
+        //on insère l'objet dans la BDD via le ContentValues
+        return bdd.insert(TABLE_RUN, null, values);
+    }
+
+    public int updateRun(Run run){
+        ContentValues values = new ContentValues();
+        values.put(COL_RUN_NAME, run.getName());
+        values.put(COL_RUN_PROFIL, run.getProfil());
+        String t2=gson.toJson(run.getCreationDate());
+        values.put(COL_RUN_DATE, t2);
+        return bdd.update(TABLE_RUN, values, COL_RUN_NAME + " LIKE \"" + run.getName() +"\"" +" AND " + COL_RUN_PROFIL + " LIKE \"" + run.getProfil() +"\"", null);
+    }
+
+    public Run getRunWithNameAndProfil(String name,String profil){
+        Cursor c = bdd.query(TABLE_RUN, new String[] {COL_RUN_ID, COL_RUN_NAME, COL_RUN_DATE,COL_RUN_PROFIL}, COL_RUN_NAME + " LIKE \"" + name +"\"" +" AND " +COL_RUN_PROFIL + " LIKE \"" + profil +"\"", null, null, null, null);
+        c.moveToFirst();
+        return cursorToRun(c);
+    }
+
+    public List<Run> getAllRunWithProfil(String profil) {
+        List<Run> runs = new ArrayList<Run>();
+        Cursor cursor = bdd.query(TABLE_RUN,
+                new String[] {COL_RUN_ID, COL_RUN_NAME, COL_RUN_DATE,COL_RUN_PROFIL}, COL_RUN_PROFIL + " LIKE \"" + profil +"\"", null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Run run = cursorToRun(cursor);
+            runs.add(run);
+            cursor.moveToNext();
+        }
+        // assurez-vous de la fermeture du curseur
+        cursor.close();
+        return runs;
+    }
+
+    private Run cursorToRun(Cursor c){
+        //si aucun élément n'a été retourné dans la requête, on renvoie null
+        Log.v("cursor", Integer.toString(c.getCount()));
+        if (c.getCount() >= 1) {
+            Run run = new Run(null, null, null);
+            run.setName(c.getString(NUM_COL_RUN_NAME));
+            run.setProfil(c.getString(NUM_COL_RUN_PROFIL));
+            Type type = new TypeToken<Time>() {
+            }.getType();
+            Time time = gson.fromJson(c.getString(NUM_COL_RUN_DATE), type);
+            run.setCreationDate(time);
+            return run;
+        } else  return null;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Accelerometer Table
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public long insertDataAcc(DataSensor dataSensor){
+        //Création d'un ContentValues (fonctionne comme une HashMap)
+        ContentValues values = new ContentValues();
+        //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+        values.put(COL_ACC_RUN_NAME, dataSensor.getRunName());
+        values.put(COL_ACC_RUN_PROFIL, dataSensor.getProfil());
+        values.put(COL_ACC_DATA_X,  dataSensor.getDataX());
+        values.put(COL_ACC_DATA_Y,  dataSensor.getDataY());
+        values.put(COL_ACC_DATA_Z,  dataSensor.getDataZ());
+        //on insère l'objet dans la BDD via le ContentValues
+        return bdd.insert(TABLE_ACCELEROMETER, null, values);
+    }
+
+    public int updateDataAcc(DataSensor dataSensor){
+        ContentValues values = new ContentValues();
+        values.put(COL_ACC_RUN_NAME, dataSensor.getRunName());
+        values.put(COL_ACC_RUN_PROFIL, dataSensor.getProfil());
+        values.put(COL_ACC_DATA_X,  dataSensor.getDataX());
+        values.put(COL_ACC_DATA_Y,  dataSensor.getDataY());
+        values.put(COL_ACC_DATA_Z,  dataSensor.getDataZ());
+        return bdd.update(TABLE_ACCELEROMETER, values, COL_ACC_RUN_NAME + " LIKE \"" + dataSensor.getRunName() +"\"" +" AND " + COL_ACC_RUN_PROFIL + " LIKE \"" + dataSensor.getProfil() +"\"", null);
+    }
+
+    public Run getDataAccWithRunNameAndProfil(String name,String profil){
+        Cursor c = bdd.query(TABLE_ACCELEROMETER, new String[] {COL_ACC_DATA_ID, COL_ACC_RUN_NAME, COL_ACC_RUN_PROFIL, COL_ACC_DATA_X,COL_ACC_DATA_Y,COL_ACC_DATA_Z}, COL_ACC_RUN_NAME + " LIKE \"" + name +"\""+" AND " +COL_ACC_RUN_PROFIL + " LIKE \"" + profil +"\"", null, null, null, null);
+        c.moveToFirst();
+        return cursorToRun(c);
+    }
+
+    public List<DataSensor> getAllDataAccWithRunAndProfil(String name,String profil) {
+        List<DataSensor> dataSensors = new ArrayList<DataSensor>();
+        Cursor cursor = bdd.query(TABLE_ACCELEROMETER,
+                new String[] {COL_ACC_DATA_ID, COL_ACC_RUN_NAME, COL_ACC_RUN_PROFIL, COL_ACC_DATA_X,COL_ACC_DATA_Y,COL_ACC_DATA_Z}, COL_ACC_RUN_NAME + " LIKE \"" + name +"\"" +" AND " +COL_ACC_RUN_PROFIL + " LIKE \"" + profil +"\"", null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            DataSensor dataSensor = cursorToAccData(cursor);
+            dataSensors.add(dataSensor);
+            cursor.moveToNext();
+        }
+        // assurez-vous de la fermeture du curseur
+        cursor.close();
+        return dataSensors;
+    }
+
+    private DataSensor cursorToAccData(Cursor c){
+        //si aucun élément n'a été retourné dans la requête, on renvoie null
+        Log.v("cursor", Integer.toString(c.getCount()));
+        if (c.getCount() >= 1) {
+            DataSensor dataSensor = new DataSensor(null, null,null,null,null);
+            dataSensor.setRunName(c.getString(NUM_COL_ACC_RUN_NAME));
+            dataSensor.setProfil(c.getString(NUM_COL_ACC_RUN_PROFIL));
+            dataSensor.setDataX(c.getString(NUM_COL_ACC_DATA_X));
+            dataSensor.setDataY(c.getString(NUM_COL_ACC_DATA_Y));
+            dataSensor.setDataZ(c.getString(NUM_COL_ACC_DATA_Z));
+            return dataSensor;
+        } else  return null;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Gyro Table
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public long insertDataGyro(DataSensor dataSensor){
+        //Création d'un ContentValues (fonctionne comme une HashMap)
+        ContentValues values = new ContentValues();
+        //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+        values.put(COL_GYRO_RUN_NAME, dataSensor.getRunName());
+        values.put(COL_GYRO_RUN_PROFIL, dataSensor.getProfil());
+        values.put(COL_GYRO_DATA_X,  dataSensor.getDataX());
+        values.put(COL_GYRO_DATA_Y,  dataSensor.getDataY());
+        values.put(COL_GYRO_DATA_Z,  dataSensor.getDataZ());
+        //on insère l'objet dans la BDD via le ContentValues
+        return bdd.insert(TABLE_GYRO, null, values);
+    }
+
+    public int updateDataGyro(DataSensor dataSensor){
+        ContentValues values = new ContentValues();
+        values.put(COL_GYRO_RUN_NAME, dataSensor.getRunName());
+        values.put(COL_GYRO_RUN_PROFIL, dataSensor.getProfil());
+        values.put(COL_GYRO_DATA_X,  dataSensor.getDataX());
+        values.put(COL_GYRO_DATA_Y,  dataSensor.getDataY());
+        values.put(COL_GYRO_DATA_Z,  dataSensor.getDataZ());
+        return bdd.update(TABLE_GYRO, values, COL_GYRO_RUN_NAME + " LIKE \"" + dataSensor.getRunName() +"\"" +" AND " + COL_GYRO_RUN_PROFIL + " LIKE \"" + dataSensor.getProfil() +"\"", null);
+    }
+
+    public Run getDataGyroWithRunNameAndProfil(String name,String profil){
+        Cursor c = bdd.query(TABLE_GYRO, new String[] {COL_GYRO_DATA_ID, COL_GYRO_RUN_NAME, COL_GYRO_RUN_PROFIL, COL_GYRO_DATA_X,COL_GYRO_DATA_Y,COL_GYRO_DATA_Z}, COL_GYRO_RUN_NAME + " LIKE \"" + name +"\""+" AND " +COL_GYRO_RUN_PROFIL + " LIKE \"" + profil +"\"", null, null, null, null);
+        c.moveToFirst();
+        return cursorToRun(c);
+    }
+
+    public List<DataSensor> getAllDataGyroWithRunAndProfil(String name,String profil) {
+        List<DataSensor> dataSensors = new ArrayList<DataSensor>();
+        Cursor cursor = bdd.query(TABLE_GYRO,
+                new String[] {COL_GYRO_DATA_ID, COL_GYRO_RUN_NAME, COL_GYRO_RUN_PROFIL, COL_GYRO_DATA_X,COL_GYRO_DATA_Y,COL_GYRO_DATA_Z}, COL_GYRO_RUN_NAME + " LIKE \"" + name +"\"" +" AND " +COL_GYRO_RUN_PROFIL + " LIKE \"" + profil +"\"", null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            DataSensor dataSensor = cursorToGyroData(cursor);
+            dataSensors.add(dataSensor);
+            cursor.moveToNext();
+        }
+        // assurez-vous de la fermeture du curseur
+        cursor.close();
+        return dataSensors;
+    }
+
+    private DataSensor cursorToGyroData(Cursor c){
+        //si aucun élément n'a été retourné dans la requête, on renvoie null
+        Log.v("cursor", Integer.toString(c.getCount()));
+        if (c.getCount() >= 1) {
+            DataSensor dataSensor = new DataSensor(null, null,null,null,null);
+            dataSensor.setRunName(c.getString(NUM_COL_GYRO_RUN_NAME));
+            dataSensor.setProfil(c.getString(NUM_COL_GYRO_RUN_PROFIL));
+            dataSensor.setDataX(c.getString(NUM_COL_GYRO_DATA_X));
+            dataSensor.setDataY(c.getString(NUM_COL_GYRO_DATA_Y));
+            dataSensor.setDataZ(c.getString(NUM_COL_GYRO_DATA_Z));
+            return dataSensor;
+        } else  return null;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     public void clearTable(String nameoftable){
         bdd=maBaseSQLite.getWritableDatabase();

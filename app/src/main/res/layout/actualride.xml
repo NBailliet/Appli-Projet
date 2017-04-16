@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextView
             android:text="Actual Ride"
             android:textSize="25dp"
@@ -21,81 +22,123 @@
             android:id="@+id/textViewActual"
             android:layout_marginTop="5dp"/>
 
-        <TextView
-            android:text="Graph Test 1"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp"
-            android:textStyle="italic"
+        <Spinner
+            android:id="@+id/ride_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="125dp"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/textViewActual"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#FFFFFF"/>
+
+        <TextView
+            android:text="Accéléromètre X"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ride_spinner"
             android:layout_marginTop="40dp"
-            android:id="@+id/textGraph1"/>
+            android:id="@+id/textGraphAX"/>
 
         <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"
-            android:layout_height="200dip"
-            android:id="@+id/graph"
-            android:layout_below="@+id/textGraph1"
+            android:layout_height="400dip"
+            android:id="@+id/graphAX"
+            android:layout_below="@+id/textGraphAX"
             android:layout_marginTop="20dp"/>
 
         <TextView
-            android:text="Graph Test 2"
+            android:text="Accéléromètre Y"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
-            android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="125dp"
-            android:layout_below="@+id/graph"
-            android:layout_marginTop="20dp"
-            android:id="@+id/textGraph2"/>
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphAX"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphAY"/>
 
         <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"
             android:layout_height="200dip"
-            android:id="@+id/graph2"
-            android:layout_below="@+id/textGraph2"
+            android:id="@+id/graphAY"
+            android:layout_below="@+id/textGraphAY"
             android:layout_marginTop="20dp"/>
 
         <TextView
-            android:text="Graph Test 3"
+            android:text="Accéléromètre Z"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
-            android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="125dp"
-            android:layout_below="@+id/graph2"
-            android:layout_marginTop="20dp"
-            android:id="@+id/textGraph3" />
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphAY"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphAZ"/>
 
         <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"
             android:layout_height="200dip"
-            android:id="@+id/graph3"
-            android:layout_below="@+id/textGraph3"
+            android:id="@+id/graphAZ"
+            android:layout_below="@+id/textGraphAZ"
             android:layout_marginTop="20dp"/>
 
         <TextView
-            android:text="Graph Test 4"
+            android:text="Gyroscope X"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
-            android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="125dp"
-            android:layout_below="@+id/graph3"
-            android:layout_marginTop="20dp"
-            android:id="@+id/textGraph4" />
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphAZ"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphGX"/>
 
         <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"
             android:layout_height="200dip"
-            android:id="@+id/graph4"
-            android:layout_below="@+id/textGraph4"
+            android:id="@+id/graphGX"
+            android:layout_below="@+id/textGraphGX"
             android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Gyroscope Y"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphGX"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphGY"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graphGY"
+            android:layout_below="@+id/textGraphGY"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Gyroscope Z"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphGY"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphGZ"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graphGZ"
+            android:layout_below="@+id/textGraphGZ"
+            android:layout_marginTop="20dp"/>
+
 
     </RelativeLayout>
 

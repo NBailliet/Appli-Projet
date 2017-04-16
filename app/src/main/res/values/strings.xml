@@ -20,7 +20,7 @@
     <string name="action_share">Share</string>
     <string name="action_send">Send</string>
 
-    <string-array name="ride_array">
+    <string-array name="last_ride_array">
         <item>Last Ride 1</item>
         <item>Last Ride 2</item>
         <item>Last Ride 3</item>
@@ -31,6 +31,11 @@
         <item>Last Ride 8</item>
         <item>Last Ride 9</item>
         <item>Last Ride 10</item>
+    </string-array>
+
+    <string-array name="actual_ride_array">
+        <item>Ski Gauche</item>
+        <item>Ski Droit</item>
     </string-array>
 
 </resources>

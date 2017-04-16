@@ -8,7 +8,7 @@
     <TextView
         android:text="Motion Capture Mode"
         android:textColor="#FFFFFF"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
     <TextView
         android:text="In this Motion Capture menu, the SmartRide system will automatically detect when you start moving and also start your run on the application."
         android:textColor="#FFFFFF"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:layout_below="@+id/textMotion"
         android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
     <TextView
         android:text="The chronometer will then start counting and stop when you will press the Stop Run Button"
         android:textColor="#FFFFFF"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

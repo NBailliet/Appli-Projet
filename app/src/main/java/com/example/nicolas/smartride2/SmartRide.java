@@ -39,7 +39,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.Time;
 import com.example.nicolas.smartride2.BDD.User;
@@ -49,18 +48,19 @@ import com.example.nicolas.smartride2.Fragments.OverviewFragment;
 import com.example.nicolas.smartride2.Fragments.RecordFragment;
 import com.example.nicolas.smartride2.Fragments.SettingsFragment;
 import com.example.nicolas.smartride2.Services.BluetoothService;
+import com.example.nicolas.smartride2.Services.Constants;
 import com.example.nicolas.smartride2.Services.LocalService;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 //import com.google.android.gms.appindexing.Action;
 //import com.google.android.gms.appindexing.AppIndex;
 //import com.google.android.gms.appindexing.Thing;
 //import com.google.android.gms.common.api.GoogleApiClient;
-import java.util.Set;
 
 public class SmartRide extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -82,7 +82,7 @@ public class SmartRide extends AppCompatActivity
     private String action;
     static SessionManager session;
     static SettingsManager settings;
-
+    String rxBuffer="";
     private BDD bdd;
     public User user;
     public User utilisateurCo;
@@ -504,17 +504,45 @@ public class SmartRide extends AppCompatActivity
                 mBTService = new BluetoothService(this,mHandler);
                 //ensureDiscoverable();
 
-                //BluetoothDevice skiR;
-                //BluetoothDevice skiG;
-               // if (pairedDevices.size() > 0) {
-                    //if(pairedDevices.containsAll()){
+                List<BluetoothDevice> listPairedDevices = new ArrayList<>();
+                listPairedDevices.addAll(pairedDevices);
+                List<String> listNamePairedDevices = new ArrayList<>();
+                Log.i(TAG,Integer.toString(listPairedDevices.size()));
+                int i=0;
+                while(i<listPairedDevices.size()){
+                    listNamePairedDevices.add(listPairedDevices.get(i).getName());
+                    Log.i(TAG,listPairedDevices.get(i).getName());
+                    i++;
+                }
+                i=0;
+               if (pairedDevices.size() > 0 && (listNamePairedDevices.contains("SkiRight") || listNamePairedDevices.contains("SkiLeft"))) {
+                   if(listNamePairedDevices.contains("SkiRight")){
+                       //lancer connection ski droit
+                       //BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                       // Attempt to connect to the device
+                       /*if(device!=null) {
+                           mBTService.connect(device);
+                       }*/
+                   }else{
+                       findDevice();
+                       Toast.makeText(SmartRide.this, "Right Ski not paired", Toast.LENGTH_SHORT).show();
+                   }
+                   if(listNamePairedDevices.contains("SkiLeft")){
+                       //lancer connection ski droit
+                       //BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                       // Attempt to connect to the device
+                       /*if(device!=null) {
+                           mBTService.connect(device);
+                       }*/
+                   }else{
+                       findDevice();
+                       Toast.makeText(SmartRide.this, "Left Ski not paired", Toast.LENGTH_SHORT).show();
+                   }
 
-                   //}else{
-                      //  findDevice();
-                   // }
-                //} else {
+                } else {
                     findDevice();
-                //}
+                //mBTService.start();//todo voir si c utile
+               }
             }
 
             return true;
@@ -757,52 +785,66 @@ public class SmartRide extends AppCompatActivity
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            /*//FragmentActivity activity = getActivity();
+
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
-                        case BluetoothChatService.STATE_CONNECTED:
-                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mConversationArrayAdapter.clear();
+                        case BluetoothService.STATE_CONNECTED:
+                            //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            //mConversationArrayAdapter.clear();
                             break;
-                        case BluetoothChatService.STATE_CONNECTING:
-                            setStatus(R.string.title_connecting);
+                        case BluetoothService.STATE_CONNECTING:
+                            //setStatus(R.string.title_connecting);
                             break;
-                        case BluetoothChatService.STATE_LISTEN:
-                        case BluetoothChatService.STATE_NONE:
-                            setStatus(R.string.title_not_connected);
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
+                            //setStatus(R.string.title_not_connected);
                             break;
                     }
                     break;
                 case Constants.MESSAGE_WRITE:
-                    byte[] writeBuf = (byte[]) msg.obj;
+                    //byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
-                    String writeMessage = new String(writeBuf);
-                    mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    //String writeMessage = new String(writeBuf);
+                    //mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    Log.d("Write","message envoyé");
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                   // mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                   Log.d("message recu",readMessage);
+                   //Toast.makeText(SmartRide.this, readMessage, Toast.LENGTH_SHORT).show();
+                    //rxBuffer=rxBuffer+readMessage;
+                    //Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
+                    if (rxBuffer.contains("AX") && rxBuffer.contains("GX")&& rxBuffer.contains("AY") && rxBuffer.contains("GY") && rxBuffer.contains("AZ") && rxBuffer.contains("GZ")){
+                        //testBuffer(rxBuffer);
+                        // Toast.makeText(SmartRide.this, rxBuffer, Toast.LENGTH_SHORT).show();
+                        //Log.d("full data",rxBuffer + "   size ="+rxBuffer.length());
+                        rxBuffer="";
+                    }
+                    //SmartRide.this.sendMessage(readMessage);
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
-                    mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
-                    if (null != activity) {
-                        Toast.makeText(activity, "Connected to "
+                   String mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
+                    if (null != SmartRide.this) {
+                        Toast.makeText(SmartRide.this, "Connected to "
                                 + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case Constants.MESSAGE_TOAST:
-                    if (null != activity) {
-                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
+                    if (null != SmartRide.this) {
+                        Toast.makeText(SmartRide.this, msg.getData().getString(Constants.TOAST),
                                 Toast.LENGTH_SHORT).show();
                     }
                     break;
-            }*/
+            }
         }
     };
+
+
 
     /**
      * Makes this device discoverable for 300 seconds (5 minutes).
@@ -816,6 +858,48 @@ public class SmartRide extends AppCompatActivity
         }
     }
 
+    private void sendMessage(String message) {
+        // Check that we're actually connected before trying anything
+        if (mBTService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(SmartRide.this,"not connected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            byte[] send = message.getBytes();
+            mBTService.write(send);
+        }
+    }
+
+
+    private void testBuffer(String data) {
+        if (data.contains("A")) {
+            if (data.contains("X")) {
+                //Log.d("testBufferAX",data);
+            }
+            if (data.contains("Y")) {
+                //Log.d("testBufferAY",data);
+            }
+            if (data.contains("Z")) {
+               // Log.d("testBufferAZ",data);
+            }
+
+        }
+        if (data.contains("G")) {
+            if (data.contains("X")) {
+                //Log.d("testBufferGX",data);
+            }
+            if (data.contains("Y")) {
+                //Log.d("testBufferGY",data);
+            }
+            if (data.contains("Z")) {
+               // Log.d("testBufferGZ",data);
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -826,6 +910,12 @@ public class SmartRide extends AppCompatActivity
         if (isMyServiceRunning(LocalService.class)){
             Intent intentService = new Intent(SmartRide.this, LocalService.class);
             SmartRide.this.stopService(intentService);
+        }
+        if (mBTService != null) {
+            mBTService.stop();
+        }
+        if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.cancelDiscovery();
         }
     }
 

@@ -18,7 +18,6 @@ import com.example.nicolas.smartride2.R;
 import com.example.nicolas.smartride2.Services.LocalService;
 import com.example.nicolas.smartride2.Services.RideLocationGetter;
 import com.example.nicolas.smartride2.SettingsManager;
-import com.example.nicolas.smartride2.Fragments.OverviewFragment;
 import com.example.nicolas.smartride2.SmartRide;
 
 import org.w3c.dom.Text;
@@ -110,6 +109,7 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
             switch (v.getId()) {
 
                     case (R.id.buttonStartRun):
+                        //todo gérer l'activation du GPS et l'autorisation
                         if (!settings.getStartMotionRunPref()) {
                             System.out.println(isMyServiceRunning(LocalService.class));
                             if (!isMyServiceRunning(LocalService.class)) {
@@ -211,7 +211,6 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
         }
         return false;
     }
-
 
     public static Chronometer getChronometer() {
         return chronometer;

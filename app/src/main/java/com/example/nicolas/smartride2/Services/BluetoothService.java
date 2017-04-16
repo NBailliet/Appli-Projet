@@ -5,12 +5,15 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 /**
@@ -27,6 +30,8 @@ public class BluetoothService {
     // Unique UUID for this application
     private static final UUID MY_UUID =
             UUID.fromString("f47bce9b-834b-487a-a8ac-477a494b605f");
+    private static final UUID MY_SPP_UUID =
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // Member fields
     private final BluetoothAdapter mAdapter;
@@ -146,12 +151,12 @@ public class BluetoothService {
         mConnectedThread = new ConnectedThread(socket);
         mConnectedThread.start();
 
-        /*// Send the name of the connected device back to the UI Activity
+        // Send the name of the connected device back to the UI Activity
         Message msg = mHandler.obtainMessage(Constants.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.DEVICE_NAME, device.getName());
         msg.setData(bundle);
-        mHandler.sendMessage(msg);*/
+        mHandler.sendMessage(msg);
     }
 
     /**
@@ -200,12 +205,12 @@ public class BluetoothService {
      * Indicate that the connection attempt failed and notify the UI Activity.
      */
     private void connectionFailed() {
-        /*// Send a failure message back to the Activity
+        // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(Constants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.TOAST, "Unable to connect device");
         msg.setData(bundle);
-        mHandler.sendMessage(msg);*/
+        mHandler.sendMessage(msg);
 
         mState = STATE_NONE;
 
@@ -219,12 +224,12 @@ public class BluetoothService {
      * Indicate that the connection was lost and notify the UI Activity.
      */
     private void connectionLost() {
-        /*// Send a failure message back to the Activity
+        // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(Constants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.TOAST, "Device connection was lost");
         msg.setData(bundle);
-        mHandler.sendMessage(msg);*/
+        mHandler.sendMessage(msg);
 
         mState = STATE_NONE;
 
@@ -323,14 +328,23 @@ public class BluetoothService {
 
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
-            try {
-                    tmp = device.createRfcommSocketToServiceRecord(
-                            MY_UUID);
-                Log.i(TAG,"create() sucesss");
+           // try {
+                    //tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+                try {
+                    tmp =(BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,Integer.valueOf(1));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                //tmp = mmDevice.getClass().getMethod("createRfcommSocket",new Class[] {int.class}).invoke()
+                //Log.i(TAG,"create() sucesss");
 
-            } catch (IOException e) {
-                Log.i(TAG,"create() failed");
-            }
+            //} catch (IOException e) {
+                //Log.i(TAG,"create() failed");
+            //}
             mmSocket = tmp;
 
             if(mmSocket==null){
@@ -350,6 +364,8 @@ public class BluetoothService {
             try {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
+                //Log.i(TAG,Boolean.toString(mmSocket.isConnected()));
+                //mmSocket.close();
                 mmSocket.connect();
                 Log.i(TAG, "BEGIN mConnectThread 3");
             } catch (IOException e) {
@@ -360,6 +376,7 @@ public class BluetoothService {
                 } catch (IOException e2) {
                     Log.i(TAG, "unable to close() ");
                 }
+                Log.e(TAG,"failed to connect",e);
                 connectionFailed();
                 return;
             }
@@ -421,10 +438,12 @@ public class BluetoothService {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
-
-                    /*// Send the obtained bytes to the UI Activity
+                    //Log.d("ServiceBluetooth",buffer.toString());
+                   /* String readMessage = new String(buffer);
+                    Log.d("ServiceBluetooth",readMessage);*/
+                    // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();*/
+                            .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
@@ -442,9 +461,9 @@ public class BluetoothService {
             try {
                 mmOutStream.write(buffer);
 
-                /*// Share the sent message back to the UI Activity
+                // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();*/
+                        .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
