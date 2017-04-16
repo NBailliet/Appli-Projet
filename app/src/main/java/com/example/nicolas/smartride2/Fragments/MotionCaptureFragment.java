@@ -29,7 +29,7 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
     Button buttonStartRun;
     Button buttonStartPauseRun;
     Button buttonStopPauseRun;
-    Chronometer chronometer;
+    static Chronometer chronometer;
     SettingsManager settings;
     long timeWhenStopped = 0;
 
@@ -224,5 +224,8 @@ public class MotionCaptureFragment extends Fragment implements View.OnClickListe
         return false;
     }
 
+    public static Chronometer getChronometer() {
+        return chronometer;
+    }
 
 }

@@ -33,7 +33,7 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
     Button buttonStopRun;
     Button buttonStartPauseRun;
     Button buttonStopPauseRun;
-    Chronometer chronometer;
+    static Chronometer chronometer;
     SettingsManager settings;
     long timeWhenStopped = 0;
 
@@ -212,4 +212,8 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
         return false;
     }
 
+
+    public static Chronometer getChronometer() {
+        return chronometer;
+    }
 }

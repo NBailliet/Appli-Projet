@@ -12,6 +12,7 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
@@ -29,6 +30,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Nicolas on 07/04/2017.
  */
@@ -45,6 +48,10 @@ public class LocalService extends Service
     SettingsManager settings;
     private static final int LOC_API_CALL_INTERVAL = 1000;
     NotificationManager mNotificationManager;
+    String PLAY_ACTION;
+    String PAUSE_ACTION;
+    String STOP_ACTION;
+    Boolean testPause;
 
 
     public IBinder onBind(Intent arg0)
@@ -61,6 +68,7 @@ public class LocalService extends Service
         System.out.println("Service created");
         startService();
         int mId = 0;
+        testPause = false;
 
             /*if (settings.getManualRunPref()) {
                 resultIntent = new Intent(LocalService.this, ManualModeFragment.class);
@@ -74,6 +82,70 @@ public class LocalService extends Service
         // use System.currentTimeMillis() to have a unique ID for the pending intent
         PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
+        /*long time = SystemClock.elapsedRealtime() - cArg.getBase();
+        int h= (int)(time /3600000);
+        int m= (int)(time - h*3600000)/60000;
+        int s= (int)(time - h*3600000- m*60000)/1000 ;
+        String hh = h < 10 ? "0"+h: h+"";
+        String mm = m < 10 ? "0"+m: m+"";
+        String ss = s < 10 ? "0"+s: s+"";
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notification);
+        contentView.setTextViewText(R.id.title, "SmartRide Run");
+        contentView.setTextViewText(R.id.text, "Click to go back to SmartRide app");
+        contentView.setChronometer(R.id.chronometerNotif,SystemClock.elapsedRealtime(),hh+":"+mm+":"+ss,true);
+
+
+        Chronometer chronoManual = ManualModeFragment.getChronometer();
+        Chronometer chronoMotion = MotionCaptureFragment.getChronometer();
+
+
+        switch (contentView.getLayoutId()) {
+
+            case R.id.playButton :
+                if (testPause) {
+                    if (settings.getStartManualRunPref()) {
+                        chronoManual.start();
+                    }
+                    else if (settings.getStartMotionRunPref()) {
+                        chronoMotion.start();
+                    }
+                    startTimer();
+                }
+                break;
+
+            case R.id.
+
+
+
+    }
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.logosmartridemini)
+                .setContent(contentView);
+
+        Notification notification = mBuilder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1, notification);*/
+
+
+        /*Intent intentPlay = new Intent(this, SmartRide.class);
+        intentPlay.setAction(PLAY_ACTION);
+        PendingIntent pendingIntentPlay = PendingIntent.getBroadcast(this, 12345, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Intent intentPause = new Intent(this, SmartRide.class);
+        intentPlay.setAction(PAUSE_ACTION);
+        PendingIntent pendingIntentPause = PendingIntent.getBroadcast(this, 12345, intentPause, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Intent intentStop = new Intent(this, SmartRide.class);
+        intentPlay.setAction(STOP_ACTION);
+        PendingIntent pendingIntentStop = PendingIntent.getBroadcast(this, 12345, intentStop, PendingIntent.FLAG_UPDATE_CURRENT);*/
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -82,8 +154,8 @@ public class LocalService extends Service
                         .setContentText("Click to go back to SmartRide app")
                         .setColor(2)
                         .setUsesChronometer(true)
-                        .setProgress(0,0,true)
                         .setContentIntent(pIntent);
+
 
 
         // Creates an explicit intent for an Activity in your app
@@ -110,6 +182,8 @@ public class LocalService extends Service
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
         mNotificationManager.notify(mId, mBuilder.build());
+
+        //onReceive(context,intentPlay);
 
     }
 
@@ -210,5 +284,27 @@ public class LocalService extends Service
     public static int getSeconds(){
         return (int) seconds;
     }
+
+
+    /*public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        testPause = false;
+        Chronometer chrono = ManualModeFragment.getChronometer();
+
+        if(PLAY_ACTION.equals(action)) {
+            if (testPause == true) {
+                chrono.start();
+                startTimer();
+            }
+        } else if(PAUSE_ACTION.equals(action)) {
+            chrono.stop();
+            stopTimer();
+            testPause=true;
+        } else if(STOP_ACTION.equals(action)) {
+            chrono.stop();
+            stopTimer();
+            testPause=true;
+        }
+    }*/
 
 }
