@@ -814,13 +814,14 @@ public class SmartRide extends AppCompatActivity
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
                    // mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-                    Log.d("message recu",readMessage);
+                   Log.d("message recu",readMessage);
                    //Toast.makeText(SmartRide.this, readMessage, Toast.LENGTH_SHORT).show();
-                    rxBuffer=rxBuffer+readMessage;
-                    Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
-                    if ((rxBuffer.contains("A")||rxBuffer.contains("G"))&& rxBuffer.endsWith("GZ")){
-                        testBuffer(rxBuffer);
+                    //rxBuffer=rxBuffer+readMessage;
+                    //Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
+                    if (rxBuffer.contains("AX") && rxBuffer.contains("GX")&& rxBuffer.contains("AY") && rxBuffer.contains("GY") && rxBuffer.contains("AZ") && rxBuffer.contains("GZ")){
+                        //testBuffer(rxBuffer);
                         // Toast.makeText(SmartRide.this, rxBuffer, Toast.LENGTH_SHORT).show();
+                        //Log.d("full data",rxBuffer + "   size ="+rxBuffer.length());
                         rxBuffer="";
                     }
                     //SmartRide.this.sendMessage(readMessage);
@@ -874,27 +875,28 @@ public class SmartRide extends AppCompatActivity
 
 
     private void testBuffer(String data) {
+        data.
         if (data.contains("A")) {
             if (data.contains("X")) {
-                Log.d("testBufferAX",data);
+                //Log.d("testBufferAX",data);
             }
             if (data.contains("Y")) {
-                Log.d("testBufferAY",data);
+                //Log.d("testBufferAY",data);
             }
             if (data.contains("Z")) {
-                Log.d("testBufferAZ",data);
+               // Log.d("testBufferAZ",data);
             }
 
         }
         if (data.contains("G")) {
             if (data.contains("X")) {
-                Log.d("testBufferGX",data);
+                //Log.d("testBufferGX",data);
             }
             if (data.contains("Y")) {
-                Log.d("testBufferGY",data);
+                //Log.d("testBufferGY",data);
             }
             if (data.contains("Z")) {
-                Log.d("testBufferGZ",data);
+               // Log.d("testBufferGZ",data);
             }
         }
     }
