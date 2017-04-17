@@ -32,6 +32,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View recordView = inflater.inflate(R.layout.record, container, false);
+        ((SmartRide) getActivity())
+                .setActionBarTitle("Record");
         settings = SmartRide.getSettingsManager();
         buttonMotion = (Button) recordView.findViewById(R.id.buttonMotion);
         buttonMotion.setOnClickListener(this);

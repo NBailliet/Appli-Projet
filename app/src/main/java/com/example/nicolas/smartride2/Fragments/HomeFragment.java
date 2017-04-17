@@ -36,6 +36,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View homeView = inflater.inflate(R.layout.home, container, false);
+            ((SmartRide) getActivity())
+                    .setActionBarTitle("Home");
             session = SmartRide.getSessionManager();
             textHome = (TextView) homeView.findViewById(R.id.textHome);
             textHome.setText("Welcome " + session.getLoginPref() + " on SmartRide application. You can open the navigation bar on the left to start using the app.");

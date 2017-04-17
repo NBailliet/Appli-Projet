@@ -22,20 +22,11 @@
 
     <string-array name="last_ride_array">
         <item>Last Ride 1</item>
-        <item>Last Ride 2</item>
-        <item>Last Ride 3</item>
-        <item>Last Ride 4</item>
-        <item>Last Ride 5</item>
-        <item>Last Ride 6</item>
-        <item>Last Ride 7</item>
-        <item>Last Ride 8</item>
-        <item>Last Ride 9</item>
-        <item>Last Ride 10</item>
     </string-array>
 
     <string-array name="actual_ride_array">
-        <item>Ski Gauche</item>
-        <item>Ski Droit</item>
+        <item>Left Ski</item>
+        <item>Right Ski</item>
     </string-array>
 
 </resources>

@@ -14,11 +14,17 @@ import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nicolas.smartride2.BDD.BDD;
+import com.example.nicolas.smartride2.BDD.Run;
 import com.example.nicolas.smartride2.R;
+import com.example.nicolas.smartride2.SessionManager;
 import com.example.nicolas.smartride2.SettingsManager;
 import com.example.nicolas.smartride2.SmartRide;
+
+import java.util.List;
 
 /**
  * Created by Nicolas on 01/02/2017.
@@ -26,10 +32,6 @@ import com.example.nicolas.smartride2.SmartRide;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
-    //RadioButton radioButton1;
-    //RadioButton radioButton2;
-    CheckBox checkBox1;
-    CheckBox checkBox2;
     CheckBox checkBox3;
     CheckBox checkBox4;
     CheckBox checkBox5;
@@ -41,16 +43,24 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     Switch switchVoice;
     Switch switchGPS;
     SettingsManager settings;
+    SessionManager session;
+    TextView textViewRun;
+    BDD bdd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View settingsView = inflater.inflate(R.layout.settings, container, false);
+        ((SmartRide) getActivity())
+                .setActionBarTitle("Settings");
         settings = SmartRide.getSettingsManager();
-
-        checkBox1 = (CheckBox) settingsView.findViewById(R.id.checkBox1);
-        checkBox1.setOnClickListener(this);
-        checkBox2 = (CheckBox) settingsView.findViewById(R.id.checkBox2);
-        checkBox2.setOnClickListener(this);
+        session = SmartRide.getSessionManager();
+        textViewRun = (TextView) settingsView.findViewById(R.id.textViewNbRun);
+        bdd = new BDD(getActivity());
+        bdd.open();
+        List<Run> listRun =  bdd.getAllRunWithProfil(session.getLoginPref());
+        int nbRunListP = listRun.size();
+        bdd.close();
+        textViewRun.setText("Number of runs : " + nbRunListP);
         checkBox3 = (CheckBox) settingsView.findViewById(R.id.checkBox3);
         checkBox3.setOnClickListener(this);
         checkBox4 = (CheckBox) settingsView.findViewById(R.id.checkBox4);
@@ -87,25 +97,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
             switch (v.getId()) {
 
-                case R.id.checkBox1 :
-
-                    if (checkBox1.isChecked()) {
-                        Toast.makeText(activity, "Test1 Checked", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(activity, "Test1 UnChecked", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-
-                case R.id.checkBox2 :
-
-                    if (checkBox2.isChecked()) {
-                        Toast.makeText(activity, "Test2 Checked", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(activity, "Test2 UnChecked", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
 
                 case R.id.checkBox3 :
 

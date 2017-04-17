@@ -25,6 +25,7 @@ import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.Localisation;
 import com.example.nicolas.smartride2.R;
 import com.example.nicolas.smartride2.Services.RideLocationGetter;
+import com.example.nicolas.smartride2.SmartRide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -60,6 +61,8 @@ public class MapViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.map, container, false);
+        ((SmartRide) getActivity())
+                .setActionBarTitle("Map");
 
         bdd = new BDD(getContext());
         setUserVisibleHint(false);

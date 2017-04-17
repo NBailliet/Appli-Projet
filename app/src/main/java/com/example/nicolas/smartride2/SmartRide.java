@@ -44,6 +44,7 @@ import com.example.nicolas.smartride2.BDD.Time;
 import com.example.nicolas.smartride2.BDD.User;
 import com.example.nicolas.smartride2.Fragments.HomeFragment;
 import com.example.nicolas.smartride2.Fragments.MapViewFragment;
+import com.example.nicolas.smartride2.Fragments.NoRideFragment;
 import com.example.nicolas.smartride2.Fragments.OverviewFragment;
 import com.example.nicolas.smartride2.Fragments.RecordFragment;
 import com.example.nicolas.smartride2.Fragments.SettingsFragment;
@@ -96,8 +97,9 @@ public class SmartRide extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         bdd = new BDD(this);
-        //bdd.clearTable("TABLE_LOC");
-        //bdd.clearTable("TABLE_PROFIL");
+        bdd.clearTable("TABLE_ACCELEROMETER");
+        bdd.clearTable("TABLE_GYRO");
+
 
         session = new SessionManager(getApplicationContext());
 
@@ -357,11 +359,15 @@ public class SmartRide extends AppCompatActivity
                             System.out.println(session.isLoggedIn());
                             System.out.println(session.getLoginPref());
                             showInfoDialog(utilisateurCo);
+                            FragmentManager fm = getSupportFragmentManager();
+                            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).addToBackStack(null).commit();
                             Toast.makeText(SmartRide.this, "Connection successful !", Toast.LENGTH_SHORT).show();
 
                         } else {
                             session.createLoginSession(login,connectionFlag);
                             dialog.cancel();
+                            FragmentManager fm = getSupportFragmentManager();
+                            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).addToBackStack(null).commit();
                             Toast.makeText(SmartRide.this, "Connection successful !", Toast.LENGTH_SHORT).show();
                         }
                     } else {
@@ -455,13 +461,18 @@ public class SmartRide extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NoRideFragment noRideFragment = new NoRideFragment();
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(getFragmentManager().getBackStackEntryCount() > 0){
+                getFragmentManager().popBackStack();
+            }
+            else {
+                super.onBackPressed();
+            }
         }
 
-        //TODO GERER BACK OPTIONS VERS DRAWER
     }
 
     @Override
@@ -482,7 +493,7 @@ public class SmartRide extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            fm.beginTransaction().replace(R.id.frame, new SettingsFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new SettingsFragment()).addToBackStack(null).commit();
             setTitle(getString(R.string.action_settings));
             return true;
         } else if (id == R.id.action_bluetooth) {
@@ -623,20 +634,15 @@ public class SmartRide extends AppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
 
         if (id == R.id.home) {
-            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).commit();
-            setTitle(getString(R.string.action_home));
+            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).addToBackStack(null).commit();
         } else if (id == R.id.record) {
             //if (findDevice == 0) {
-            fm.beginTransaction().replace(R.id.frame, new RecordFragment()).commit();
-            setTitle(getString(R.string.action_record));
+            fm.beginTransaction().replace(R.id.frame, new RecordFragment()).addToBackStack(null).commit();
         } else if (id == R.id.overview) {
-            fm.beginTransaction().replace(R.id.frame, new OverviewFragment()).commit();
-            setTitle(getString(R.string.action_overview));
+            fm.beginTransaction().replace(R.id.frame, new OverviewFragment()).addToBackStack(null).commit();
         } else if (id == R.id.map) {
-            fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).commit();
-            setTitle(getString(R.string.action_map));
+            fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_send) {
-            setTitle(getString(R.string.action_send));
 
             /*Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setType("text/html");
@@ -790,6 +796,9 @@ public class SmartRide extends AppCompatActivity
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
+                            settings.setBluetoothStatePref(true);
+                            Toast.makeText(SmartRide.this, "BLUETOOTH CHANGE", Toast.LENGTH_SHORT).show();
+
                             //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             //mConversationArrayAdapter.clear();
                             break;
@@ -798,6 +807,7 @@ public class SmartRide extends AppCompatActivity
                             break;
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
+                            settings.setBluetoothStatePref(false);
                             //setStatus(R.string.title_not_connected);
                             break;
                     }
@@ -935,6 +945,10 @@ public class SmartRide extends AppCompatActivity
             }
         }
         return false;
+    }
+
+    public void setActionBarTitle(String title){
+        getSupportActionBar().setTitle(title);
     }
 
 }

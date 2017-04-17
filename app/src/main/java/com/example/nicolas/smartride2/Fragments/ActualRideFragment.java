@@ -3,6 +3,7 @@ package com.example.nicolas.smartride2.Fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +39,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
     TextView textViewGY;
     TextView textViewGZ;
 
+    InputStream inputStream;
     CSVFile csvFile;
     List fileList;
     List resultList;
@@ -52,6 +55,11 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
     List<Integer> GYList = new ArrayList();
     List<Integer> GZList = new ArrayList();
 
+    boolean isSkiD=false;
+
+    int counter=0;
+    int check=0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,9 +70,35 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
         textViewGX = (TextView) actualRideView.findViewById(R.id.textGraphGX);
         textViewGY = (TextView) actualRideView.findViewById(R.id.textGraphGY);
         textViewGZ = (TextView) actualRideView.findViewById(R.id.textGraphGZ);
-
-
-        InputStream inputStream = getResources().openRawResource(R.raw.run5skig);
+        System.out.println("CHECK TEST ONCREATE = " + check);
+        Spinner spinner = (Spinner) actualRideView.findViewById(R.id.ride_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.actual_ride_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+        System.out.println(isSkiD);
+        if (isSkiD) {
+            inputStream = getResources().openRawResource(R.raw.run5skid);
+        }
+        else {
+            inputStream = getResources().openRawResource(R.raw.run5skig);
+        }
+        if (counter>0) {
+            newTime = new String[1000][4];
+            AXList.clear();
+            AYList.clear();
+            AZList.clear();
+            GXList.clear();
+            GYList.clear();
+            GZList.clear();
+            dataLFList.clear();
+            timeList.clear();
+            timeListTemp.clear();
+        }
         csvFile = new CSVFile(inputStream);
         fileList = csvFile.read();
         fileList.remove(0);
@@ -90,174 +124,216 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
         GZList = (List) resultList.get(7);
         //System.out.println("GZLIST : " + GZList);
 
-        for (int i = 0;i<timeListTemp.size();i++) {
-            newTime[i] = timeListTemp.get(i).split(":");
-            int hour = Integer.parseInt(newTime[i][0]);
-            int min = Integer.parseInt(newTime[i][1]);
-            int sec = Integer.parseInt(newTime[i][2]);
-            int msec = Integer.parseInt(newTime[i][3]);
-            String floatStringMin = hour*60 + min + "." + sec + msec;
-            float floatTime = Float.parseFloat(floatStringMin);
-            timeList.add(floatTime);
-        }
-        System.out.println("TIMELIST : " + timeList);
+        timeList = timeStringToFloat(timeListTemp,newTime);
+        //System.out.println("TIMELIST : " + timeList);
 
 
-
-        Spinner spinner = (Spinner) actualRideView.findViewById(R.id.ride_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.actual_ride_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-
-        /*LineGraphSeries<DataPoint> series = null;
-        GraphView graph = (GraphView) actualRideView.findViewById(R.id.graphAX);
+        LineGraphSeries<DataPoint> series = null;
+        GraphView graph = (GraphView) actualRideView.findViewById(R.id.graphDataLogger);
         for (int i=0;i<timeList.size();i++) {
             if (i==0) {
 
+                //System.out.println(timeList.get(i));
+                //System.out.println(dataLFList.get(i));
+
                 series = new LineGraphSeries<>(new DataPoint[]{
-                        new DataPoint(timeList.get(i), AXList.get(i))
+                        new DataPoint(timeList.get(i), dataLFList.get(i))
                 });
 
             }
             else {
-                series.appendData(new DataPoint(timeList.get(i),AXList.get(i)),false,timeList.size());
+
+                //System.out.println(timeList.get(i));
+                //System.out.println(dataLFList.get(i));
+
+                series.appendData(new DataPoint(timeList.get(i),dataLFList.get(i)),false,timeList.size());
             }
         }
         graph.addSeries(series);
         graph.getViewport().setScalable(true);
         graph.getViewport().setScalableY(true);
+        graph.getViewport().setMinX(timeList.get(0));
+        graph.getViewport().setMaxX(timeList.get(0)+1);
+        graph.getViewport().setMinY(Collections.min(dataLFList));
+        graph.getViewport().setMaxY(Collections.max(dataLFList));
         series.setBackgroundColor(Color.RED);
         series.setAnimated(true);
-        series.setDrawDataPoints(true);*/
+        series.setDrawDataPoints(true);
 
+        LineGraphSeries<DataPoint> series2 = null;
+        GraphView graph2 = (GraphView) actualRideView.findViewById(R.id.graphAX);
+        for (int i=0;i<timeList.size();i++) {
+            if (i==0) {
 
-        //GridLabelRenderer gridLabelRenderer = graph.getGridLabelRenderer();
-        //gridLabelRenderer.draw();
-        //gridLabelRenderer.reloadStyles();
+                //System.out.println(timeList.get(i));
+                //System.out.println(AXList.get(i));
 
-//        GraphView graph2 = (GraphView) actualRideView.findViewById(R.id.graph2);
-//        BarGraphSeries<DataPoint> series2 = new BarGraphSeries<>(new DataPoint[] {
-//                new DataPoint(0, -1),
-//                new DataPoint(1, 5),
-//                new DataPoint(2, 3),
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 6)
-//        });
-//        graph2.addSeries(series2);
-//        graph2.getViewport().setScalable(true);
-//        graph2.getViewport().setScalableY(true);
-//
-//        // styling
-//        series2.setValueDependentColor(new ValueDependentColor<DataPoint>() {
-//            @Override
-//            public int get(DataPoint data) {
-//                return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
-//            }
-//        });
-//
-//        series2.setSpacing(50);
-//
-//        // draw values on top
-//        series2.setDrawValuesOnTop(true);
-//        series2.setValuesOnTopColor(Color.WHITE);
-//        series2.setAnimated(true);
-//        //series2.setValuesOnTopSize(50);
-//
-//        GraphView graph3 = (GraphView) actualRideView.findViewById(R.id.graph3);
-//        BarGraphSeries<DataPoint> series3 = new BarGraphSeries<>(new DataPoint[] {
-//                new DataPoint(0, -2),
-//                new DataPoint(1, 1),
-//                new DataPoint(2, 8),
-//                new DataPoint(3, 10),
-//                new DataPoint(4, 5)
-//        });
-//        graph3.addSeries(series3);
-//        graph3.getViewport().setScalable(true);
-//        graph3.getViewport().setScalableY(true);
-//
-//        series3.setValueDependentColor(new ValueDependentColor<DataPoint>() {
-//            @Override
-//            public int get(DataPoint data) {
-//                return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
-//            }
-//        });
-//
-//        series3.setSpacing(50);
-//
-//        // draw values on top
-//        series3.setDrawValuesOnTop(true);
-//        series3.setValuesOnTopColor(Color.WHITE);
-//        series3.setAnimated(true);
-//
-//        LineGraphSeries<DataPoint> series4 = new LineGraphSeries<>(new DataPoint[] {
-//                new DataPoint(0, 3),
-//                new DataPoint(1, 3),
-//                new DataPoint(2, 6),
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 5)
-//        });
-//        graph3.addSeries(series4);
-//        series4.setColor(Color.DKGRAY);
-//        series4.setAnimated(true);
-//        series4.setDrawDataPoints(true);
-//
-//        GraphView graph4 = (GraphView) actualRideView.findViewById(R.id.graph4);
-//        PointsGraphSeries<DataPoint> series5 = new PointsGraphSeries<>(new DataPoint[] {
-//                new DataPoint(0, -2),
-//                new DataPoint(1, 5),
-//                new DataPoint(2, 3),
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 6)
-//        });
-//        graph4.addSeries(series5);
-//        graph4.getViewport().setScalable(true);
-//        graph4.getViewport().setScalableY(true);
-//        series5.setShape(PointsGraphSeries.Shape.POINT);
-//
-//        PointsGraphSeries<DataPoint> series6 = new PointsGraphSeries<DataPoint>(new DataPoint[] {
-//                new DataPoint(0, -1),
-//                new DataPoint(1, 4),
-//                new DataPoint(2, 2),
-//                new DataPoint(3, 1),
-//                new DataPoint(4, 5)
-//        });
-//        graph4.addSeries(series6);
-//        series6.setShape(PointsGraphSeries.Shape.RECTANGLE);
-//        series6.setColor(Color.RED);
-//
-//        PointsGraphSeries<DataPoint> series7 = new PointsGraphSeries<>(new DataPoint[] {
-//                new DataPoint(0, 0),
-//                new DataPoint(1, 3),
-//                new DataPoint(2, 1),
-//                new DataPoint(3, 0),
-//                new DataPoint(4, 4)
-//        });
-//        graph4.addSeries(series7);
-//        series7.setShape(PointsGraphSeries.Shape.TRIANGLE);
-//        series7.setColor(Color.YELLOW);
-//
-//        PointsGraphSeries<DataPoint> series8 = new PointsGraphSeries<>(new DataPoint[] {
-//                new DataPoint(0, 1),
-//                new DataPoint(1, 2),
-//                new DataPoint(2, 0),
-//                new DataPoint(3, -1),
-//                new DataPoint(4, 3)
-//        });
-//        graph4.addSeries(series8);
-//        series8.setColor(Color.GREEN);
-//        series8.setCustomShape(new PointsGraphSeries.CustomShape() {
-//            @Override
-//            public void draw(Canvas canvas, Paint paint, float x, float y, DataPointInterface dataPoint) {
-//                paint.setStrokeWidth(10);
-//                canvas.drawLine(x-20, y-20, x+20, y+20, paint);
-//                canvas.drawLine(x+20, y-20, x-20, y+20, paint);
-//            }
-//        });
+                series2 = new LineGraphSeries<>(new DataPoint[]{
+                        new DataPoint(timeList.get(i), AXList.get(i))
+                });
+
+            }
+            else {
+                //System.out.println(timeList.get(i));
+                //System.out.println(AXList.get(i));
+
+                series2.appendData(new DataPoint(timeList.get(i),AXList.get(i)),false,timeList.size());
+            }
+        }
+        graph2.addSeries(series2);
+        graph2.getViewport().setScalable(true);
+        graph2.getViewport().setScalableY(true);
+        graph2.getViewport().setMinX(timeList.get(0));
+        graph2.getViewport().setMaxX(timeList.get(0)+1);
+        series2.setBackgroundColor(Color.RED);
+        series2.setAnimated(true);
+        series2.setDrawDataPoints(true);
+
+        LineGraphSeries<DataPoint> series3 = null;
+        GraphView graph3 = (GraphView) actualRideView.findViewById(R.id.graphAY);
+        for (int i=0;i<timeList.size();i++) {
+            if (i==0) {
+
+                //System.out.println(timeList.get(i));
+                //System.out.println(AYList.get(i));
+
+                series3 = new LineGraphSeries<>(new DataPoint[]{
+                        new DataPoint(timeList.get(i), AYList.get(i))
+                });
+
+            }
+            else {
+                //System.out.println(timeList.get(i));
+                //System.out.println(AYList.get(i));
+
+                series3.appendData(new DataPoint(timeList.get(i),AYList.get(i)),false,timeList.size());
+            }
+        }
+        graph3.addSeries(series3);
+        graph3.getViewport().setScalable(true);
+        graph3.getViewport().setScalableY(true);
+        graph3.getViewport().setMinX(timeList.get(0));
+        graph3.getViewport().setMaxX(timeList.get(0)+1);
+        series3.setBackgroundColor(Color.RED);
+        series3.setAnimated(true);
+        series3.setDrawDataPoints(true);
+
+        LineGraphSeries<DataPoint> series4 = null;
+        GraphView graph4 = (GraphView) actualRideView.findViewById(R.id.graphAZ);
+        for (int i=0;i<timeList.size();i++) {
+            if (i==0) {
+
+                //System.out.println(timeList.get(i));
+                //System.out.println(AZList.get(i));
+
+                series4 = new LineGraphSeries<>(new DataPoint[]{
+                        new DataPoint(timeList.get(i), AZList.get(i))
+                });
+
+            }
+            else {
+                //System.out.println(timeList.get(i));
+                //System.out.println(AZList.get(i));
+
+                series4.appendData(new DataPoint(timeList.get(i),AZList.get(i)),false,timeList.size());
+            }
+        }
+        graph4.addSeries(series4);
+        graph4.getViewport().setScalable(true);
+        graph4.getViewport().setScalableY(true);
+        graph4.getViewport().setMinX(timeList.get(0));
+        graph4.getViewport().setMaxX(timeList.get(0)+1);
+        series4.setBackgroundColor(Color.RED);
+        series4.setAnimated(true);
+        series4.setDrawDataPoints(true);
+
+        LineGraphSeries<DataPoint> series5 = null;
+        GraphView graph5 = (GraphView) actualRideView.findViewById(R.id.graphGX);
+        for (int i=0;i<timeList.size();i++) {
+            if (i==0) {
+
+                //System.out.println(timeList.get(i));
+                //System.out.println(GXList.get(i));
+
+                series5 = new LineGraphSeries<>(new DataPoint[]{
+                        new DataPoint(timeList.get(i), GXList.get(i))
+                });
+
+            }
+            else {
+                //System.out.println(timeList.get(i));
+                //System.out.println(GXList.get(i));
+
+                series5.appendData(new DataPoint(timeList.get(i),GXList.get(i)),false,timeList.size());
+            }
+        }
+        graph5.addSeries(series5);
+        graph5.getViewport().setScalable(true);
+        graph5.getViewport().setScalableY(true);
+        graph5.getViewport().setMinX(timeList.get(0));
+        graph5.getViewport().setMaxX(timeList.get(0)+1);
+        series5.setBackgroundColor(Color.RED);
+        series5.setAnimated(true);
+        series5.setDrawDataPoints(true);
+
+        LineGraphSeries<DataPoint> series6 = null;
+        GraphView graph6 = (GraphView) actualRideView.findViewById(R.id.graphGY);
+        for (int i=0;i<timeList.size();i++) {
+            if (i==0) {
+
+                //System.out.println(timeList.get(i));
+                //System.out.println(GYList.get(i));
+
+                series6 = new LineGraphSeries<>(new DataPoint[]{
+                        new DataPoint(timeList.get(i), GYList.get(i))
+                });
+
+            }
+            else {
+                //System.out.println(timeList.get(i));
+                //System.out.println(GYList.get(i));
+
+                series6.appendData(new DataPoint(timeList.get(i),GYList.get(i)),false,timeList.size());
+            }
+        }
+        graph6.addSeries(series6);
+        graph6.getViewport().setScalable(true);
+        graph6.getViewport().setScalableY(true);
+        graph6.getViewport().setMinX(timeList.get(0));
+        graph6.getViewport().setMaxX(timeList.get(0)+1);
+        series6.setBackgroundColor(Color.RED);
+        series6.setAnimated(true);
+        series6.setDrawDataPoints(true);
+
+        LineGraphSeries<DataPoint> series7 = null;
+        GraphView graph7 = (GraphView) actualRideView.findViewById(R.id.graphGZ);
+        for (int i=0;i<timeList.size();i++) {
+            if (i==0) {
+
+                //System.out.println(timeList.get(i));
+                //System.out.println(GZList.get(i));
+
+                series7 = new LineGraphSeries<>(new DataPoint[]{
+                        new DataPoint(timeList.get(i), GZList.get(i))
+                });
+
+            }
+            else {
+                //System.out.println(timeList.get(i));
+                //System.out.println(GZList.get(i));
+
+                series7.appendData(new DataPoint(timeList.get(i),GZList.get(i)),false,timeList.size());
+            }
+        }
+        graph7.addSeries(series7);
+        graph7.getViewport().setScalable(true);
+        graph7.getViewport().setScalableY(true);
+        graph7.getViewport().setMinX(timeList.get(0));
+        graph7.getViewport().setMaxX(timeList.get(0)+1);
+        series7.setBackgroundColor(Color.RED);
+        series7.setAnimated(true);
+        series7.setDrawDataPoints(true);
+
         return actualRideView;
     }
 
@@ -265,16 +341,46 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int index = parent.getSelectedItemPosition();
 
+        //System.out.println("CHECK TEST = " + check);
+
         switch (index) {
             case 0 :
-                Toast.makeText(getActivity(), "SWITCH SKI GAUCHE SPINNER", Toast.LENGTH_SHORT).show();
+                if (isSkiD) {
+                    check=0;
+                }
+                if (check == 0) {
+                    Toast.makeText(getActivity(), "SWITCH SKI GAUCHE SPINNER", Toast.LENGTH_SHORT).show();
+
+                    if (isSkiD) {
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(this).attach(this).commit();
+                        counter++;
+                        check=check+1;
+                        //System.out.println("CHECK TEST = " + check);
+                        isSkiD=false;
+                    }
+                }
 
 
                 break;
-            case 1 :
-                Toast.makeText(getActivity(), "SWITCH SKI DROIT SPINNER", Toast.LENGTH_SHORT).show();
+
+            case 1:
+                if (!isSkiD) {
+                    check=0;
+                }
+                if (check == 0) {
+                    Toast.makeText(getActivity(), "SWITCH SKI DROIT SPINNER", Toast.LENGTH_SHORT).show();
+
+                    isSkiD = true;
+                    counter++;
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(this).attach(this).commit();
+                    check=check+1;
+                    //System.out.println("CHECK TEST" + check);
+                }
 
                 break;
+
         }
 
     }
@@ -315,7 +421,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
 
 //        System.out.println("LISTT : " + listt);
 //        System.out.println("LISTP : " + listp);
-//        System.out.println("TIME : " + time);
+          System.out.println("TIME IN FUNCTION: " + time);
 //        System.out.println("DATALF : " + dataLF);
 //        System.out.println("AX : " + AX);
 //        System.out.println("AY : " + AY);
@@ -336,5 +442,24 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
         //System.out.println(newList);
 
         return newList;
+    }
+
+    public List<Float> timeStringToFloat(List<String> timeListTemp1, String[][] newTime1) {
+
+        for (int i = 0;i<timeListTemp1.size();i++) {
+            newTime1[i] = timeListTemp1.get(i).split(":");
+            //String hour = newTime[i][0];
+            String min = newTime1[i][1];
+            String sec = newTime1[i][2];
+            String msec = newTime1[i][3];
+            if (msec.length()==2){
+                msec = '0'+msec;
+            }
+            String floatStringMin = min + "." + sec + msec;
+            float floatTime = Float.parseFloat(floatStringMin);
+            timeList.add(floatTime);
+        }
+
+        return timeList;
     }
 }
