@@ -10,10 +10,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.example.nicolas.smartride2.BDD.BDD;
+import com.example.nicolas.smartride2.BDD.DataSensor;
+import com.example.nicolas.smartride2.BDD.Time;
+import com.example.nicolas.smartride2.SessionManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.UUID;
 
 /**
@@ -48,6 +54,13 @@ public class BluetoothService {
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
+
+    String rxBuffer="";
+
+    BDD bdd;
+    static SessionManager session;
+    DataSensor dataSensorAcc;
+    DataSensor dataSensorGyro;
     /**
      * Constructor. Prepares a new BluetoothChat session.
      *
@@ -59,6 +72,11 @@ public class BluetoothService {
         mState = STATE_NONE;
         mNewState = mState;
         mHandler = handler;
+        bdd = new BDD(context);
+        session = new SessionManager(context);
+        //init DataSensor Object
+        dataSensorAcc= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+        dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
     }
 
     /**
@@ -438,12 +456,20 @@ public class BluetoothService {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
-                    //Log.d("ServiceBluetooth","message recu");
-                   /* String readMessage = new String(buffer);
-                    Log.d("ServiceBluetooth",readMessage);*/
-                    // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                   String readMessage = new String(buffer);
+                    readMessage=rxBuffer+readMessage;
+                    rxBuffer=extractData(readMessage);
+                    //Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
+                   /* bdd.open();
+                    List<DataSensor> dataSensorsA = new ArrayList<DataSensor>();
+                    dataSensorsA=bdd.getAllDataAccWithRunAndProfil("Run#1",session.getLoginPref());
+                    List<DataSensor> dataSensorsG = new ArrayList<DataSensor>();
+                    dataSensorsG=bdd.getAllDataGyroWithRunAndProfil("Run#1",session.getLoginPref());
+                    //Log.d("bdd","length Acc ="+dataSensorsA.size());
+                    //Log.d("bdd","length Gyro ="+dataSensorsG.size());
+                    bdd.close();*/
+                   /* mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
+                            .sendToTarget();*/
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
@@ -475,6 +501,131 @@ public class BluetoothService {
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
+        }
+
+        private String extractData(String data) {
+            String[] splitedString = data.split("");
+            Log.d("ExtractData","lenght="+splitedString.length);
+            int indexOfLastLetter=0;
+            String lastString="";
+            for (int i=0;i<splitedString.length;i++){
+                //Log.d("ExtractData",Integer.toString(i));
+                if(i>11) {
+                    if (i + 1 < splitedString.length) {
+                        if (splitedString[i].compareTo("A") == 0) {
+                            if (splitedString[i + 1].compareTo("X") == 0) {
+                                String dataAX = data.substring(i - 11, i - 1);
+                                if(!dataAX.contains("A")&&!dataAX.contains("G")&&!dataAX.contains("X")&&!dataAX.contains("Y")&&!dataAX.contains("Z")) {
+                                    if (dataAX.replace('\0','0').replace("0","")!="") {
+                                        dataSensorAcc.setDataX(dataAX);
+                                        Log.d("ExtractData", "dataAX=" + dataAX);
+                                    }
+                                }
+                                indexOfLastLetter=i+1;
+                            }
+                            if (splitedString[i + 1].compareTo("Y") == 0) {
+                                String dataAY = data.substring(i - 11, i - 1);
+                                if(!dataAY.contains("A")&&!dataAY.contains("G")&&!dataAY.contains("X")&&!dataAY.contains("Y")&&!dataAY.contains("Z")) {
+                                    if (dataAY.replace('\0','0').replace("0","")!="") {
+                                        dataSensorAcc.setDataY(dataAY);
+                                        Log.d("ExtractData", "dataAY=" + dataAY);
+                                    }
+
+                                }
+                                indexOfLastLetter=i+1;
+                            }
+                            if (splitedString[i + 1].compareTo("Z") == 0) {
+                                String dataAZ = data.substring(i - 11, i - 1);
+                                if(!dataAZ.contains("A")&&!dataAZ.contains("G")&&!dataAZ.contains("X")&&!dataAZ.contains("Y")&&!dataAZ.contains("Z")) {
+                                    //Log.d("ExtractData", "dataAZ=" + dataAZ);
+                                    if (dataAZ.replace('\0','0').replace("0","")!="") {
+                                        dataSensorAcc.setDataZ(dataAZ);
+                                        Log.d("ExtractData", "dataAZ=" + dataAZ);
+                                    }
+
+                                }
+                                indexOfLastLetter=i+1;
+                            }
+                        }
+                        if (splitedString[i].compareTo("G") == 0) {
+                            if (splitedString[i + 1].compareTo("X") == 0) {
+                                String dataGX = data.substring(i - 11, i - 1);
+                                if(!dataGX.contains("A")&&!dataGX.contains("G")&&!dataGX.contains("X")&&!dataGX.contains("Y")&&!dataGX.contains("Z")) {
+                                    if (dataGX.replace('\0','0').replace("0","")!="") {
+                                        dataSensorGyro.setDataX(dataGX);
+                                        Log.d("ExtractData", "dataGX=" + dataGX);
+                                    }
+                                }
+
+                                indexOfLastLetter=i+1;
+                            }
+                            if (splitedString[i + 1].compareTo("Y") == 0) {
+                                String dataGY = data.substring(i - 11, i - 1);
+                                if(!dataGY.contains("A")&&!dataGY.contains("G")&&!dataGY.contains("X")&&!dataGY.contains("Y")&&!dataGY.contains("Z")) {
+                                    if (dataGY.replace('\0','0').replace("0","")!="") {
+                                        dataSensorGyro.setDataY(dataGY);
+                                        Log.d("ExtractData", "dataGY=" + dataGY);
+                                    }
+                                }
+
+                                indexOfLastLetter=i+1;
+                            }
+                            if (splitedString[i + 1].compareTo("Z") == 0) {
+                                String dataGZ = data.substring(i - 11, i - 1);
+                                if(!dataGZ.contains("A")&&!dataGZ.contains("G")&&!dataGZ.contains("X")&&!dataGZ.contains("Y")&&!dataGZ.contains("Z")) {
+                                    Log.d("ExtractData", "dataGZ=" + dataGZ);
+                                    if (dataGZ.replace('\0','0').replace("0","")!="") {
+                                        dataSensorGyro.setDataZ(dataGZ);
+                                    }
+
+                                }
+
+                                indexOfLastLetter=i+1;
+                            }
+                        }
+                    }
+                }
+                if(dataSensorAcc.getDataX()!=null && dataSensorAcc.getDataY()!=null && dataSensorAcc.getDataZ()!=null ){
+                    Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH) + 1;
+                    int day = c.get(Calendar.DATE);
+                    int hours = c.get(Calendar.HOUR);
+                    int mins = c.get(Calendar.MINUTE);
+                    int seconds = c.get(Calendar.SECOND);
+                    int milliseconds = c.get(Calendar.MILLISECOND);
+                    Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
+                    dataSensorAcc.setTime(time);
+                    bdd.open();
+                    bdd.insertDataAcc(dataSensorAcc);
+                    bdd.close();
+                    //enregistrement dans la bdd
+                    Log.d("save data","AccData save !");
+                    dataSensorAcc= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+                }
+                if(dataSensorGyro.getDataX()!=null && dataSensorGyro.getDataY()!=null && dataSensorGyro.getDataZ()!=null ){
+                    Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH) + 1;
+                    int day = c.get(Calendar.DATE);
+                    int hours = c.get(Calendar.HOUR);
+                    int mins = c.get(Calendar.MINUTE);
+                    int seconds = c.get(Calendar.SECOND);
+                    int milliseconds = c.get(Calendar.MILLISECOND);
+                    Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
+                    dataSensorAcc.setTime(time);
+                    bdd.open();
+                    bdd.insertDataGyro(dataSensorGyro);
+                    bdd.close();
+                    //enregistrement dans la bdd
+                    Log.d("save data","GyroData save !");
+                    dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+                }
+            }
+            if(indexOfLastLetter+13>=splitedString.length){
+                lastString=data.substring(indexOfLastLetter, indexOfLastLetter+(splitedString.length-1-indexOfLastLetter));
+            }
+            return lastString;
         }
     }
 }

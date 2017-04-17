@@ -14,7 +14,7 @@
                     android:title="@string/action_record"/>
                 <item
                     android:id="@+id/overview"
-                    android:icon="@drawable/courbelinear"
+                    android:icon="@drawable/chart"
                     android:title="@string/action_overview" />
                 <item
                     android:id="@+id/map"

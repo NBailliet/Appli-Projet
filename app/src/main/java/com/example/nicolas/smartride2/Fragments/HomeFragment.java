@@ -13,10 +13,9 @@ import android.widget.Toast;
 
 import com.example.nicolas.smartride2.R;
 import com.example.nicolas.smartride2.Services.LocalService;
+import com.example.nicolas.smartride2.SessionManager;
 import com.example.nicolas.smartride2.SettingsManager;
 import com.example.nicolas.smartride2.SmartRide;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by Nicolas on 01/02/2017.
@@ -26,12 +25,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         TextView textrun;
         TextView textnorun;
+        TextView textHome;
         Button buttonRun;
         SettingsManager settings;
+        SessionManager session;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View homeView = inflater.inflate(R.layout.home, container, false);
+            session = SmartRide.getSessionManager();
+            textHome = (TextView) homeView.findViewById(R.id.textHome);
+            textHome.setText("Welcome " + session.getLoginPref() + " on SmartRide application. You can open the navigation bar on the left to start using the app.");
             textrun = (TextView) homeView.findViewById(R.id.textViewRun);
             textnorun = (TextView) homeView.findViewById(R.id.textViewNoRun);
             buttonRun = (Button) homeView.findViewById(R.id.buttonRun);

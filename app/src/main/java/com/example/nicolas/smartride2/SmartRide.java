@@ -81,7 +81,7 @@ public class SmartRide extends AppCompatActivity
     public ProgressDialog progress;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private String action;
-    SessionManager session;
+    static SessionManager session;
     static SettingsManager settings;
     String rxBuffer="";
     DataSensor dataSensorAcc;
@@ -103,8 +103,8 @@ public class SmartRide extends AppCompatActivity
         //bdd.clearTable("TABLE_LOC");
         //bdd.clearTable("TABLE_PROFIL");
         //bdd.clearTable("TABLE_RUN");
-        bdd.clearTable("TABLE_ACCELEROMETER");
-        bdd.clearTable("TABLE_GYRO");
+        //bdd.clearTable("TABLE_ACCELEROMETER");
+        //bdd.clearTable("TABLE_GYRO");
 
 
         session = new SessionManager(getApplicationContext());
@@ -298,7 +298,7 @@ public class SmartRide extends AppCompatActivity
 
                         bdd.insertProfil(user);
 
-                        Toast.makeText(SmartRide.this, "Account created successfuly !" + user.getLogin() + user.getPassword(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SmartRide.this, "Account created successfuly !" + user.getLogin(), Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                         showConnectDialog(login);
                     } else {
@@ -821,7 +821,7 @@ public class SmartRide extends AppCompatActivity
                     Log.d("Write","message envoyé");
                     break;
                 case Constants.MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
+                    /*byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
                    // mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
@@ -838,15 +838,15 @@ public class SmartRide extends AppCompatActivity
                         //Log.d("full data",rxBuffer + "   size ="+rxBuffer.length());
                         rxBuffer="";
                     }*/
-                    //SmartRide.this.sendMessage(readMessage);
-                    bdd.open();
+                    //SmartRide.this.sendMessage(readMessage);*/
+                    /*bdd.open();
                     List<DataSensor> dataSensorsA = new ArrayList<DataSensor>();
                     dataSensorsA=bdd.getAllDataAccWithRunAndProfil("Run#1",session.getLoginPref());
                     List<DataSensor> dataSensorsG = new ArrayList<DataSensor>();
                     dataSensorsG=bdd.getAllDataGyroWithRunAndProfil("Run#1",session.getLoginPref());
                     Log.d("bdd","length Acc ="+dataSensorsA.size());
                     Log.d("bdd","length Gyro ="+dataSensorsG.size());
-                    bdd.close();
+                    bdd.close();*/
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -1051,6 +1051,10 @@ public class SmartRide extends AppCompatActivity
 
     public static SettingsManager getSettingsManager() {
         return settings;
+    }
+
+    public static SessionManager getSessionManager() {
+        return session;
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
