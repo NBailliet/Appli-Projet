@@ -36,13 +36,149 @@
             android:textAlignment="center"/>
 
         <Spinner
-            android:id="@+id/ride_spinner"
+            android:id="@+id/last_ride_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/text1"
             android:layout_marginTop="30dp"
             android:backgroundTint="#FFFFFF"/>
+
+        <Spinner
+            android:id="@+id/ride_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/last_ride_spinner"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#FFFFFF"/>
+
+        <TextView
+            android:text="Datalogger Frequency"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ride_spinner"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphDataLogger"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graphDataLogger"
+            android:layout_below="@+id/textGraphDataLogger"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Accelerometre X"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphDataLogger"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphAX"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="300dip"
+            android:id="@+id/graphAX"
+            android:layout_below="@+id/textGraphAX"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Accelerometre Y"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphAX"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphAY"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="300dip"
+            android:id="@+id/graphAY"
+            android:layout_below="@+id/textGraphAY"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Accelerometre Z"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphAY"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphAZ"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="300dip"
+            android:id="@+id/graphAZ"
+            android:layout_below="@+id/textGraphAZ"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Gyroscope X"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphAZ"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphGX"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="300dip"
+            android:id="@+id/graphGX"
+            android:layout_below="@+id/textGraphGX"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Gyroscope Y"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphGX"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphGY"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="300dip"
+            android:id="@+id/graphGY"
+            android:layout_below="@+id/textGraphGY"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:text="Gyroscope Z"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/graphGY"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textGraphGZ"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="300dip"
+            android:id="@+id/graphGZ"
+            android:layout_below="@+id/textGraphGZ"
+            android:layout_marginTop="20dp"/>
+
 
     </RelativeLayout>
 

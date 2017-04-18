@@ -11,13 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.DataSensor;
-import com.example.nicolas.smartride2.CSVFile;
+import com.example.nicolas.smartride2.BDD.Run;
 import com.example.nicolas.smartride2.R;
 import com.example.nicolas.smartride2.SessionManager;
+import com.example.nicolas.smartride2.SettingsManager;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -39,21 +39,6 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
     TextView textViewGY;
     TextView textViewGZ;
 
-    CSVFile csvFile;
-    List fileList;
-    List resultList;
-
-    List<String> timeListTemp = new ArrayList();
-    List<Float> timeList = new ArrayList();
-    String[][] newTime = new String[1000][4];
-    List<Integer> dataLFList = new ArrayList();
-    List<Integer> AXList = new ArrayList();
-    List<Integer> AYList = new ArrayList();
-    List<Integer> AZList = new ArrayList();
-    List<Integer> GXList = new ArrayList();
-    List<Integer> GYList = new ArrayList();
-    List<Integer> GZList = new ArrayList();
-
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
     private Runnable mTimer2;
@@ -67,6 +52,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
 
     BDD bdd;
     static SessionManager session;
+    SettingsManager setting;
     List<Long> dataAX= new ArrayList<>();
     List<Long> dataAY= new ArrayList<>();
     List<Long> dataAZ= new ArrayList<>();
@@ -75,6 +61,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
     List<Long> dataGY= new ArrayList<>();
     List<Long> dataGZ= new ArrayList<>();
     List<Long> dataGTime= new ArrayList<>();
+    String ski="left";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,45 +74,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
         textViewGZ = (TextView) actualRideView.findViewById(R.id.textGraphGZ);
         bdd = new BDD(getContext());
         session = new SessionManager(getActivity());
-
-  /*      InputStream inputStream = getResources().openRawResource(R.raw.run5skig);
-        csvFile = new CSVFile(inputStream);
-        fileList = csvFile.read();
-        fileList.remove(0);
-        newTime = new String[fileList.size()][4];
-        //System.out.println(fileList);
-        //System.out.println(fileList.get(1));
-        //System.out.println(fileList.get(2));
-        resultList=fromListToRow(fileList);
-        timeListTemp = (List) resultList.get(0);
-        //System.out.println("TIMELISTTEMP : " + timeListTemp);
-        dataLFList = (List) resultList.get(1);
-        //System.out.println("DATALFLIST : " + dataLFList);
-        AXList = (List) resultList.get(2);
-        //System.out.println("AXLIST : " + AXList);
-        AYList = (List) resultList.get(3);
-        //System.out.println("AYLIST : " + AYList);
-        AZList = (List) resultList.get(4);
-        //System.out.println("AZLIST : " + AZList);
-        GXList = (List) resultList.get(5);
-        //System.out.println("GXLIST : " + GXList);
-        GYList = (List) resultList.get(6);
-        //System.out.println("GYLIST : " + GYList);
-        GZList = (List) resultList.get(7);
-        //System.out.println("GZLIST : " + GZList);
-
-        for (int i = 0;i<timeListTemp.size();i++) {
-            newTime[i] = timeListTemp.get(i).split(":");
-            int hour = Integer.parseInt(newTime[i][0]);
-            int min = Integer.parseInt(newTime[i][1]);
-            int sec = Integer.parseInt(newTime[i][2]);
-            int msec = Integer.parseInt(newTime[i][3]);
-            String floatStringMin = hour*60 + min + "." + sec + msec;
-            float floatTime = Float.parseFloat(floatStringMin);
-            timeList.add(floatTime);
-        }
-        System.out.println("TIMELIST : " + timeList);
-*/
+        setting = new SettingsManager(getActivity());
 
 
         Spinner spinner = (Spinner) actualRideView.findViewById(R.id.ride_spinner);
@@ -141,7 +90,9 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
 
 
 
-        getDataFromBdd();
+        if (setting.getStartManualRunPref()||setting.getStartMotionRunPref()){
+            getDataFromBdd();
+        }
         //Log.d("ActualRideFragment","Acc ="+dataAX);
         GraphView graph = (GraphView) actualRideView.findViewById(R.id.graphAX);
         mSeries1 = new LineGraphSeries<>(generateDataAX());
@@ -156,7 +107,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
         graph2.getViewport().setScalable(true);
         graph2.getViewport().setScalableY(true);
         graph2.getViewport().setScrollable(true);
-       // graph2.getViewport().setMaxXAxisSize(100);
+        // graph2.getViewport().setMaxXAxisSize(100);
         GraphView graph3 = (GraphView) actualRideView.findViewById(R.id.graphAZ);
         mSeries3 = new LineGraphSeries<>(generateDataAZ());
         graph3.addSeries(mSeries3);
@@ -170,7 +121,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
         graph4.getViewport().setScalableY(true);
         graph4.getViewport().setScalable(true);
         graph4.getViewport().setScrollable(true);
-       // graph4.getViewport().setMaxXAxisSize(10);
+        // graph4.getViewport().setMaxXAxisSize(10);
         GraphView graph5 = (GraphView) actualRideView.findViewById(R.id.graphGY);
         mSeries5 = new LineGraphSeries<>(generateDataGY());
         graph5.addSeries(mSeries5);
@@ -196,13 +147,43 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
 
         switch (index) {
             case 0 :
-                Toast.makeText(getActivity(), "SWITCH SKI GAUCHE SPINNER", Toast.LENGTH_SHORT).show();
-
+                ski="left";
+                //Toast.makeText(getActivity(), "SWITCH SKI GAUCHE SPINNER", Toast.LENGTH_SHORT).show();
+                if (setting.getStartManualRunPref()||setting.getStartMotionRunPref()){
+                    getDataFromBdd();
+                    mSeries1.resetData(generateDataAX());
+                    mSeries2.resetData(generateDataAY());
+                    mSeries3.resetData(generateDataAZ());
+                    mSeries4.resetData(generateDataGX());
+                    mSeries5.resetData(generateDataGY());
+                    mSeries6.resetData(generateDataGZ());
+                    dataAX.clear();
+                    dataAY.clear();
+                    dataAZ.clear();
+                    dataGX.clear();
+                    dataGY.clear();
+                    dataGZ.clear();
+                }
 
                 break;
             case 1 :
-                Toast.makeText(getActivity(), "SWITCH SKI DROIT SPINNER", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "SWITCH SKI DROIT SPINNER", Toast.LENGTH_SHORT).show();
+                ski="right";
+                if (setting.getStartManualRunPref()||setting.getStartMotionRunPref()){
+                    getDataFromBdd();mSeries1.resetData(generateDataAX());
+                    mSeries2.resetData(generateDataAY());
+                    mSeries3.resetData(generateDataAZ());
+                    mSeries4.resetData(generateDataGX());
+                    mSeries5.resetData(generateDataGY());
+                    mSeries6.resetData(generateDataGZ());
+                    dataAX.clear();
+                    dataAY.clear();
+                    dataAZ.clear();
+                    dataGX.clear();
+                    dataGY.clear();
+                    dataGZ.clear();
 
+                }
                 break;
         }
 
@@ -211,60 +192,6 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    public List fromListToRow(List fileList) {
-
-        List newList = new ArrayList();
-        String[] listt = new String[fileList.size()];
-        String[] listp = new String[fileList.size()];
-
-        List<String> time = new ArrayList();
-        List<Integer> dataLF = new ArrayList();
-        List<Integer> AX = new ArrayList();
-        List<Integer> AY = new ArrayList();
-        List<Integer> AZ = new ArrayList();
-        List<Integer> GX = new ArrayList();
-        List<Integer> GY = new ArrayList();
-        List<Integer> GZ = new ArrayList();
-
-        for (int i=1;i<fileList.size();i++) {
-            listt[i] = (String) fileList.get(i);
-            listp = listt[i].split(", ");
-
-            time.add(listp[0]);
-            dataLF.add(Integer.parseInt(listp[1]));
-            AX.add(Integer.parseInt(listp[2]));
-            AY.add(Integer.parseInt(listp[3]));
-            AZ.add(Integer.parseInt(listp[4]));
-            GX.add(Integer.parseInt(listp[5]));
-            GY.add(Integer.parseInt(listp[6]));
-            GZ.add(Integer.parseInt(listp[7]));
-        }
-
-//        System.out.println("LISTT : " + listt);
-//        System.out.println("LISTP : " + listp);
-//        System.out.println("TIME : " + time);
-//        System.out.println("DATALF : " + dataLF);
-//        System.out.println("AX : " + AX);
-//        System.out.println("AY : " + AY);
-//        System.out.println("AZ : " + AZ);
-//        System.out.println("GX : " + GX);
-//        System.out.println("GY : " + GY);
-//        System.out.println("GZ : " + GZ);
-
-        newList.add(time);
-        newList.add(dataLF);
-        newList.add(AX);
-        newList.add(AY);
-        newList.add(AZ);
-        newList.add(GX);
-        newList.add(GY);
-        newList.add(GZ);
-
-        //System.out.println(newList);
-
-        return newList;
     }
 
     @Override
@@ -309,13 +236,21 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
     }
 
     void getDataFromBdd(){
-        bdd.open();
         List<DataSensor> dataSensorsA = new ArrayList<DataSensor>();
-        dataSensorsA=bdd.getAllDataAccWithRunAndProfil("Run#1",session.getLoginPref());
         List<DataSensor> dataSensorsG = new ArrayList<DataSensor>();
-        dataSensorsG=bdd.getAllDataGyroWithRunAndProfil("Run#1",session.getLoginPref());
-       // Log.d("bdd","length Acc ="+dataSensorsA.size());
-        //Log.d("bdd","length Gyro ="+dataSensorsG.size());
+        bdd.open();
+        if (ski.compareTo("left")==0) {
+            List<Run> listRun =  bdd.getAllRunWithProfil(session.getLoginPref());
+            int nbRunListP = listRun.size();
+            dataSensorsA = bdd.getAllDataAccWithRunAndProfil(listRun.get(nbRunListP-1).getName(), session.getLoginPref());
+            dataSensorsG = bdd.getAllDataGyroWithRunAndProfil(listRun.get(nbRunListP-1).getName(), session.getLoginPref());
+        }
+        if (ski.compareTo("right")==0) {
+            List<Run> listRun =  bdd.getAllRunWithProfil(session.getLoginPref());
+            int nbRunListP = listRun.size();
+            dataSensorsA = bdd.getAllDataAccWithRunAndProfil(listRun.get(nbRunListP-1).getName(), session.getLoginPref());
+            dataSensorsG = bdd.getAllDataGyroWithRunAndProfil(listRun.get(nbRunListP-1).getName(), session.getLoginPref());
+        }
         bdd.close();
 
         if (dataSensorsA.size()!=0){

@@ -459,6 +459,20 @@ public class BDD {
         cursor.close();
         return dataSensors;
     }
+    public List<DataSensor> getAllDataGyro() {
+        List<DataSensor> dataSensors = new ArrayList<DataSensor>();
+        Cursor cursor = bdd.query(TABLE_GYRO,
+                new String[] {COL_GYRO_DATA_ID, COL_GYRO_RUN_NAME, COL_GYRO_RUN_PROFIL, COL_GYRO_DATA_X,COL_GYRO_DATA_Y,COL_GYRO_DATA_Z,COL_GYRO_TIME},null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            DataSensor dataSensor = cursorToGyroData(cursor);
+            dataSensors.add(dataSensor);
+            cursor.moveToNext();
+        }
+        // assurez-vous de la fermeture du curseur
+        cursor.close();
+        return dataSensors;
+    }
 
     private DataSensor cursorToGyroData(Cursor c){
         //si aucun élément n'a été retourné dans la requête, on renvoie null

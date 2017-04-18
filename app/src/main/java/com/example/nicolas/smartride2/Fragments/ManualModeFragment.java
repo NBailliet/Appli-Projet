@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,20 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
+import com.example.nicolas.smartride2.BDD.BDD;
+import com.example.nicolas.smartride2.BDD.Run;
+import com.example.nicolas.smartride2.BDD.Time;
 import com.example.nicolas.smartride2.R;
 import com.example.nicolas.smartride2.Services.LocalService;
 import com.example.nicolas.smartride2.Services.RideLocationGetter;
+import com.example.nicolas.smartride2.SessionManager;
 import com.example.nicolas.smartride2.SettingsManager;
 import com.example.nicolas.smartride2.SmartRide;
+
+import java.util.Calendar;
+import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Nicolas on 30/01/2017.
@@ -31,7 +41,9 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
     Button buttonStopPauseRun;
     static Chronometer chronometer;
     SettingsManager settings;
+    SessionManager session;
     long timeWhenStopped = 0;
+    BDD bdd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +51,7 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
         int hour = 0;
         int sec = 0;
         settings = SmartRide.getSettingsManager();
+        session = SmartRide.getSessionManager();
         View manualView = inflater.inflate(R.layout.manualmode, container, false);
         buttonStartRun = (Button) manualView.findViewById(R.id.buttonStartRun);
         buttonStartRun.setOnClickListener(this);
@@ -101,45 +114,69 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
             Button buttonStopPauseRun = (Button) parent.findViewById(R.id.buttonStopPauseRun);
             Chronometer chronometerRun = (Chronometer) parent.findViewById(R.id.chronometer);
             System.out.println("Test Service Running : " + isMyServiceRunning(LocalService.class));
-            SettingsManager settings = SmartRide.getSettingsManager();
+            settings = SmartRide.getSettingsManager();
+            session = SmartRide.getSessionManager();
+
 
             switch (v.getId()) {
 
                     case (R.id.buttonStartRun):
-                        //todo gérer l'activation du GPS et l'autorisation
-                        if (!settings.getStartMotionRunPref()) {
-                            System.out.println(isMyServiceRunning(LocalService.class));
-                            if (!isMyServiceRunning(LocalService.class)) {
+                        if (settings.getBluetoothStatePref()) {
+                            if (!settings.getStartMotionRunPref()) {
+                                System.out.println(isMyServiceRunning(LocalService.class));
+                                if (!isMyServiceRunning(LocalService.class)) {
 
-                                System.out.println("Bouton Start OK");
-                                try {
-                                    Thread.sleep(5);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                    System.out.println("Bouton Start OK");
+                                    try {
+                                        Thread.sleep(5);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    chronometerRun.setBase(SystemClock.elapsedRealtime());
+                                    chronometerRun.start();
+                                    bdd = new BDD(getActivity());
+                                    bdd.open();
+                                    List<Run> listRun = bdd.getAllRunWithProfil(session.getLoginPref());
+                                    int nbRunListP = listRun.size() + 1;
+                                    Calendar c = Calendar.getInstance();
+                                    int year = c.get(Calendar.YEAR);
+                                    int month = c.get(Calendar.MONTH) + 1;
+                                    int day = c.get(Calendar.DATE);
+                                    int hours = c.get(Calendar.HOUR);
+                                    int mins = c.get(Calendar.MINUTE);
+                                    int seconds = c.get(Calendar.SECOND);
+                                    int milliseconds = c.get(Calendar.MILLISECOND);
+                                    Log.v(TAG, String.valueOf("y=" + year + " mo=" + month + " day=" + day + " h=" + hours + " m=" + mins + " s=" + seconds + " ms=" + milliseconds));
+                                    //listDataTime.add(new Time(year,month,day,hours,mins,seconds,milliseconds));
+                                    Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
+                                    Run run = new Run("Run" + nbRunListP, time, session.getLoginPref());
+                                    bdd.insertRun(run);
+                                    bdd.close();
+                                    Intent intentChrono = new Intent(getActivity(), LocalService.class);
+                                    getActivity().startService(intentChrono);
+                                    if (settings.getGPSTrackPref()) {
+                                        Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
+                                        getActivity().startService(intentGPS);
+                                        System.out.println("GPS lancé :)");
+                                    }
+                                    settings = SmartRide.getSettingsManager();
+                                    settings.setStartManualRunPref(true);
+                                    buttonStartRun.setVisibility(View.INVISIBLE);
+                                    buttonStopRun.setVisibility(View.VISIBLE);
+                                    buttonStartPauseRun.setVisibility(View.VISIBLE);
+                                    //send 1 to start run on cortex
+                                    ((SmartRide) getActivity()).sendMessage("1");
+                                } else {
+                                    buttonStartRun.setVisibility(View.INVISIBLE);
+                                    buttonStopRun.setVisibility(View.VISIBLE);
+                                    buttonStartPauseRun.setVisibility(View.VISIBLE);
                                 }
-                                chronometerRun.setBase(SystemClock.elapsedRealtime());
-                                chronometerRun.start();
-                                Intent intentChrono = new Intent(getActivity(), LocalService.class);
-                                getActivity().startService(intentChrono);
-                                if (settings.getGPSTrackPref()) {
-                                    Intent intentGPS = new Intent(getActivity(), RideLocationGetter.class);
-                                    getActivity().startService(intentGPS);
-                                    System.out.println("GPS lancé :)");
-                                }
-                                settings = SmartRide.getSettingsManager();
-                                settings.setStartManualRunPref(true);
-                                buttonStartRun.setVisibility(View.INVISIBLE);
-                                buttonStopRun.setVisibility(View.VISIBLE);
-                                buttonStartPauseRun.setVisibility(View.VISIBLE);
                             } else {
-                                buttonStartRun.setVisibility(View.INVISIBLE);
-                                buttonStopRun.setVisibility(View.VISIBLE);
-                                buttonStartPauseRun.setVisibility(View.VISIBLE);
+                                Toast.makeText(getActivity(), "Error : 2 runs at the same time, please stop the other run !", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                        else {
-                            Toast.makeText(getActivity(), "Error : 2 runs at the same time, please stop the other run !", Toast.LENGTH_SHORT).show();
-                        }
+                        }else {
+                            Toast.makeText(getActivity(), "Please connect your device to the ski", Toast.LENGTH_SHORT).show();
+            }
 
                         break;
 
@@ -164,6 +201,8 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                             getActivity().stopService(intentGPS2);
                             System.out.println("GPS stoppé :)");
                         }
+                        //send 0 to start run on cortex
+                        ((SmartRide)getActivity()).sendMessage("0");
                         break;
 
                     case (R.id.buttonStartPauseRun):
@@ -178,6 +217,8 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                         chronometerRun.stop();
                         buttonStartPauseRun.setVisibility(View.INVISIBLE);
                         buttonStopPauseRun.setVisibility(View.VISIBLE);
+                        //send 0 to start run on cortex
+                        ((SmartRide)getActivity()).sendMessage("1");
                         break;
 
                     case (R.id.buttonStopPauseRun):
@@ -192,6 +233,8 @@ public class ManualModeFragment extends Fragment implements View.OnClickListener
                         chronometerRun.start();
                         buttonStopPauseRun.setVisibility(View.INVISIBLE);
                         buttonStartPauseRun.setVisibility(View.VISIBLE);
+                        //send 1 to start run on cortex
+                        ((SmartRide)getActivity()).sendMessage("0");
                         break;
 
                 }

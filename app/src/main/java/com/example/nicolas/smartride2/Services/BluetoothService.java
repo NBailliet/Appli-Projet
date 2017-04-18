@@ -12,14 +12,17 @@ import android.util.Log;
 
 import com.example.nicolas.smartride2.BDD.BDD;
 import com.example.nicolas.smartride2.BDD.DataSensor;
+import com.example.nicolas.smartride2.BDD.Run;
 import com.example.nicolas.smartride2.BDD.Time;
 import com.example.nicolas.smartride2.SessionManager;
+import com.example.nicolas.smartride2.SettingsManager;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -59,6 +62,7 @@ public class BluetoothService {
 
     BDD bdd;
     static SessionManager session;
+    static SettingsManager settings;
     DataSensor dataSensorAcc;
     DataSensor dataSensorGyro;
     /**
@@ -75,8 +79,9 @@ public class BluetoothService {
         bdd = new BDD(context);
         session = new SessionManager(context);
         //init DataSensor Object
-        dataSensorAcc= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
-        dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+        dataSensorAcc= new DataSensor(null,session.getLoginPref(),null,null,null,null);
+        dataSensorGyro= new DataSensor(null,session.getLoginPref(),null,null,null,null);
+        settings = new SettingsManager(context);
     }
 
     /**
@@ -199,6 +204,7 @@ public class BluetoothService {
         }
 
         mState = STATE_NONE;
+        mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE,STATE_NONE,STATE_NONE).sendToTarget();
     }
 
     /**
@@ -231,7 +237,7 @@ public class BluetoothService {
         mHandler.sendMessage(msg);
 
         mState = STATE_NONE;
-
+        mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE,STATE_NONE,STATE_NONE).sendToTarget();
         // Start the service over to restart listening mode
         //BluetoothService.this.start();
         Log.i(TAG, "connectionFailed");
@@ -250,6 +256,7 @@ public class BluetoothService {
         mHandler.sendMessage(msg);
 
         mState = STATE_NONE;
+        mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE,STATE_NONE,STATE_NONE).sendToTarget();
 
         // Start the service over to restart listening mode
         //BluetoothService.this.start();
@@ -276,6 +283,8 @@ public class BluetoothService {
             }
             mmServerSocket = tmp;
             mState = STATE_LISTEN;
+            mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE,STATE_LISTEN,STATE_LISTEN).sendToTarget();
+            Log.d("acceptThread","acceptTread");
         }
 
         public void run() {
@@ -369,6 +378,8 @@ public class BluetoothService {
                 Log.i(TAG,"mmSocket null !");
             }
             mState = STATE_CONNECTING;
+            mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE,STATE_CONNECTING,STATE_CONNECTING).sendToTarget();
+            Log.d("ConnectThread","ConnectThread");
         }
 
         public void run() {
@@ -444,6 +455,8 @@ public class BluetoothService {
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
             mState = STATE_CONNECTED;
+            mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE,STATE_CONNECTED,STATE_CONNECTED).sendToTarget();
+            Log.d("ConnectedThread","ConnectedThread");
         }
 
         public void run() {
@@ -455,10 +468,13 @@ public class BluetoothService {
             while (mState == STATE_CONNECTED) {
                 try {
                     // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
-                   String readMessage = new String(buffer);
-                    readMessage=rxBuffer+readMessage;
-                    rxBuffer=extractData(readMessage);
+                    if(settings.getStartManualRunPref()||settings.getStartMotionRunPref()) {
+                        bytes = mmInStream.read(buffer);
+                        String readMessage = new String(buffer);
+                        readMessage = rxBuffer + readMessage;
+                        rxBuffer = extractData(readMessage);
+                        //Log.d("message recu","message recu");
+                    }
                     //Log.d("message recu","rxBuffer="+rxBuffer+" size="+rxBuffer.length());
                    /* bdd.open();
                     List<DataSensor> dataSensorsA = new ArrayList<DataSensor>();
@@ -486,7 +502,7 @@ public class BluetoothService {
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
-
+                Log.d(TAG, "message send");
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
@@ -597,11 +613,15 @@ public class BluetoothService {
                     Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
                     dataSensorAcc.setTime(time);
                     bdd.open();
+                    List<Run> listRun =  bdd.getAllRunWithProfil(session.getLoginPref());
+                    int nbRunListP = listRun.size();
+                    dataSensorAcc.setRunName(listRun.get(nbRunListP-1).getName());
+                    Log.d("save data","nameRun="+listRun.get(nbRunListP-1).getName());
                     bdd.insertDataAcc(dataSensorAcc);
                     bdd.close();
                     //enregistrement dans la bdd
                     Log.d("save data","AccData save !");
-                    dataSensorAcc= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+                    dataSensorAcc= new DataSensor(null,session.getLoginPref(),null,null,null,null);
                 }
                 if(dataSensorGyro.getDataX()!=null && dataSensorGyro.getDataY()!=null && dataSensorGyro.getDataZ()!=null ){
                     Calendar c = Calendar.getInstance();
@@ -613,13 +633,17 @@ public class BluetoothService {
                     int seconds = c.get(Calendar.SECOND);
                     int milliseconds = c.get(Calendar.MILLISECOND);
                     Time time = new Time(year, month, day, hours, mins, seconds, milliseconds);
-                    dataSensorAcc.setTime(time);
+                    dataSensorGyro.setTime(time);
                     bdd.open();
+                    List<Run> listRun =  bdd.getAllRunWithProfil(session.getLoginPref());
+                    int nbRunListP = listRun.size();
+                    dataSensorGyro.setRunName(listRun.get(nbRunListP-1).getName());
+                    Log.d("save data","nameRun="+listRun.get(nbRunListP-1).getName());
                     bdd.insertDataGyro(dataSensorGyro);
                     bdd.close();
                     //enregistrement dans la bdd
                     Log.d("save data","GyroData save !");
-                    dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+                    dataSensorGyro= new DataSensor(null,session.getLoginPref(),null,null,null,null);
                 }
             }
             if(indexOfLastLetter+13>=splitedString.length){

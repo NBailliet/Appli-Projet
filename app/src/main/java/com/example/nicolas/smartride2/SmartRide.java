@@ -40,11 +40,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicolas.smartride2.BDD.BDD;
-import com.example.nicolas.smartride2.BDD.DataSensor;
 import com.example.nicolas.smartride2.BDD.Time;
 import com.example.nicolas.smartride2.BDD.User;
 import com.example.nicolas.smartride2.Fragments.HomeFragment;
 import com.example.nicolas.smartride2.Fragments.MapViewFragment;
+import com.example.nicolas.smartride2.Fragments.NoRideFragment;
 import com.example.nicolas.smartride2.Fragments.OverviewFragment;
 import com.example.nicolas.smartride2.Fragments.RecordFragment;
 import com.example.nicolas.smartride2.Fragments.SettingsFragment;
@@ -62,6 +62,7 @@ import java.util.Set;
 //import com.google.android.gms.appindexing.AppIndex;
 //import com.google.android.gms.appindexing.Thing;
 //import com.google.android.gms.common.api.GoogleApiClient;
+
 
 public class SmartRide extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -83,9 +84,9 @@ public class SmartRide extends AppCompatActivity
     private String action;
     static SessionManager session;
     static SettingsManager settings;
-    String rxBuffer="";
-    DataSensor dataSensorAcc;
-    DataSensor dataSensorGyro;
+    //String rxBuffer="";
+    //DataSensor dataSensorAcc;
+    //DataSensor dataSensorGyro;
     private BDD bdd;
     public User user;
     public User utilisateurCo;
@@ -194,9 +195,9 @@ public class SmartRide extends AppCompatActivity
             connectionFlag=true;
             Toast.makeText(SmartRide.this, "Welcome back " + utilisateurCo.getLogin(), Toast.LENGTH_SHORT).show();
         }
-        //init DataSensor Object
+       /* //init DataSensor Object
         dataSensorAcc= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
-        dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);
+        dataSensorGyro= new DataSensor("Run#1",session.getLoginPref(),null,null,null,null);*/
 
     }
 
@@ -368,11 +369,15 @@ public class SmartRide extends AppCompatActivity
                             System.out.println(session.isLoggedIn());
                             System.out.println(session.getLoginPref());
                             showInfoDialog(utilisateurCo);
+                            FragmentManager fm = getSupportFragmentManager();
+                            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).addToBackStack(null).commit();
                             Toast.makeText(SmartRide.this, "Connection successful !", Toast.LENGTH_SHORT).show();
 
                         } else {
                             session.createLoginSession(login,connectionFlag);
                             dialog.cancel();
+                            FragmentManager fm = getSupportFragmentManager();
+                            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).addToBackStack(null).commit();
                             Toast.makeText(SmartRide.this, "Connection successful !", Toast.LENGTH_SHORT).show();
                         }
                     } else {
@@ -466,13 +471,18 @@ public class SmartRide extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NoRideFragment noRideFragment = new NoRideFragment();
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(getFragmentManager().getBackStackEntryCount() > 0){
+                getFragmentManager().popBackStack();
+            }
+            else {
+                super.onBackPressed();
+            }
         }
 
-        //TODO GERER BACK OPTIONS VERS DRAWER
     }
 
     @Override
@@ -493,7 +503,7 @@ public class SmartRide extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            fm.beginTransaction().replace(R.id.frame, new SettingsFragment()).commit();
+            fm.beginTransaction().replace(R.id.frame, new SettingsFragment()).addToBackStack(null).commit();
             setTitle(getString(R.string.action_settings));
             return true;
         } else if (id == R.id.action_bluetooth) {
@@ -634,20 +644,15 @@ public class SmartRide extends AppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
 
         if (id == R.id.home) {
-            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).commit();
-            setTitle(getString(R.string.action_home));
+            fm.beginTransaction().replace(R.id.frame, new HomeFragment()).addToBackStack(null).commit();
         } else if (id == R.id.record) {
             //if (findDevice == 0) {
-            fm.beginTransaction().replace(R.id.frame, new RecordFragment()).commit();
-            setTitle(getString(R.string.action_record));
+            fm.beginTransaction().replace(R.id.frame, new RecordFragment()).addToBackStack(null).commit();
         } else if (id == R.id.overview) {
-            fm.beginTransaction().replace(R.id.frame, new OverviewFragment()).commit();
-            setTitle(getString(R.string.action_overview));
+            fm.beginTransaction().replace(R.id.frame, new OverviewFragment()).addToBackStack(null).commit();
         } else if (id == R.id.map) {
-            fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).commit();
-            setTitle(getString(R.string.action_map));
+            fm.beginTransaction().replace(R.id.frame, new MapViewFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_send) {
-            setTitle(getString(R.string.action_send));
 
             /*Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setType("text/html");
@@ -801,24 +806,31 @@ public class SmartRide extends AppCompatActivity
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
+                            settings.setBluetoothStatePref(true);
+                           Log.d("mHandler SmartRide","state connected");
                             //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             //mConversationArrayAdapter.clear();
                             break;
                         case BluetoothService.STATE_CONNECTING:
+                            Log.d("mHandler SmartRide","state connecting");
                             //setStatus(R.string.title_connecting);
                             break;
                         case BluetoothService.STATE_LISTEN:
+                            Log.d("mHandler SmartRide","state Listen");
+                            break;
                         case BluetoothService.STATE_NONE:
+                            settings.setBluetoothStatePref(false);
+                            Log.d("mHandler SmartRide","state none");
                             //setStatus(R.string.title_not_connected);
                             break;
                     }
                     break;
                 case Constants.MESSAGE_WRITE:
-                    //byte[] writeBuf = (byte[]) msg.obj;
+                    byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
-                    //String writeMessage = new String(writeBuf);
+                    String writeMessage = new String(writeBuf);
                     //mConversationArrayAdapter.add("Me:  " + writeMessage);
-                    Log.d("Write","message envoyé");
+                    Log.d("Write","message envoyé="+writeMessage);
                     break;
                 case Constants.MESSAGE_READ:
                     /*byte[] readBuf = (byte[]) msg.obj;
@@ -880,22 +892,25 @@ public class SmartRide extends AppCompatActivity
         }
     }
 
-    private void sendMessage(String message) {
-        // Check that we're actually connected before trying anything
-        if (mBTService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(SmartRide.this,"not connected", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public void sendMessage(String message) {
+        if(mBTService!=null) {
+            // Check that we're actually connected before trying anything
+            if (mBTService.getState() != BluetoothService.STATE_CONNECTED) {
+                Toast.makeText(SmartRide.this, "not connected", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        // Check that there's actually something to send
-        if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothChatService to write
-            byte[] send = message.getBytes();
-            mBTService.write(send);
-        }
+            // Check that there's actually something to send
+            if (message.length() > 0) {
+                // Get the message bytes and tell the BluetoothChatService to write
+                byte[] send = message.getBytes();
+                mBTService.write(send);
+                Toast.makeText(SmartRide.this, "message envoyé=" + message, Toast.LENGTH_SHORT).show();
+            }
+        }else{Log.d("sendMessage","message non envoyé");}
     }
 
-    private String extractData(String data) {
+    /*private String extractData(String data) {
         String[] splitedString = data.split("");
         Log.d("ExtractData","lenght="+splitedString.length);
         int indexOfLastLetter=0;
@@ -1028,7 +1043,7 @@ public class SmartRide extends AppCompatActivity
                // Log.d("testBufferGZ",data);
             }
         }
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
@@ -1065,6 +1080,10 @@ public class SmartRide extends AppCompatActivity
             }
         }
         return false;
+    }
+
+    public void setActionBarTitle(String title){
+        getSupportActionBar().setTitle(title);
     }
 
 }
