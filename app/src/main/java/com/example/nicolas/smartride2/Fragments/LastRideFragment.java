@@ -146,31 +146,10 @@ public class LastRideFragment extends Fragment implements AdapterView.OnItemSele
         graph6.getViewport().setScrollable(true);
         //graph6.getViewport().setMaxXAxisSize(10);
 
-        Log.d("lastRide","dataGX="+dataGX);
-        Log.d("lastRide","dataGX="+dataGY);
-        Log.d("lastRide","dataGX="+dataGZ);
-        bdd.open();
-        List<DataSensor> dataSensorsAtemp15 = new ArrayList<DataSensor>();
-        dataSensorsAtemp15=bdd.getAllDataGyroWithRunAndProfil("Run15",session.getLoginPref());
-        List<DataSensor> dataSensorsAtemp14 = new ArrayList<DataSensor>();
-        dataSensorsAtemp14=bdd.getAllDataGyroWithRunAndProfil("Run14",session.getLoginPref());
-        List<DataSensor> dataSensorsAtemp13 = new ArrayList<DataSensor>();
-        dataSensorsAtemp13=bdd.getAllDataGyroWithRunAndProfil("Run13",session.getLoginPref());
-        List<DataSensor> dataSensorsAtemp12 = new ArrayList<DataSensor>();
-        dataSensorsAtemp12=bdd.getAllDataGyroWithRunAndProfil("Run12",session.getLoginPref());
-        List<DataSensor> dataSensorsAtemp = new ArrayList<DataSensor>();
-        dataSensorsAtemp=bdd.getAllDataGyro();
-        bdd.close();
-        Log.d("lastRide","size15="+dataSensorsAtemp15.size());
-        Log.d("lastRide","size14="+dataSensorsAtemp14.size());
-        Log.d("lastRide","size13="+dataSensorsAtemp13.size());
-        Log.d("lastRide","size="+dataSensorsAtemp.size());
-        List<String> nameList =new ArrayList<>();
-        for(int i =0;i<dataSensorsAtemp.size();i++){
-            nameList.add(dataSensorsAtemp.get(i).getRunName());
-        }
-        Log.d("lastRide","sizenameList="+nameList.size());
-        Log.d("lastRide","nameList="+nameList);
+        Log.d("lastRide","dataAX="+dataAX);
+        Log.d("lastRide","dataAY="+dataAY);
+        Log.d("lastRide","dataAZ="+dataAZ);
+
         return lastRideView;
     }
 
@@ -182,6 +161,7 @@ public class LastRideFragment extends Fragment implements AdapterView.OnItemSele
             case 0 :
                 ski="left";
                 //Toast.makeText(getActivity(), "SWITCH SKI GAUCHE SPINNER", Toast.LENGTH_SHORT).show();
+                //refresh all data with data from good ski table
                     /*getDataFromBdd();
                     mSeries1.resetData(generateDataAX());
                     mSeries2.resetData(generateDataAY());
@@ -199,6 +179,7 @@ public class LastRideFragment extends Fragment implements AdapterView.OnItemSele
             case 1 :
                 //Toast.makeText(getActivity(), "SWITCH SKI DROIT SPINNER", Toast.LENGTH_SHORT).show();
                 ski="right";
+                //refresh all data with data from good ski table
                     /*getDataFromBdd();
                     mSeries1.resetData(generateDataAX());
                     mSeries2.resetData(generateDataAY());

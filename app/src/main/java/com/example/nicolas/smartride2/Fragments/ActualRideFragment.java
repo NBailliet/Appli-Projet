@@ -87,12 +87,7 @@ public class ActualRideFragment extends Fragment implements AdapterView.OnItemSe
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-
-
-
-        if (setting.getStartManualRunPref()||setting.getStartMotionRunPref()){
-            getDataFromBdd();
-        }
+         getDataFromBdd();
         //Log.d("ActualRideFragment","Acc ="+dataAX);
         GraphView graph = (GraphView) actualRideView.findViewById(R.id.graphAX);
         mSeries1 = new LineGraphSeries<>(generateDataAX());
